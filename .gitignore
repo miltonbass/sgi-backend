@@ -31,3 +31,31 @@ yarn-error.log*
 target/
 *.class
 *.lst
+
+
+# ============================================================
+# SGI Backend - .gitignore
+# ============================================================
+
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+*.jar
+*.war
+
+# Spring Boot - NUNCA subir credenciales
+.env
+.env.*
+!.env.example
+application-dev.properties
+application-prod.properties
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
