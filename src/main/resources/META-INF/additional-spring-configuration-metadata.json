@@ -1,0 +1,21 @@
+{
+  "properties": [
+    {
+      "name": "sgi.jwt.secret",
+      "type": "java.lang.String",
+      "description": "Clave secreta HMAC-SHA256 para firmar tokens JWT."
+    },
+    {
+      "name": "sgi.jwt.expiration-minutes",
+      "type": "java.lang.Long",
+      "description": "Duración del access token JWT en minutos.",
+      "defaultValue": 60
+    },
+    {
+      "name": "sgi.jwt.refresh-expiration-days",
+      "type": "java.lang.Long",
+      "description": "Duración del refresh token en días.",
+      "defaultValue": 30
+    }
+  ]
+}

@@ -30,7 +30,7 @@ public class TenantFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
 
         // Prioridad 1: atributo puesto por JwtAuthFilter (Historia 1.4)
-        String sedeSchema = (String) httpRequest.getAttribute("sgi_sede_schema");
+        String sedeSchema = (String) httpRequest.getAttribute("JwtAuthFilter");
 
         // Prioridad 2 (solo dev): header manual para tests sin JWT
         if (sedeSchema == null) {
