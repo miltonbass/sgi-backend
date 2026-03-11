@@ -66,4 +66,10 @@ public class AuthException extends RuntimeException {
 
     public int getHttpStatus() { return httpStatus; }
     public String getCodigo() { return codigo; }
+    public AuthException(String codigo, String mensaje, int httpStatus) {
+        super(mensaje);
+        this.httpStatus = httpStatus;
+        this.codigo = codigo;
+    }
+
 }

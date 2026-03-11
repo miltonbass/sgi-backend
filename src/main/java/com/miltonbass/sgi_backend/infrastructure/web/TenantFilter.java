@@ -2,6 +2,8 @@
 package com.miltonbass.sgi_backend.infrastructure.web;
 
 import com.miltonbass.sgi_backend.config.TenantContext;
+import com.miltonbass.sgi_backend.security.JwtAuthFilter;
+
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.annotation.Order;
@@ -30,8 +32,8 @@ public class TenantFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
 
         // Prioridad 1: atributo puesto por JwtAuthFilter (Historia 1.4)
-        String sedeSchema = (String) httpRequest.getAttribute("JwtAuthFilter");
-
+        String sedeSchema = (String) httpRequest.getAttribute(JwtAuthFilter.ATTR_SEDE_SCHEMA);
+        
         // Prioridad 2 (solo dev): header manual para tests sin JWT
         if (sedeSchema == null) {
             sedeSchema = httpRequest.getHeader("X-Sede-Schema");

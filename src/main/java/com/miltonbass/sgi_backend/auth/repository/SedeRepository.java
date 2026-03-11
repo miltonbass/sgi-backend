@@ -13,4 +13,6 @@ public interface SedeRepository extends JpaRepository<Sede, UUID> {
     Optional<Sede> findByIdAndActivaTrue(UUID id);
 
     Optional<Sede> findByCodigoAndActivaTrue(String codigo);
+
+    boolean existsByCodigo(String codigo);
 }
