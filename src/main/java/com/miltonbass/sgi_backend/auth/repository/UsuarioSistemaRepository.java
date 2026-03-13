@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -15,6 +16,19 @@ import java.util.UUID;
 public interface UsuarioSistemaRepository extends JpaRepository<UsuarioSistema, UUID> {
 
     Optional<UsuarioSistema> findByEmailIgnoreCase(String email);
+
+    boolean existsByEmail(String email);
+
+    @Query(value = """
+            SELECT u.* FROM shared.usuarios_sistema u
+            JOIN shared.usuarios_sedes us ON us.usuario_id = u.id
+            WHERE us.sede_id = :sedeId AND u.deleted_at IS NULL
+            ORDER BY u.apellido, u.nombre
+            LIMIT :tamano OFFSET :offset
+            """, nativeQuery = true)
+    List<UsuarioSistema> findBySede(@Param("sedeId") UUID sedeId,
+                                    @Param("offset") int offset,
+                                    @Param("tamano") int tamano);
 
     /** Resetea intentos fallidos y registra ultimo_login tras login exitoso */
     @Modifying

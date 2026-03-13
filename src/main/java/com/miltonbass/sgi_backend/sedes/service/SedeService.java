@@ -31,6 +31,7 @@ public class SedeService {
 
     // ── Listar (paginado) ────────────────────────────────────────────
     @Transactional(readOnly = true)
+    @SuppressWarnings("null")
     public SedePageResponse listar(Pageable pageable) {
         Page<Sede> page = sedeRepo.findAll(pageable);
         return new SedePageResponse(
@@ -51,11 +52,7 @@ public class SedeService {
     // que PostgreSQL no permite dentro de una transacción activa.
     public SedeResponse crear(CreateSedeRequest req) {
         if (sedeRepo.existsByCodigo(req.codigo())) {
-            throw new AuthException(
-                AuthException.class.getSimpleName(),
-                "Ya existe una sede con el código: " + req.codigo(),
-                400
-            );
+            throw AuthException.codigoDuplicado(req.codigo());
         }
 
         String schemaName = "sede_" + req.codigo().toLowerCase();
@@ -116,18 +113,10 @@ public class SedeService {
     public void desactivar(UUID id) {
         Sede sede = buscarPorId(id);
         if (SEDE_PRINCIPAL.equals(sede.getCodigo())) {
-            throw new AuthException(
-                AuthException.class.getSimpleName(),
-                "No se puede desactivar la sede principal",
-                400
-            );
+            throw AuthException.sedePrincipalProtegida();
         }
         if (!sede.isActiva()) {
-            throw new AuthException(
-                AuthException.class.getSimpleName(),
-                "La sede ya está inactiva",
-                400
-            );
+            throw AuthException.sedeYaInactiva();
         }
         sede.setActiva(false);
         sede.setDeletedAt(Instant.now());
@@ -137,10 +126,10 @@ public class SedeService {
     }
 
     // ── Helpers ──────────────────────────────────────────────────────
+    @SuppressWarnings("null")
     private Sede buscarPorId(UUID id) {
         return sedeRepo.findById(id)
-            .orElseThrow(() -> new AuthException(
-                AuthException.class.getSimpleName(), "Sede no encontrada: " + id, 404));
+            .orElseThrow(AuthException::sedeNoEncontrada);
     }
 
     private SedeResponse toResponse(Sede s) {

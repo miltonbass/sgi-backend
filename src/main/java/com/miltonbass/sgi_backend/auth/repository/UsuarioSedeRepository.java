@@ -6,13 +6,19 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.Optional;
 
 @Repository
 public interface UsuarioSedeRepository extends JpaRepository<UsuarioSede, UUID> {
 
     /** Obtiene todas las sedes activas de un usuario */
     List<UsuarioSede> findByUsuarioIdAndActivoTrue(UUID usuarioId);
+    
 
     /** Verifica si un usuario tiene acceso a una sede específica */
     boolean existsByUsuarioIdAndSedeIdAndActivoTrue(UUID usuarioId, UUID sedeId);
+
+    List<UsuarioSede> findByUsuarioId(UUID usuarioId);
+    Optional<UsuarioSede> findByUsuarioIdAndSedeId(UUID usuarioId, UUID sedeId);
+    void deleteByUsuarioIdAndSedeId(UUID usuarioId, UUID sedeId);
 }

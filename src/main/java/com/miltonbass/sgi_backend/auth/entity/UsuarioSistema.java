@@ -30,6 +30,9 @@ public class UsuarioSistema {
     @Column(nullable = false, length = 100)
     private String apellido;
 
+    @Column(length = 20)
+    private String telefono;
+
     @Column(nullable = false)
     private boolean activo = true;
 
@@ -48,6 +51,12 @@ public class UsuarioSistema {
 
     @Column(name = "debe_cambiar_password", nullable = false)
     private boolean debeCambiarPassword = false;
+
+    @Column(name = "token_reset_password", length = 255)
+    private String tokenResetPassword;
+
+    @Column(name = "token_reset_expira")
+    private Instant tokenResetExpira;
 
     @Column(name = "created_at", updatable = false)
     private Instant creadoEn;
@@ -108,4 +117,25 @@ public class UsuarioSistema {
 
     public Instant getCreadoEn() { return creadoEn; }
     public Instant getActualizadoEn() { return actualizadoEn; }
+
+    public String getTelefono() { return telefono; }
+    public void setTelefono(String telefono) { this.telefono = telefono; }
+
+    public String getTokenResetPassword() { return tokenResetPassword; }
+    public void setTokenResetPassword(String tokenResetPassword) { this.tokenResetPassword = tokenResetPassword; }
+
+    public Instant getTokenResetExpira() { return tokenResetExpira; }
+    public void setTokenResetExpira(Instant tokenResetExpira) { this.tokenResetExpira = tokenResetExpira; }
+
+    @PrePersist
+    protected void onCreate() {
+        Instant ahora = Instant.now();
+        if (this.creadoEn == null)    this.creadoEn = ahora;
+        if (this.actualizadoEn == null) this.actualizadoEn = ahora;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.actualizadoEn = Instant.now();
+    }
 }

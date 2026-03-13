@@ -62,14 +62,44 @@ public class AuthException extends RuntimeException {
         return new AuthException(503, "SEDE_NO_DISPONIBLE", "La sede no está disponible en este momento");
     }
 
+        /** 409 - Email ya registrado */
+    public static AuthException emailDuplicado() {
+        return new AuthException(409, "EMAIL_DUPLICADO", "El email ya está registrado en el sistema");
+    }
+
+    /** 404 - Usuario no encontrado */
+    public static AuthException usuarioNoEncontrado() {
+        return new AuthException(404, "USUARIO_NO_ENCONTRADO", "El usuario no existe");
+    }
+
+    /** 403 - Rol no permitido para esta operación */
+    public static AuthException rolNoPermitido() {
+        return new AuthException(403, "ROL_NO_PERMITIDO", "No tienes permisos para asignar ese rol");
+    }
+
+    /** 404 - Sede no encontrada */
+    public static AuthException sedeNoEncontrada() {
+        return new AuthException(404, "SEDE_NO_ENCONTRADA", "La sede no existe o está inactiva");
+    }
+
+    /** 400 - Código de sede duplicado */
+    public static AuthException codigoDuplicado(String codigo) {
+        return new AuthException(400, "CODIGO_DUPLICADO", "Ya existe una sede con el código: " + codigo);
+    }
+
+    /** 400 - Operación no permitida sobre sede principal */
+    public static AuthException sedePrincipalProtegida() {
+        return new AuthException(400, "SEDE_PRINCIPAL_PROTEGIDA", "No se puede desactivar la sede principal");
+    }
+
+    /** 400 - Sede ya inactiva */
+    public static AuthException sedeYaInactiva() {
+        return new AuthException(400, "SEDE_YA_INACTIVA", "La sede ya está inactiva");
+    }
+
     // ─── Getters ─────────────────────────────────────────────────────────────
 
     public int getHttpStatus() { return httpStatus; }
     public String getCodigo() { return codigo; }
-    public AuthException(String codigo, String mensaje, int httpStatus) {
-        super(mensaje);
-        this.httpStatus = httpStatus;
-        this.codigo = codigo;
-    }
 
 }
