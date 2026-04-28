@@ -9,7 +9,6 @@ import com.miltonbass.sgi_backend.usuarios.dto.UsuarioDtos.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -91,7 +90,7 @@ public class UsuarioService {
                                        AsignarSedeRequest req,
                                        String rolLlamante,
                                        String sedeIdLlamante) {
-        UsuarioSistema u = usuarioRepo.findById(usuarioId)
+        UsuarioSistema u = usuarioRepo.findById(Objects.requireNonNull(usuarioId, "usuarioId no puede ser nulo"))
             .orElseThrow(() -> AuthException.usuarioNoEncontrado());
 
         validarAsignacion(req.sedeId(), req.roles(), rolLlamante, sedeIdLlamante);
@@ -171,7 +170,7 @@ public class UsuarioService {
     private UsuarioResponse toResponse(UsuarioSistema u) {
         List<UsuarioSede> sedes = usuarioSedeRepo.findByUsuarioId(u.getId());
         List<SedeAsignada> sedesDto = sedes.stream().map(us -> {
-            Sede s = sedeRepo.findById(us.getSedeId()).orElse(null);
+            Sede s = sedeRepo.findById(Objects.requireNonNull(us.getSedeId(), "sedeId no puede ser nulo")).orElse(null);
             String cod = s != null ? s.getCodigo() : "?";
             String nom = s != null ? s.getNombreCorto() : "?";
             return new SedeAsignada(us.getSedeId().toString(), cod, nom, us.getRoles());
@@ -189,7 +188,7 @@ public class UsuarioService {
     @Transactional
     public UsuarioResponse actualizar(UUID id, UpdateUsuarioRequest req,
                                     String rolLlamante, String sedeIdLlamante) {
-        UsuarioSistema u = usuarioRepo.findById(id)
+        UsuarioSistema u = usuarioRepo.findById(Objects.requireNonNull(id, "id no puede ser nulo"))
             .orElseThrow(() -> AuthException.usuarioNoEncontrado());
 
         if (req.nombre()    != null) u.setNombre(req.nombre());
@@ -197,7 +196,7 @@ public class UsuarioService {
         if (req.telefono()  != null) u.setTelefono(req.telefono());
         if (req.activo()    != null) u.setActivo(req.activo());
 
-        usuarioRepo.save(u);
+        usuarioRepo.save(Objects.requireNonNull(u, "usuario no puede ser nulo"));
         return toResponse(u);
     }
 

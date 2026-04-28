@@ -3,6 +3,8 @@ package com.miltonbass.sgi_backend.infrastructure.persistence;
 import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
 import org.springframework.stereotype.Component;
 
+import com.miltonbass.sgi_backend.config.TenantContext;
+
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -20,7 +22,15 @@ public class SgiConnectionProvider
 
     @Override
     public Connection getAnyConnection() throws SQLException {
-        return dataSource.getConnection();
+        String tenant = TenantContext.getCurrentTenant();
+        Connection conn = dataSource.getConnection();
+        if (tenant != null && !tenant.equals("shared")
+                && tenant.matches("^[a-zA-Z][a-zA-Z0-9_]{0,62}$")) {
+            try (Statement stmt = conn.createStatement()) {
+                stmt.execute("SET search_path TO " + tenant + ", shared, public");
+            }
+        }
+        return conn;
     }
 
     @Override
@@ -35,9 +45,7 @@ public class SgiConnectionProvider
         }
         Connection conn = dataSource.getConnection();
         try (Statement stmt = conn.createStatement()) {
-            stmt.execute(
-                "SET search_path TO " + tenantIdentifier + ", shared, public"
-            );
+            stmt.execute("SET search_path TO " + tenantIdentifier + ", shared, public");
         }
         return conn;
     }
@@ -51,7 +59,18 @@ public class SgiConnectionProvider
         connection.close();
     }
 
-    @Override public boolean supportsAggressiveRelease() { return false; }
-    @Override public boolean isUnwrappableAs(Class<?> u) { return false; }
-    @Override public <T> T unwrap(Class<T> u) { return null; }
+    @Override
+    public boolean supportsAggressiveRelease() {
+        return false;
+    }
+
+    @Override
+    public boolean isUnwrappableAs(Class<?> u) {
+        return false;
+    }
+
+    @Override
+    public <T> T unwrap(Class<T> u) {
+        return null;
+    }
 }

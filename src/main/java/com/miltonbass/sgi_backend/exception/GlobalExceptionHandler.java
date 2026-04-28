@@ -26,7 +26,6 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(AuthException.class)
     public ResponseEntity<ErrorResponse> handleAuthException(AuthException ex) {
-        log.debug("AuthException: {} - {}", ex.getCodigo(), ex.getMessage());
         ErrorResponse body = ErrorResponse.of(ex.getHttpStatus(), ex.getCodigo(), ex.getMessage());
         return ResponseEntity.status(ex.getHttpStatus()).body(body);
     }

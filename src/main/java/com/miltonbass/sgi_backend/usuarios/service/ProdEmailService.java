@@ -14,7 +14,7 @@ public class ProdEmailService implements EmailService {
 
     @Override
     public void enviarActivacion(String email, String nombre, String token) {
-        // TODO: integrar SMTP real (SendGrid, SES, etc.) en historia futura
+        // TODO integrar SMTP real (SendGrid, SES, etc.) en historia futura
         log.info("=================================================");
         log.info("[EMAIL PROD] Para: {} ({})", nombre, email);
         log.info("[EMAIL PROD] Token activacion: {}", token);
