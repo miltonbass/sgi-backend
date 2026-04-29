@@ -2,16 +2,19 @@
 package com.miltonbass.sgi_backend.miembros.controller;
 
 import com.miltonbass.sgi_backend.miembros.dto.MiembroDtos.*;
+import com.miltonbass.sgi_backend.miembros.service.MiembroImportService;
 import com.miltonbass.sgi_backend.miembros.service.MiembroService;
 import io.jsonwebtoken.Claims;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -20,9 +23,12 @@ import java.util.UUID;
 public class MiembroController {
 
     private final MiembroService miembroService;
+    private final MiembroImportService miembroImportService;
 
-    public MiembroController(MiembroService miembroService) {
-        this.miembroService = miembroService;
+    public MiembroController(MiembroService miembroService,
+                              MiembroImportService miembroImportService) {
+        this.miembroService       = miembroService;
+        this.miembroImportService = miembroImportService;
     }
 
     /**
@@ -137,6 +143,27 @@ public class MiembroController {
         UUID cambiadoPorId = extraerUsuarioId(auth);
         miembroService.eliminar(id, req.motivo(), cambiadoPorId);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * POST /api/v1/miembros/import
+     * Importa miembros desde CSV o Excel (.xlsx/.xls).
+     * Columnas aceptadas: nombres, apellidos, email, telefono, cedula (cualquier orden).
+     * ?estadoDefault=VISITOR|MIEMBRO  (por defecto: VISITOR)
+     */
+    @PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE')")
+    public ResponseEntity<ImportMiembrosResult> importar(
+            @RequestParam("archivo") MultipartFile archivo,
+            @RequestParam(value = "estadoDefault", defaultValue = "VISITOR") String estadoDefault,
+            Authentication auth) throws Exception {
+        if (archivo.isEmpty()) {
+            throw new IllegalArgumentException("El archivo está vacío");
+        }
+        UUID sedeId      = extraerSedeId(auth);
+        UUID creadoPorId = extraerUsuarioId(auth);
+        ImportMiembrosResult resultado = miembroImportService.importar(archivo, estadoDefault, sedeId, creadoPorId);
+        return ResponseEntity.ok(resultado);
     }
 
     // ─── Helpers JWT ──────────────────────────────────────────────────

@@ -126,4 +126,21 @@ public final class MiembroDtos {
 
     public record EstadoHistorialResponse(List<EstadoHistorialItem> historial) {
     }
+
+    // ─── Import (H2.4) ───────────────────────────────────────
+
+    public record FilaImportError(
+            int fila,
+            String preview,
+            String motivo) {
+    }
+
+    public record ImportMiembrosResult(
+            int totalProcesados,
+            int importados,
+            int omitidos,
+            int conError,
+            List<FilaImportError> errores,
+            List<String> emailsOmitidos) {
+    }
 }
