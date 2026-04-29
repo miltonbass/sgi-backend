@@ -5,11 +5,11 @@
 [INFO]   from pom.xml
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO] 
-[INFO] >>> spring-boot:3.5.13:run (default-cli) > test-compile @ sgi-backend >>>
+[INFO] >>> spring-boot:3.5.14:run (default-cli) > test-compile @ sgi-backend >>>
 [INFO] 
 [INFO] --- resources:3.3.1:resources (default-resources) @ sgi-backend ---
 [INFO] Copying 3 resources from src\main\resources to target\classes
-[INFO] Copying 9 resources from src\main\resources to target\classes
+[INFO] Copying 11 resources from src\main\resources to target\classes
 [INFO] 
 [INFO] --- compiler:3.14.1:compile (default-compile) @ sgi-backend ---
 [INFO] Nothing to compile - all classes are up to date.
@@ -20,10 +20,10 @@
 [INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ sgi-backend ---
 [INFO] Nothing to compile - all classes are up to date.
 [INFO] 
-[INFO] <<< spring-boot:3.5.13:run (default-cli) < test-compile @ sgi-backend <<<
+[INFO] <<< spring-boot:3.5.14:run (default-cli) < test-compile @ sgi-backend <<<
 [INFO] 
 [INFO] 
-[INFO] --- spring-boot:3.5.13:run (default-cli) @ sgi-backend ---
+[INFO] --- spring-boot:3.5.14:run (default-cli) @ sgi-backend ---
 [INFO] Attaching agents: []
 
   .   ____          _            __ _ _
@@ -33,41 +33,41 @@
   '  |____| .__|_| |_|_| |_\__, | / / / /
  =========|_|==============|___/=/_/_/_/
 
- :: Spring Boot ::               (v3.5.13)
+ :: Spring Boot ::               (v3.5.14)
 
-2026-04-08T21:38:25.956-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] c.m.sgi_backend.SgiBackendApplication    : Starting SgiBackendApplication using Java 21.0.10 with PID 42496 (C:\proyectos\sgi-backend\target\classes started by milto in C:\proyectos\sgi-backend)
-2026-04-08T21:38:25.959-05:00 DEBUG 42496 --- [sgi-backend] [  restartedMain] c.m.sgi_backend.SgiBackendApplication    : Running with Spring Boot v3.5.13, Spring v6.2.17
-2026-04-08T21:38:25.961-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] c.m.sgi_backend.SgiBackendApplication    : The following 1 profile is active: "dev"
-2026-04-08T21:38:26.053-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2026-04-08T21:38:26.054-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2026-04-08T21:38:27.836-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
-2026-04-08T21:38:27.839-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-04-08T21:38:28.153-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 294 ms. Found 5 JPA repository interfaces.
-2026-04-08T21:38:28.198-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
-2026-04-08T21:38:28.199-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
-2026-04-08T21:38:28.248-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.miltonbass.sgi_backend.auth.repository.RefreshTokenRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
-2026-04-08T21:38:28.249-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.miltonbass.sgi_backend.auth.repository.SedeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
-2026-04-08T21:38:28.249-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.miltonbass.sgi_backend.auth.repository.UsuarioSedeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
-2026-04-08T21:38:28.251-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.miltonbass.sgi_backend.auth.repository.UsuarioSistemaRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
-2026-04-08T21:38:28.252-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.miltonbass.sgi_backend.miembros.repository.MiembroRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
-2026-04-08T21:38:28.252-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 31 ms. Found 0 Redis repository interfaces.
-2026-04-08T21:38:29.583-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
-2026-04-08T21:38:29.611-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2026-04-08T21:38:29.613-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.53]
-2026-04-08T21:38:29.704-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2026-04-08T21:38:29.705-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3648 ms
-2026-04-08T21:38:29.816-05:00 DEBUG 42496 --- [sgi-backend] [  restartedMain] c.m.sgi_backend.security.JwtAuthFilter   : Filter 'jwtAuthFilter' configured for use
-2026-04-08T21:38:30.202-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : SGI-Dev-Pool - Starting...
-2026-04-08T21:38:30.431-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : SGI-Dev-Pool - Added connection org.postgresql.jdbc.PgConnection@c93aa0b
-2026-04-08T21:38:30.433-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : SGI-Dev-Pool - Start completed.
-2026-04-08T21:38:30.490-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:5432/sgi_system (PostgreSQL 15.16)
-2026-04-08T21:38:30.673-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 7
-2026-04-08T21:38:30.679-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
-2026-04-08T21:38:30.884-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-04-08T21:38:30.969-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.45.Final
-2026-04-08T21:38:31.028-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2026-04-08T21:38:31.435-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-04-08T21:38:31.579-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+2026-04-28T20:56:49.529-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] c.m.sgi_backend.SgiBackendApplication    : Starting SgiBackendApplication using Java 21.0.10 with PID 8964 (C:\proyectos\sgi-backend\target\classes started by milto in C:\proyectos\sgi-backend)
+2026-04-28T20:56:49.532-05:00 DEBUG 8964 --- [sgi-backend] [  restartedMain] c.m.sgi_backend.SgiBackendApplication    : Running with Spring Boot v3.5.14, Spring v6.2.18
+2026-04-28T20:56:49.532-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] c.m.sgi_backend.SgiBackendApplication    : The following 1 profile is active: "dev"
+2026-04-28T20:56:49.604-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-04-28T20:56:49.605-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-04-28T20:56:50.926-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-04-28T20:56:50.928-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-28T20:56:51.147-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 209 ms. Found 5 JPA repository interfaces.
+2026-04-28T20:56:51.174-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-04-28T20:56:51.176-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-04-28T20:56:51.214-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.miltonbass.sgi_backend.auth.repository.RefreshTokenRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-28T20:56:51.215-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.miltonbass.sgi_backend.auth.repository.SedeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-28T20:56:51.216-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.miltonbass.sgi_backend.auth.repository.UsuarioSedeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-28T20:56:51.216-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.miltonbass.sgi_backend.auth.repository.UsuarioSistemaRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-28T20:56:51.217-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.miltonbass.sgi_backend.miembros.repository.MiembroRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-28T20:56:51.217-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 25 ms. Found 0 Redis repository interfaces.
+2026-04-28T20:56:52.280-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-04-28T20:56:52.301-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-04-28T20:56:52.302-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.54]
+2026-04-28T20:56:52.362-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-04-28T20:56:52.364-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2757 ms
+2026-04-28T20:56:52.460-05:00 DEBUG 8964 --- [sgi-backend] [  restartedMain] c.m.sgi_backend.security.JwtAuthFilter   : Filter 'jwtAuthFilter' configured for use
+2026-04-28T20:56:52.811-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : SGI-Dev-Pool - Starting...
+2026-04-28T20:56:53.019-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : SGI-Dev-Pool - Added connection org.postgresql.jdbc.PgConnection@32dade50
+2026-04-28T20:56:53.020-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : SGI-Dev-Pool - Start completed.
+2026-04-28T20:56:53.061-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:5432/sgi_system (PostgreSQL 15.16)
+2026-04-28T20:56:53.221-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 9
+2026-04-28T20:56:53.226-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2026-04-28T20:56:53.370-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-04-28T20:56:53.436-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.49.Final
+2026-04-28T20:56:53.490-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-04-28T20:56:53.857-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-28T20:56:53.951-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
 	Database JDBC URL [undefined/unknown]
 	Database driver: undefined/unknown
 	Database version: 15.16
@@ -75,66 +75,2179 @@
 	Isolation level: undefined/unknown
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2026-04-08T21:38:33.253-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-04-08T21:38:33.360-05:00 ERROR 42496 --- [sgi-backend] [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Failed to initialize JPA EntityManagerFactory: [PersistenceUnit: default] Unable to build Hibernate SessionFactory; nested exception is org.hibernate.tool.schema.spi.SchemaManagementException: Schema-validation: missing table [miembros]
-2026-04-08T21:38:33.361-05:00  WARN 42496 --- [sgi-backend] [  restartedMain] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: [PersistenceUnit: default] Unable to build Hibernate SessionFactory; nested exception is org.hibernate.tool.schema.spi.SchemaManagementException: Schema-validation: missing table [miembros]
-2026-04-08T21:38:33.365-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : SGI-Dev-Pool - Shutdown initiated...
-2026-04-08T21:38:33.369-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : SGI-Dev-Pool - Shutdown completed.
-2026-04-08T21:38:33.374-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
-2026-04-08T21:38:33.393-05:00  INFO 42496 --- [sgi-backend] [  restartedMain] .s.b.a.l.ConditionEvaluationReportLogger : 
+2026-04-28T20:56:55.275-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-28T20:56:55.281-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-28T20:56:55.589-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-28T20:56:57.467-05:00  WARN 8964 --- [sgi-backend] [  restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 8c900eff-4598-4618-bd51-47ecfd9d0134
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-04-28T20:56:57.476-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-04-28T20:56:58.387-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-04-28T20:56:58.426-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-04-28T20:56:58.441-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] c.m.sgi_backend.SgiBackendApplication    : Started SgiBackendApplication in 9.656 seconds (process running for 10.295)
+2026-04-28T20:57:14.098-05:00  INFO 8964 --- [sgi-backend] [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 80 class path changes (0 additions, 80 deletions, 0 modifications)
+2026-04-28T20:57:14.103-05:00  INFO 8964 --- [sgi-backend] [       Thread-5] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-28T20:57:14.143-05:00  INFO 8964 --- [sgi-backend] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-04-28T20:57:14.170-05:00  INFO 8964 --- [sgi-backend] [       Thread-5] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-28T20:57:14.176-05:00  INFO 8964 --- [sgi-backend] [       Thread-5] com.zaxxer.hikari.HikariDataSource       : SGI-Dev-Pool - Shutdown initiated...
+2026-04-28T20:57:14.178-05:00  INFO 8964 --- [sgi-backend] [       Thread-5] com.zaxxer.hikari.HikariDataSource       : SGI-Dev-Pool - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.14)
+
+2026-04-28T20:57:14.283-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] c.m.sgi_backend.SgiBackendApplication    : Starting SgiBackendApplication using Java 21.0.10 with PID 8964 (C:\proyectos\sgi-backend\target\classes started by milto in C:\proyectos\sgi-backend)
+2026-04-28T20:57:14.284-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] c.m.sgi_backend.SgiBackendApplication    : No active profile set, falling back to 1 default profile: "default"
+2026-04-28T20:57:14.629-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-04-28T20:57:14.629-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-28T20:57:14.642-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 10 ms. Found 0 JPA repository interfaces.
+2026-04-28T20:57:14.651-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-04-28T20:57:14.651-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-04-28T20:57:14.662-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 8 ms. Found 0 Redis repository interfaces.
+2026-04-28T20:57:14.813-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-04-28T20:57:14.814-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-04-28T20:57:14.815-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.54]
+2026-04-28T20:57:14.845-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-04-28T20:57:14.845-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 559 ms
+2026-04-28T20:57:14.877-05:00  WARN 8964 --- [sgi-backend] [  restartedMain] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Failed to initialize dependency 'flyway' of LoadTimeWeaverAware bean 'entityManagerFactory': Error creating bean with name 'flyway' defined in class path resource [org/springframework/boot/autoconfigure/flyway/FlywayAutoConfiguration$FlywayConfiguration.class]: Failed to instantiate [org.flywaydb.core.Flyway]: Factory method 'flyway' threw exception with message: Error creating bean with name 'dataSource' defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Hikari.class]: Failed to instantiate [com.zaxxer.hikari.HikariDataSource]: Factory method 'dataSource' threw exception with message: Failed to determine a suitable driver class
+2026-04-28T20:57:14.878-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2026-04-28T20:57:14.885-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .s.b.a.l.ConditionEvaluationReportLogger : 
 
 Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
-2026-04-08T21:38:33.420-05:00 ERROR 42496 --- [sgi-backend] [  restartedMain] o.s.boot.SpringApplication               : Application run failed
+2026-04-28T20:57:14.921-05:00 ERROR 8964 --- [sgi-backend] [  restartedMain] o.s.b.d.LoggingFailureAnalysisReporter   : 
 
-org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: [PersistenceUnit: default] Unable to build Hibernate SessionFactory; nested exception is org.hibernate.tool.schema.spi.SchemaManagementException: Schema-validation: missing table [miembros]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1826) ~[spring-beans-6.2.17.jar:6.2.17]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:607) ~[spring-beans-6.2.17.jar:6.2.17]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529) ~[spring-beans-6.2.17.jar:6.2.17]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339) ~[spring-beans-6.2.17.jar:6.2.17]
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373) ~[spring-beans-6.2.17.jar:6.2.17]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337) ~[spring-beans-6.2.17.jar:6.2.17]
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:207) ~[spring-beans-6.2.17.jar:6.2.17]
-	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:974) ~[spring-context-6.2.17.jar:6.2.17]
-	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:628) ~[spring-context-6.2.17.jar:6.2.17]
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.5.13.jar:3.5.13]
-	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752) ~[spring-boot-3.5.13.jar:3.5.13]
-	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.5.13.jar:3.5.13]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.5.13.jar:3.5.13]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361) ~[spring-boot-3.5.13.jar:3.5.13]
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350) ~[spring-boot-3.5.13.jar:3.5.13]
-	at com.miltonbass.sgi_backend.SgiBackendApplication.main(SgiBackendApplication.java:12) ~[classes/:na]
-	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
-	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
-	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50) ~[spring-boot-devtools-3.5.13.jar:3.5.13]
-Caused by: jakarta.persistence.PersistenceException: [PersistenceUnit: default] Unable to build Hibernate SessionFactory; nested exception is org.hibernate.tool.schema.spi.SchemaManagementException: Schema-validation: missing table [miembros]
-	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:431) ~[spring-orm-6.2.17.jar:6.2.17]
-	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:400) ~[spring-orm-6.2.17.jar:6.2.17]
-	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:364) ~[spring-orm-6.2.17.jar:6.2.17]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1873) ~[spring-beans-6.2.17.jar:6.2.17]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1822) ~[spring-beans-6.2.17.jar:6.2.17]
-	... 18 common frames omitted
-Caused by: org.hibernate.tool.schema.spi.SchemaManagementException: Schema-validation: missing table [miembros]
-	at org.hibernate.tool.schema.internal.AbstractSchemaValidator.validateTable(AbstractSchemaValidator.java:136) ~[hibernate-core-6.6.45.Final.jar:6.6.45.Final]
-	at org.hibernate.tool.schema.internal.GroupedSchemaValidatorImpl.validateTables(GroupedSchemaValidatorImpl.java:46) ~[hibernate-core-6.6.45.Final.jar:6.6.45.Final]
-	at org.hibernate.tool.schema.internal.AbstractSchemaValidator.performValidation(AbstractSchemaValidator.java:99) ~[hibernate-core-6.6.45.Final.jar:6.6.45.Final]
-	at org.hibernate.tool.schema.internal.AbstractSchemaValidator.doValidation(AbstractSchemaValidator.java:77) ~[hibernate-core-6.6.45.Final.jar:6.6.45.Final]
-	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:289) ~[hibernate-core-6.6.45.Final.jar:6.6.45.Final]
-	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.lambda$process$5(SchemaManagementToolCoordinator.java:144) ~[hibernate-core-6.6.45.Final.jar:6.6.45.Final]
-	at java.base/java.util.HashMap.forEach(HashMap.java:1429) ~[na:na]
-	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:141) ~[hibernate-core-6.6.45.Final.jar:6.6.45.Final]
-	at org.hibernate.boot.internal.SessionFactoryObserverForSchemaExport.sessionFactoryCreated(SessionFactoryObserverForSchemaExport.java:37) ~[hibernate-core-6.6.45.Final.jar:6.6.45.Final]
-	at org.hibernate.internal.SessionFactoryObserverChain.sessionFactoryCreated(SessionFactoryObserverChain.java:35) ~[hibernate-core-6.6.45.Final.jar:6.6.45.Final]
-	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:324) ~[hibernate-core-6.6.45.Final.jar:6.6.45.Final]
-	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:463) ~[hibernate-core-6.6.45.Final.jar:6.6.45.Final]
-	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1517) ~[hibernate-core-6.6.45.Final.jar:6.6.45.Final]
-	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:66) ~[spring-orm-6.2.17.jar:6.2.17]
-	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:388) ~[spring-orm-6.2.17.jar:6.2.17]
-	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:419) ~[spring-orm-6.2.17.jar:6.2.17]
-	... 22 common frames omitted
+***************************
+APPLICATION FAILED TO START
+***************************
 
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time:  13.240 s
-[INFO] Finished at: 2026-04-08T21:38:33-05:00
-[INFO] ------------------------------------------------------------------------
+Description:
+
+Failed to configure a DataSource: 'url' attribute is not specified and no embedded datasource could be configured.
+
+Reason: Failed to determine a suitable driver class
+
+
+Action:
+
+Consider the following:
+	If you want an embedded database (H2, HSQL or Derby), please put it on the classpath.
+	If you have database settings to be loaded from a particular profile you may need to activate it (no profiles are currently active).
+
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.14)
+
+2026-04-28T20:57:16.849-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] c.m.sgi_backend.SgiBackendApplication    : Starting SgiBackendApplication using Java 21.0.10 with PID 8964 (C:\proyectos\sgi-backend\target\classes started by milto in C:\proyectos\sgi-backend)
+2026-04-28T20:57:16.849-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] c.m.sgi_backend.SgiBackendApplication    : No active profile set, falling back to 1 default profile: "default"
+2026-04-28T20:57:17.174-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-04-28T20:57:17.176-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-28T20:57:17.219-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 39 ms. Found 5 JPA repository interfaces.
+2026-04-28T20:57:17.223-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-04-28T20:57:17.223-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-04-28T20:57:17.231-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.miltonbass.sgi_backend.auth.repository.RefreshTokenRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-28T20:57:17.231-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.miltonbass.sgi_backend.auth.repository.SedeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-28T20:57:17.231-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.miltonbass.sgi_backend.auth.repository.UsuarioSedeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-28T20:57:17.231-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.miltonbass.sgi_backend.auth.repository.UsuarioSistemaRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-28T20:57:17.231-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.miltonbass.sgi_backend.miembros.repository.MiembroRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-28T20:57:17.232-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 6 ms. Found 0 Redis repository interfaces.
+2026-04-28T20:57:17.367-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-04-28T20:57:17.368-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-04-28T20:57:17.368-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.54]
+2026-04-28T20:57:17.385-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2026-04-28T20:57:17.385-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 533 ms
+2026-04-28T20:57:17.441-05:00  WARN 8964 --- [sgi-backend] [  restartedMain] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Failed to initialize dependency 'flyway' of LoadTimeWeaverAware bean 'entityManagerFactory': Error creating bean with name 'flyway' defined in class path resource [org/springframework/boot/autoconfigure/flyway/FlywayAutoConfiguration$FlywayConfiguration.class]: Failed to instantiate [org.flywaydb.core.Flyway]: Factory method 'flyway' threw exception with message: Error creating bean with name 'dataSource' defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Hikari.class]: Failed to instantiate [com.zaxxer.hikari.HikariDataSource]: Factory method 'dataSource' threw exception with message: Failed to determine a suitable driver class
+2026-04-28T20:57:17.442-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2026-04-28T20:57:17.447-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-04-28T20:57:17.450-05:00 ERROR 8964 --- [sgi-backend] [  restartedMain] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Failed to configure a DataSource: 'url' attribute is not specified and no embedded datasource could be configured.
+
+Reason: Failed to determine a suitable driver class
+
+
+Action:
+
+Consider the following:
+	If you want an embedded database (H2, HSQL or Derby), please put it on the classpath.
+	If you have database settings to be loaded from a particular profile you may need to activate it (no profiles are currently active).
+
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.14)
+
+2026-04-28T20:57:25.187-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] c.m.sgi_backend.SgiBackendApplication    : Starting SgiBackendApplication using Java 21.0.10 with PID 8964 (C:\proyectos\sgi-backend\target\classes started by milto in C:\proyectos\sgi-backend)
+2026-04-28T20:57:25.188-05:00 DEBUG 8964 --- [sgi-backend] [  restartedMain] c.m.sgi_backend.SgiBackendApplication    : Running with Spring Boot v3.5.14, Spring v6.2.18
+2026-04-28T20:57:25.188-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] c.m.sgi_backend.SgiBackendApplication    : The following 1 profile is active: "dev"
+2026-04-28T20:57:27.399-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-04-28T20:57:27.400-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-28T20:57:27.805-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 403 ms. Found 5 JPA repository interfaces.
+2026-04-28T20:57:27.820-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-04-28T20:57:27.820-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-04-28T20:57:27.840-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.miltonbass.sgi_backend.auth.repository.RefreshTokenRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-28T20:57:27.840-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.miltonbass.sgi_backend.auth.repository.SedeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-28T20:57:27.840-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.miltonbass.sgi_backend.auth.repository.UsuarioSedeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-28T20:57:27.840-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.miltonbass.sgi_backend.auth.repository.UsuarioSistemaRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-28T20:57:27.840-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.miltonbass.sgi_backend.miembros.repository.MiembroRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-28T20:57:27.840-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 17 ms. Found 0 Redis repository interfaces.
+2026-04-28T20:57:28.077-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-04-28T20:57:28.079-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-04-28T20:57:28.080-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.54]
+2026-04-28T20:57:28.126-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.a.c.c.C.[Tomcat-2].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2026-04-28T20:57:28.127-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2931 ms
+2026-04-28T20:57:28.203-05:00 DEBUG 8964 --- [sgi-backend] [  restartedMain] c.m.sgi_backend.security.JwtAuthFilter   : Filter 'jwtAuthFilter' configured for use
+2026-04-28T20:57:28.424-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : SGI-Dev-Pool - Starting...
+2026-04-28T20:57:28.509-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : SGI-Dev-Pool - Added connection org.postgresql.jdbc.PgConnection@14a0864c
+2026-04-28T20:57:28.510-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : SGI-Dev-Pool - Start completed.
+2026-04-28T20:57:28.516-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:5432/sgi_system (PostgreSQL 15.16)
+2026-04-28T20:57:28.853-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 9
+2026-04-28T20:57:28.856-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2026-04-28T20:57:29.194-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-04-28T20:57:29.240-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-04-28T20:57:29.386-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-28T20:57:29.450-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [undefined/unknown]
+	Database driver: undefined/unknown
+	Database version: 15.16
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-28T20:57:30.273-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-28T20:57:30.273-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-28T20:57:32.750-05:00  WARN 8964 --- [sgi-backend] [  restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 5776e50c-4e31-45b2-bd55-009ee9c36c41
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-04-28T20:57:32.753-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-04-28T20:57:33.062-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-04-28T20:57:33.078-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-04-28T20:57:33.082-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] c.m.sgi_backend.SgiBackendApplication    : Started SgiBackendApplication in 8.014 seconds (process running for 44.936)
+2026-04-28T20:57:33.084-05:00  INFO 8964 --- [sgi-backend] [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2026-04-28T20:57:36.088-05:00  INFO 8964 --- [sgi-backend] [nio-8080-exec-1] o.a.c.c.C.[Tomcat-2].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-28T20:57:36.089-05:00  INFO 8964 --- [sgi-backend] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-04-28T20:57:36.090-05:00  INFO 8964 --- [sgi-backend] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-04-28T20:57:36.349-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        us1_0.id,
+        us1_0.activo,
+        us1_0.updated_at,
+        us1_0.apellido,
+        us1_0.bloqueado_hasta,
+        us1_0.created_at,
+        us1_0.debe_cambiar_password,
+        us1_0.email,
+        us1_0.intentos_fallidos,
+        us1_0.nombre,
+        us1_0.password_hash,
+        us1_0.super_admin,
+        us1_0.telefono,
+        us1_0.token_reset_expira,
+        us1_0.token_reset_password,
+        us1_0.ultimo_login,
+        us1_0.username 
+    from
+        shared.usuarios_sistema us1_0 
+    where
+        upper(us1_0.email)=upper(?)
+Hibernate: 
+    select
+        us1_0.id,
+        us1_0.activo,
+        us1_0.updated_at,
+        us1_0.apellido,
+        us1_0.bloqueado_hasta,
+        us1_0.created_at,
+        us1_0.debe_cambiar_password,
+        us1_0.email,
+        us1_0.intentos_fallidos,
+        us1_0.nombre,
+        us1_0.password_hash,
+        us1_0.super_admin,
+        us1_0.telefono,
+        us1_0.token_reset_expira,
+        us1_0.token_reset_password,
+        us1_0.ultimo_login,
+        us1_0.username 
+    from
+        shared.usuarios_sistema us1_0 
+    where
+        upper(us1_0.email)=upper(?)
+2026-04-28T20:57:37.046-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-1] org.hibernate.SQL                        : 
+    update
+        shared.usuarios_sistema us1_0 
+    set
+        intentos_fallidos=0,
+        bloqueado_hasta=null,
+        ultimo_login=? 
+    where
+        us1_0.id=?
+Hibernate: 
+    update
+        shared.usuarios_sistema us1_0 
+    set
+        intentos_fallidos=0,
+        bloqueado_hasta=null,
+        ultimo_login=? 
+    where
+        us1_0.id=?
+2026-04-28T20:57:37.057-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        us1_0.id,
+        us1_0.activo,
+        us1_0.roles,
+        us1_0.sede_id,
+        us1_0.usuario_id 
+    from
+        shared.usuarios_sedes us1_0 
+    where
+        us1_0.usuario_id=? 
+        and us1_0.activo
+Hibernate: 
+    select
+        us1_0.id,
+        us1_0.activo,
+        us1_0.roles,
+        us1_0.sede_id,
+        us1_0.usuario_id 
+    from
+        shared.usuarios_sedes us1_0 
+    where
+        us1_0.usuario_id=? 
+        and us1_0.activo
+2026-04-28T20:57:37.070-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        s1_0.id,
+        s1_0.activa,
+        s1_0.updated_at,
+        s1_0.ciudad,
+        s1_0.codigo,
+        s1_0.config,
+        s1_0.created_at,
+        s1_0.deleted_at,
+        s1_0.departamento,
+        s1_0.descripcion,
+        s1_0.direccion,
+        s1_0.email,
+        s1_0.fecha_fundacion,
+        s1_0.logo_url,
+        s1_0.nombre,
+        s1_0.pais,
+        s1_0.schema_name,
+        s1_0.telefono,
+        s1_0.zona_horaria 
+    from
+        shared.sedes s1_0 
+    where
+        s1_0.id=? 
+        and s1_0.activa
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.activa,
+        s1_0.updated_at,
+        s1_0.ciudad,
+        s1_0.codigo,
+        s1_0.config,
+        s1_0.created_at,
+        s1_0.deleted_at,
+        s1_0.departamento,
+        s1_0.descripcion,
+        s1_0.direccion,
+        s1_0.email,
+        s1_0.fecha_fundacion,
+        s1_0.logo_url,
+        s1_0.nombre,
+        s1_0.pais,
+        s1_0.schema_name,
+        s1_0.telefono,
+        s1_0.zona_horaria 
+    from
+        shared.sedes s1_0 
+    where
+        s1_0.id=? 
+        and s1_0.activa
+2026-04-28T20:57:37.094-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        s1_0.id,
+        s1_0.activa,
+        s1_0.updated_at,
+        s1_0.ciudad,
+        s1_0.codigo,
+        s1_0.config,
+        s1_0.created_at,
+        s1_0.deleted_at,
+        s1_0.departamento,
+        s1_0.descripcion,
+        s1_0.direccion,
+        s1_0.email,
+        s1_0.fecha_fundacion,
+        s1_0.logo_url,
+        s1_0.nombre,
+        s1_0.pais,
+        s1_0.schema_name,
+        s1_0.telefono,
+        s1_0.zona_horaria 
+    from
+        shared.sedes s1_0 
+    where
+        s1_0.id=? 
+        and s1_0.activa
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.activa,
+        s1_0.updated_at,
+        s1_0.ciudad,
+        s1_0.codigo,
+        s1_0.config,
+        s1_0.created_at,
+        s1_0.deleted_at,
+        s1_0.departamento,
+        s1_0.descripcion,
+        s1_0.direccion,
+        s1_0.email,
+        s1_0.fecha_fundacion,
+        s1_0.logo_url,
+        s1_0.nombre,
+        s1_0.pais,
+        s1_0.schema_name,
+        s1_0.telefono,
+        s1_0.zona_horaria 
+    from
+        shared.sedes s1_0 
+    where
+        s1_0.id=? 
+        and s1_0.activa
+2026-04-28T20:57:37.191-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-1] c.m.s.auth.service.RefreshTokenService   : Refresh token creado para usuario b2c3d4e5-f6a7-8901-bcde-f12345678901
+2026-04-28T20:57:37.191-05:00  INFO 8964 --- [sgi-backend] [nio-8080-exec-1] c.m.s.auth.service.AuthService           : Login exitoso: admin@iglesiapaibog.com → sede PAI_BOG
+2026-04-28T20:57:37.204-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-1] org.hibernate.SQL                        : 
+    insert 
+    into
+        shared.refresh_tokens
+        (activo, created_at, dispositivo, expira_en, token_hash, usuario_id, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        shared.refresh_tokens
+        (activo, created_at, dispositivo, expira_en, token_hash, usuario_id, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?)
+2026-04-28T20:57:37.371-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-2] c.m.sgi_backend.security.JwtAuthFilter   : Schema de sede establecido: sede_pai_bog
+2026-04-28T20:57:37.413-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        m1_0.id,
+        m1_0.updated_at,
+        m1_0.apellidos,
+        m1_0.cedula,
+        m1_0.ciudad,
+        m1_0.consolidador_id,
+        m1_0.created_at,
+        m1_0.creado_por,
+        m1_0.deleted_at,
+        m1_0.direccion,
+        m1_0.email,
+        m1_0.estado,
+        m1_0.estado_civil,
+        m1_0.fecha_bautismo,
+        m1_0.fecha_ingreso,
+        m1_0.fecha_nacimiento,
+        m1_0.foto_url,
+        m1_0.genero,
+        m1_0.grupo_id,
+        m1_0.metadata,
+        m1_0.nombres,
+        m1_0.numero_miembro,
+        m1_0.sede_id,
+        m1_0.telefono,
+        m1_0.usuario_id 
+    from
+        miembros m1_0 
+    where
+        m1_0.deleted_at is null 
+    order by
+        m1_0.apellidos,
+        m1_0.nombres 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.updated_at,
+        m1_0.apellidos,
+        m1_0.cedula,
+        m1_0.ciudad,
+        m1_0.consolidador_id,
+        m1_0.created_at,
+        m1_0.creado_por,
+        m1_0.deleted_at,
+        m1_0.direccion,
+        m1_0.email,
+        m1_0.estado,
+        m1_0.estado_civil,
+        m1_0.fecha_bautismo,
+        m1_0.fecha_ingreso,
+        m1_0.fecha_nacimiento,
+        m1_0.foto_url,
+        m1_0.genero,
+        m1_0.grupo_id,
+        m1_0.metadata,
+        m1_0.nombres,
+        m1_0.numero_miembro,
+        m1_0.sede_id,
+        m1_0.telefono,
+        m1_0.usuario_id 
+    from
+        miembros m1_0 
+    where
+        m1_0.deleted_at is null 
+    order by
+        m1_0.apellidos,
+        m1_0.nombres 
+    fetch
+        first ? rows only
+2026-04-28T20:57:52.535-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        us1_0.id,
+        us1_0.activo,
+        us1_0.updated_at,
+        us1_0.apellido,
+        us1_0.bloqueado_hasta,
+        us1_0.created_at,
+        us1_0.debe_cambiar_password,
+        us1_0.email,
+        us1_0.intentos_fallidos,
+        us1_0.nombre,
+        us1_0.password_hash,
+        us1_0.super_admin,
+        us1_0.telefono,
+        us1_0.token_reset_expira,
+        us1_0.token_reset_password,
+        us1_0.ultimo_login,
+        us1_0.username 
+    from
+        shared.usuarios_sistema us1_0 
+    where
+        upper(us1_0.email)=upper(?)
+Hibernate: 
+    select
+        us1_0.id,
+        us1_0.activo,
+        us1_0.updated_at,
+        us1_0.apellido,
+        us1_0.bloqueado_hasta,
+        us1_0.created_at,
+        us1_0.debe_cambiar_password,
+        us1_0.email,
+        us1_0.intentos_fallidos,
+        us1_0.nombre,
+        us1_0.password_hash,
+        us1_0.super_admin,
+        us1_0.telefono,
+        us1_0.token_reset_expira,
+        us1_0.token_reset_password,
+        us1_0.ultimo_login,
+        us1_0.username 
+    from
+        shared.usuarios_sistema us1_0 
+    where
+        upper(us1_0.email)=upper(?)
+2026-04-28T20:57:53.068-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    update
+        shared.usuarios_sistema us1_0 
+    set
+        intentos_fallidos=0,
+        bloqueado_hasta=null,
+        ultimo_login=? 
+    where
+        us1_0.id=?
+Hibernate: 
+    update
+        shared.usuarios_sistema us1_0 
+    set
+        intentos_fallidos=0,
+        bloqueado_hasta=null,
+        ultimo_login=? 
+    where
+        us1_0.id=?
+2026-04-28T20:57:53.073-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        us1_0.id,
+        us1_0.activo,
+        us1_0.roles,
+        us1_0.sede_id,
+        us1_0.usuario_id 
+    from
+        shared.usuarios_sedes us1_0 
+    where
+        us1_0.usuario_id=? 
+        and us1_0.activo
+Hibernate: 
+    select
+        us1_0.id,
+        us1_0.activo,
+        us1_0.roles,
+        us1_0.sede_id,
+        us1_0.usuario_id 
+    from
+        shared.usuarios_sedes us1_0 
+    where
+        us1_0.usuario_id=? 
+        and us1_0.activo
+2026-04-28T20:57:53.079-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        s1_0.id,
+        s1_0.activa,
+        s1_0.updated_at,
+        s1_0.ciudad,
+        s1_0.codigo,
+        s1_0.config,
+        s1_0.created_at,
+        s1_0.deleted_at,
+        s1_0.departamento,
+        s1_0.descripcion,
+        s1_0.direccion,
+        s1_0.email,
+        s1_0.fecha_fundacion,
+        s1_0.logo_url,
+        s1_0.nombre,
+        s1_0.pais,
+        s1_0.schema_name,
+        s1_0.telefono,
+        s1_0.zona_horaria 
+    from
+        shared.sedes s1_0 
+    where
+        s1_0.id=? 
+        and s1_0.activa
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.activa,
+        s1_0.updated_at,
+        s1_0.ciudad,
+        s1_0.codigo,
+        s1_0.config,
+        s1_0.created_at,
+        s1_0.deleted_at,
+        s1_0.departamento,
+        s1_0.descripcion,
+        s1_0.direccion,
+        s1_0.email,
+        s1_0.fecha_fundacion,
+        s1_0.logo_url,
+        s1_0.nombre,
+        s1_0.pais,
+        s1_0.schema_name,
+        s1_0.telefono,
+        s1_0.zona_horaria 
+    from
+        shared.sedes s1_0 
+    where
+        s1_0.id=? 
+        and s1_0.activa
+2026-04-28T20:57:53.090-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        s1_0.id,
+        s1_0.activa,
+        s1_0.updated_at,
+        s1_0.ciudad,
+        s1_0.codigo,
+        s1_0.config,
+        s1_0.created_at,
+        s1_0.deleted_at,
+        s1_0.departamento,
+        s1_0.descripcion,
+        s1_0.direccion,
+        s1_0.email,
+        s1_0.fecha_fundacion,
+        s1_0.logo_url,
+        s1_0.nombre,
+        s1_0.pais,
+        s1_0.schema_name,
+        s1_0.telefono,
+        s1_0.zona_horaria 
+    from
+        shared.sedes s1_0 
+    where
+        s1_0.id=? 
+        and s1_0.activa
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.activa,
+        s1_0.updated_at,
+        s1_0.ciudad,
+        s1_0.codigo,
+        s1_0.config,
+        s1_0.created_at,
+        s1_0.deleted_at,
+        s1_0.departamento,
+        s1_0.descripcion,
+        s1_0.direccion,
+        s1_0.email,
+        s1_0.fecha_fundacion,
+        s1_0.logo_url,
+        s1_0.nombre,
+        s1_0.pais,
+        s1_0.schema_name,
+        s1_0.telefono,
+        s1_0.zona_horaria 
+    from
+        shared.sedes s1_0 
+    where
+        s1_0.id=? 
+        and s1_0.activa
+2026-04-28T20:57:53.095-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-4] c.m.s.auth.service.RefreshTokenService   : Refresh token creado para usuario b2c3d4e5-f6a7-8901-bcde-f12345678901
+2026-04-28T20:57:53.096-05:00  INFO 8964 --- [sgi-backend] [nio-8080-exec-4] c.m.s.auth.service.AuthService           : Login exitoso: admin@iglesiapaibog.com → sede PAI_BOG
+2026-04-28T20:57:53.097-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    insert 
+    into
+        shared.refresh_tokens
+        (activo, created_at, dispositivo, expira_en, token_hash, usuario_id, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        shared.refresh_tokens
+        (activo, created_at, dispositivo, expira_en, token_hash, usuario_id, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?)
+2026-04-28T20:57:53.168-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-5] c.m.sgi_backend.security.JwtAuthFilter   : Schema de sede establecido: sede_pai_bog
+2026-04-28T20:57:53.174-05:00 ERROR 8964 --- [sgi-backend] [nio-8080-exec-5] c.m.s.exception.GlobalExceptionHandler   : Error no controlado: JSON parse error: Invalid UTF-8 middle byte 0x20
+
+org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Invalid UTF-8 middle byte 0x20
+	at org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter.readJavaType(AbstractJackson2HttpMessageConverter.java:408) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter.read(AbstractJackson2HttpMessageConverter.java:356) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodArgumentResolver.readWithMessageConverters(AbstractMessageConverterMethodArgumentResolver.java:204) ~[spring-webmvc-6.2.18.jar:6.2.18]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor.readWithMessageConverters(RequestResponseBodyMethodProcessor.java:176) ~[spring-webmvc-6.2.18.jar:6.2.18]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor.resolveArgument(RequestResponseBodyMethodProcessor.java:150) ~[spring-webmvc-6.2.18.jar:6.2.18]
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:227) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:181) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118) ~[spring-webmvc-6.2.18.jar:6.2.18]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:991) ~[spring-webmvc-6.2.18.jar:6.2.18]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:896) ~[spring-webmvc-6.2.18.jar:6.2.18]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-6.2.18.jar:6.2.18]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089) ~[spring-webmvc-6.2.18.jar:6.2.18]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979) ~[spring-webmvc-6.2.18.jar:6.2.18]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014) ~[spring-webmvc-6.2.18.jar:6.2.18]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:888) ~[spring-webmvc-6.2.18.jar:6.2.18]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) ~[tomcat-embed-core-10.1.54.jar:6.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) ~[tomcat-embed-websocket-10.1.54.jar:10.1.54]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at com.miltonbass.sgi_backend.infrastructure.web.TenantFilter.doFilter(TenantFilter.java:50) ~[classes/:na]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:370) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:379) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:125) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:119) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:379) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:379) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:379) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:379) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:379) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at com.miltonbass.sgi_backend.security.JwtAuthFilter.doFilterInternal(JwtAuthFilter.java:62) ~[classes/:na]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:379) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:379) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:379) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:379) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:379) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:379) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:379) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191) ~[spring-security-web-6.5.10.jar:6.5.10]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:319) ~[spring-security-config-6.5.10.jar:6.5.10]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$4(HandlerMappingIntrospector.java:267) ~[spring-webmvc-6.2.18.jar:6.2.18]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:240) ~[spring-security-config-6.5.10.jar:6.5.10]
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.2.18.jar:6.2.18]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:88) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:492) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:399) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1797) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:973) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:491) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.54.jar:10.1.54]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+Caused by: com.fasterxml.jackson.databind.JsonMappingException: Invalid UTF-8 middle byte 0x20
+ at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 1, column: 40] (through reference chain: com.miltonbass.sgi_backend.miembros.dto.MiembroDtos$CambiarEstadoRequest["motivo"])
+	at com.fasterxml.jackson.databind.JsonMappingException.wrapWithPath(JsonMappingException.java:400) ~[jackson-databind-2.21.2.jar:2.21.2]
+	at com.fasterxml.jackson.databind.JsonMappingException.wrapWithPath(JsonMappingException.java:359) ~[jackson-databind-2.21.2.jar:2.21.2]
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.wrapAndThrow(BeanDeserializerBase.java:1966) ~[jackson-databind-2.21.2.jar:2.21.2]
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer._deserializeWithErrorWrapping(BeanDeserializer.java:605) ~[jackson-databind-2.21.2.jar:2.21.2]
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer._deserializeUsingPropertyBased(BeanDeserializer.java:446) ~[jackson-databind-2.21.2.jar:2.21.2]
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.deserializeFromObjectUsingNonDefault(BeanDeserializerBase.java:1499) ~[jackson-databind-2.21.2.jar:2.21.2]
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserializeFromObject(BeanDeserializer.java:340) ~[jackson-databind-2.21.2.jar:2.21.2]
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:177) ~[jackson-databind-2.21.2.jar:2.21.2]
+	at com.fasterxml.jackson.databind.deser.DefaultDeserializationContext.readRootValue(DefaultDeserializationContext.java:342) ~[jackson-databind-2.21.2.jar:2.21.2]
+	at com.fasterxml.jackson.databind.ObjectReader._bindAndClose(ObjectReader.java:2148) ~[jackson-databind-2.21.2.jar:2.21.2]
+	at com.fasterxml.jackson.databind.ObjectReader.readValue(ObjectReader.java:1504) ~[jackson-databind-2.21.2.jar:2.21.2]
+	at org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter.readJavaType(AbstractJackson2HttpMessageConverter.java:397) ~[spring-web-6.2.18.jar:6.2.18]
+	... 111 common frames omitted
+Caused by: com.fasterxml.jackson.core.JsonParseException: Invalid UTF-8 middle byte 0x20
+ at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 1, column: 40]
+	at com.fasterxml.jackson.core.JsonParser._constructError(JsonParser.java:2599) ~[jackson-core-2.21.2.jar:2.21.2]
+	at com.fasterxml.jackson.core.JsonParser._constructReadException(JsonParser.java:2625) ~[jackson-core-2.21.2.jar:2.21.2]
+	at com.fasterxml.jackson.core.base.ParserMinimalBase._reportError(ParserMinimalBase.java:837) ~[jackson-core-2.21.2.jar:2.21.2]
+	at com.fasterxml.jackson.core.json.UTF8StreamJsonParser._reportInvalidOther(UTF8StreamJsonParser.java:3789) ~[jackson-core-2.21.2.jar:2.21.2]
+	at com.fasterxml.jackson.core.json.UTF8StreamJsonParser._reportInvalidOther(UTF8StreamJsonParser.java:3796) ~[jackson-core-2.21.2.jar:2.21.2]
+	at com.fasterxml.jackson.core.json.UTF8StreamJsonParser._decodeUtf8_4(UTF8StreamJsonParser.java:3614) ~[jackson-core-2.21.2.jar:2.21.2]
+	at com.fasterxml.jackson.core.json.UTF8StreamJsonParser._finishString2(UTF8StreamJsonParser.java:2674) ~[jackson-core-2.21.2.jar:2.21.2]
+	at com.fasterxml.jackson.core.json.UTF8StreamJsonParser._finishAndReturnString(UTF8StreamJsonParser.java:2614) ~[jackson-core-2.21.2.jar:2.21.2]
+	at com.fasterxml.jackson.core.json.UTF8StreamJsonParser.getText(UTF8StreamJsonParser.java:294) ~[jackson-core-2.21.2.jar:2.21.2]
+	at com.fasterxml.jackson.databind.deser.std.StringDeserializer.deserialize(StringDeserializer.java:42) ~[jackson-databind-2.21.2.jar:2.21.2]
+	at com.fasterxml.jackson.databind.deser.std.StringDeserializer.deserialize(StringDeserializer.java:11) ~[jackson-databind-2.21.2.jar:2.21.2]
+	at com.fasterxml.jackson.databind.deser.SettableBeanProperty.deserialize(SettableBeanProperty.java:562) ~[jackson-databind-2.21.2.jar:2.21.2]
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer._deserializeWithErrorWrapping(BeanDeserializer.java:603) ~[jackson-databind-2.21.2.jar:2.21.2]
+	... 119 common frames omitted
+
+2026-04-28T20:57:53.188-05:00  WARN 8964 --- [sgi-backend] [nio-8080-exec-5] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Invalid UTF-8 middle byte 0x20]
+2026-04-28T20:57:53.228-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-6] c.m.sgi_backend.security.JwtAuthFilter   : Schema de sede establecido: sede_pai_bog
+2026-04-28T20:57:53.291-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-6] org.hibernate.SQL                        : 
+    select
+        m1_0.id,
+        m1_0.updated_at,
+        m1_0.apellidos,
+        m1_0.cedula,
+        m1_0.ciudad,
+        m1_0.consolidador_id,
+        m1_0.created_at,
+        m1_0.creado_por,
+        m1_0.deleted_at,
+        m1_0.direccion,
+        m1_0.email,
+        m1_0.estado,
+        m1_0.estado_civil,
+        m1_0.fecha_bautismo,
+        m1_0.fecha_ingreso,
+        m1_0.fecha_nacimiento,
+        m1_0.foto_url,
+        m1_0.genero,
+        m1_0.grupo_id,
+        m1_0.metadata,
+        m1_0.nombres,
+        m1_0.numero_miembro,
+        m1_0.sede_id,
+        m1_0.telefono,
+        m1_0.usuario_id 
+    from
+        miembros m1_0 
+    where
+        m1_0.id=? 
+        and m1_0.deleted_at is null
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.updated_at,
+        m1_0.apellidos,
+        m1_0.cedula,
+        m1_0.ciudad,
+        m1_0.consolidador_id,
+        m1_0.created_at,
+        m1_0.creado_por,
+        m1_0.deleted_at,
+        m1_0.direccion,
+        m1_0.email,
+        m1_0.estado,
+        m1_0.estado_civil,
+        m1_0.fecha_bautismo,
+        m1_0.fecha_ingreso,
+        m1_0.fecha_nacimiento,
+        m1_0.foto_url,
+        m1_0.genero,
+        m1_0.grupo_id,
+        m1_0.metadata,
+        m1_0.nombres,
+        m1_0.numero_miembro,
+        m1_0.sede_id,
+        m1_0.telefono,
+        m1_0.usuario_id 
+    from
+        miembros m1_0 
+    where
+        m1_0.id=? 
+        and m1_0.deleted_at is null
+2026-04-28T20:57:53.304-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-6] c.m.s.exception.GlobalExceptionHandler   : IllegalArgumentException: Transición de estado no permitida: MIEMBRO → VISITOR para miembro 8ed1abbd-7cb1-4442-b340-f6975ed4f902
+2026-04-28T20:57:53.306-05:00  WARN 8964 --- [sgi-backend] [nio-8080-exec-6] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [java.lang.IllegalArgumentException: Transición de estado no permitida: MIEMBRO → VISITOR para miembro 8ed1abbd-7cb1-4442-b340-f6975ed4f902]
+2026-04-28T20:57:53.332-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-7] c.m.sgi_backend.security.JwtAuthFilter   : Schema de sede establecido: sede_pai_bog
+2026-04-28T20:57:53.356-05:00  WARN 8964 --- [sgi-backend] [nio-8080-exec-7] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.web.bind.MethodArgumentNotValidException: Validation failed for argument [1] in public org.springframework.http.ResponseEntity<com.miltonbass.sgi_backend.miembros.dto.MiembroDtos$MiembroResponse> com.miltonbass.sgi_backend.miembros.controller.MiembroController.cambiarEstado(java.util.UUID,com.miltonbass.sgi_backend.miembros.dto.MiembroDtos$CambiarEstadoRequest,org.springframework.security.core.Authentication): [Field error in object 'cambiarEstadoRequest' on field 'motivo': rejected value []; codes [NotBlank.cambiarEstadoRequest.motivo,NotBlank.motivo,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [cambiarEstadoRequest.motivo,motivo]; arguments []; default message [motivo]]; default message [no debe estar vacío]] ]
+2026-04-28T20:58:33.713-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-8] org.hibernate.SQL                        : 
+    select
+        us1_0.id,
+        us1_0.activo,
+        us1_0.updated_at,
+        us1_0.apellido,
+        us1_0.bloqueado_hasta,
+        us1_0.created_at,
+        us1_0.debe_cambiar_password,
+        us1_0.email,
+        us1_0.intentos_fallidos,
+        us1_0.nombre,
+        us1_0.password_hash,
+        us1_0.super_admin,
+        us1_0.telefono,
+        us1_0.token_reset_expira,
+        us1_0.token_reset_password,
+        us1_0.ultimo_login,
+        us1_0.username 
+    from
+        shared.usuarios_sistema us1_0 
+    where
+        upper(us1_0.email)=upper(?)
+Hibernate: 
+    select
+        us1_0.id,
+        us1_0.activo,
+        us1_0.updated_at,
+        us1_0.apellido,
+        us1_0.bloqueado_hasta,
+        us1_0.created_at,
+        us1_0.debe_cambiar_password,
+        us1_0.email,
+        us1_0.intentos_fallidos,
+        us1_0.nombre,
+        us1_0.password_hash,
+        us1_0.super_admin,
+        us1_0.telefono,
+        us1_0.token_reset_expira,
+        us1_0.token_reset_password,
+        us1_0.ultimo_login,
+        us1_0.username 
+    from
+        shared.usuarios_sistema us1_0 
+    where
+        upper(us1_0.email)=upper(?)
+2026-04-28T20:58:34.180-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-8] org.hibernate.SQL                        : 
+    update
+        shared.usuarios_sistema us1_0 
+    set
+        intentos_fallidos=0,
+        bloqueado_hasta=null,
+        ultimo_login=? 
+    where
+        us1_0.id=?
+Hibernate: 
+    update
+        shared.usuarios_sistema us1_0 
+    set
+        intentos_fallidos=0,
+        bloqueado_hasta=null,
+        ultimo_login=? 
+    where
+        us1_0.id=?
+2026-04-28T20:58:34.183-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-8] org.hibernate.SQL                        : 
+    select
+        us1_0.id,
+        us1_0.activo,
+        us1_0.roles,
+        us1_0.sede_id,
+        us1_0.usuario_id 
+    from
+        shared.usuarios_sedes us1_0 
+    where
+        us1_0.usuario_id=? 
+        and us1_0.activo
+Hibernate: 
+    select
+        us1_0.id,
+        us1_0.activo,
+        us1_0.roles,
+        us1_0.sede_id,
+        us1_0.usuario_id 
+    from
+        shared.usuarios_sedes us1_0 
+    where
+        us1_0.usuario_id=? 
+        and us1_0.activo
+2026-04-28T20:58:34.187-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-8] org.hibernate.SQL                        : 
+    select
+        s1_0.id,
+        s1_0.activa,
+        s1_0.updated_at,
+        s1_0.ciudad,
+        s1_0.codigo,
+        s1_0.config,
+        s1_0.created_at,
+        s1_0.deleted_at,
+        s1_0.departamento,
+        s1_0.descripcion,
+        s1_0.direccion,
+        s1_0.email,
+        s1_0.fecha_fundacion,
+        s1_0.logo_url,
+        s1_0.nombre,
+        s1_0.pais,
+        s1_0.schema_name,
+        s1_0.telefono,
+        s1_0.zona_horaria 
+    from
+        shared.sedes s1_0 
+    where
+        s1_0.id=? 
+        and s1_0.activa
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.activa,
+        s1_0.updated_at,
+        s1_0.ciudad,
+        s1_0.codigo,
+        s1_0.config,
+        s1_0.created_at,
+        s1_0.deleted_at,
+        s1_0.departamento,
+        s1_0.descripcion,
+        s1_0.direccion,
+        s1_0.email,
+        s1_0.fecha_fundacion,
+        s1_0.logo_url,
+        s1_0.nombre,
+        s1_0.pais,
+        s1_0.schema_name,
+        s1_0.telefono,
+        s1_0.zona_horaria 
+    from
+        shared.sedes s1_0 
+    where
+        s1_0.id=? 
+        and s1_0.activa
+2026-04-28T20:58:34.192-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-8] org.hibernate.SQL                        : 
+    select
+        s1_0.id,
+        s1_0.activa,
+        s1_0.updated_at,
+        s1_0.ciudad,
+        s1_0.codigo,
+        s1_0.config,
+        s1_0.created_at,
+        s1_0.deleted_at,
+        s1_0.departamento,
+        s1_0.descripcion,
+        s1_0.direccion,
+        s1_0.email,
+        s1_0.fecha_fundacion,
+        s1_0.logo_url,
+        s1_0.nombre,
+        s1_0.pais,
+        s1_0.schema_name,
+        s1_0.telefono,
+        s1_0.zona_horaria 
+    from
+        shared.sedes s1_0 
+    where
+        s1_0.id=? 
+        and s1_0.activa
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.activa,
+        s1_0.updated_at,
+        s1_0.ciudad,
+        s1_0.codigo,
+        s1_0.config,
+        s1_0.created_at,
+        s1_0.deleted_at,
+        s1_0.departamento,
+        s1_0.descripcion,
+        s1_0.direccion,
+        s1_0.email,
+        s1_0.fecha_fundacion,
+        s1_0.logo_url,
+        s1_0.nombre,
+        s1_0.pais,
+        s1_0.schema_name,
+        s1_0.telefono,
+        s1_0.zona_horaria 
+    from
+        shared.sedes s1_0 
+    where
+        s1_0.id=? 
+        and s1_0.activa
+2026-04-28T20:58:34.196-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-8] c.m.s.auth.service.RefreshTokenService   : Refresh token creado para usuario b2c3d4e5-f6a7-8901-bcde-f12345678901
+2026-04-28T20:58:34.196-05:00  INFO 8964 --- [sgi-backend] [nio-8080-exec-8] c.m.s.auth.service.AuthService           : Login exitoso: admin@iglesiapaibog.com → sede PAI_BOG
+2026-04-28T20:58:34.196-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-8] org.hibernate.SQL                        : 
+    insert 
+    into
+        shared.refresh_tokens
+        (activo, created_at, dispositivo, expira_en, token_hash, usuario_id, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        shared.refresh_tokens
+        (activo, created_at, dispositivo, expira_en, token_hash, usuario_id, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?)
+2026-04-28T20:58:34.287-05:00 DEBUG 8964 --- [sgi-backend] [io-8080-exec-10] c.m.sgi_backend.security.JwtAuthFilter   : Schema de sede establecido: sede_pai_bog
+2026-04-28T20:58:34.290-05:00 DEBUG 8964 --- [sgi-backend] [io-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        m1_0.id,
+        m1_0.updated_at,
+        m1_0.apellidos,
+        m1_0.cedula,
+        m1_0.ciudad,
+        m1_0.consolidador_id,
+        m1_0.created_at,
+        m1_0.creado_por,
+        m1_0.deleted_at,
+        m1_0.direccion,
+        m1_0.email,
+        m1_0.estado,
+        m1_0.estado_civil,
+        m1_0.fecha_bautismo,
+        m1_0.fecha_ingreso,
+        m1_0.fecha_nacimiento,
+        m1_0.foto_url,
+        m1_0.genero,
+        m1_0.grupo_id,
+        m1_0.metadata,
+        m1_0.nombres,
+        m1_0.numero_miembro,
+        m1_0.sede_id,
+        m1_0.telefono,
+        m1_0.usuario_id 
+    from
+        miembros m1_0 
+    where
+        m1_0.id=? 
+        and m1_0.deleted_at is null
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.updated_at,
+        m1_0.apellidos,
+        m1_0.cedula,
+        m1_0.ciudad,
+        m1_0.consolidador_id,
+        m1_0.created_at,
+        m1_0.creado_por,
+        m1_0.deleted_at,
+        m1_0.direccion,
+        m1_0.email,
+        m1_0.estado,
+        m1_0.estado_civil,
+        m1_0.fecha_bautismo,
+        m1_0.fecha_ingreso,
+        m1_0.fecha_nacimiento,
+        m1_0.foto_url,
+        m1_0.genero,
+        m1_0.grupo_id,
+        m1_0.metadata,
+        m1_0.nombres,
+        m1_0.numero_miembro,
+        m1_0.sede_id,
+        m1_0.telefono,
+        m1_0.usuario_id 
+    from
+        miembros m1_0 
+    where
+        m1_0.id=? 
+        and m1_0.deleted_at is null
+2026-04-28T20:58:34.321-05:00  INFO 8964 --- [sgi-backend] [io-8080-exec-10] c.m.s.miembros.service.MiembroService    : [Miembros] Estado cambiado: VISITOR → MIEMBRO | miembro=cd337038-bd11-4949-af22-133b91ee0f00
+2026-04-28T20:58:34.335-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-9] c.m.sgi_backend.security.JwtAuthFilter   : Schema de sede establecido: sede_pai_bog
+2026-04-28T20:58:34.338-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-9] org.hibernate.SQL                        : 
+    select
+        m1_0.id,
+        m1_0.updated_at,
+        m1_0.apellidos,
+        m1_0.cedula,
+        m1_0.ciudad,
+        m1_0.consolidador_id,
+        m1_0.created_at,
+        m1_0.creado_por,
+        m1_0.deleted_at,
+        m1_0.direccion,
+        m1_0.email,
+        m1_0.estado,
+        m1_0.estado_civil,
+        m1_0.fecha_bautismo,
+        m1_0.fecha_ingreso,
+        m1_0.fecha_nacimiento,
+        m1_0.foto_url,
+        m1_0.genero,
+        m1_0.grupo_id,
+        m1_0.metadata,
+        m1_0.nombres,
+        m1_0.numero_miembro,
+        m1_0.sede_id,
+        m1_0.telefono,
+        m1_0.usuario_id 
+    from
+        miembros m1_0 
+    where
+        m1_0.id=? 
+        and m1_0.deleted_at is null
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.updated_at,
+        m1_0.apellidos,
+        m1_0.cedula,
+        m1_0.ciudad,
+        m1_0.consolidador_id,
+        m1_0.created_at,
+        m1_0.creado_por,
+        m1_0.deleted_at,
+        m1_0.direccion,
+        m1_0.email,
+        m1_0.estado,
+        m1_0.estado_civil,
+        m1_0.fecha_bautismo,
+        m1_0.fecha_ingreso,
+        m1_0.fecha_nacimiento,
+        m1_0.foto_url,
+        m1_0.genero,
+        m1_0.grupo_id,
+        m1_0.metadata,
+        m1_0.nombres,
+        m1_0.numero_miembro,
+        m1_0.sede_id,
+        m1_0.telefono,
+        m1_0.usuario_id 
+    from
+        miembros m1_0 
+    where
+        m1_0.id=? 
+        and m1_0.deleted_at is null
+2026-04-28T20:58:34.346-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-9] c.m.s.exception.GlobalExceptionHandler   : IllegalArgumentException: Transición de estado no permitida: MIEMBRO → VISITOR para miembro 8ed1abbd-7cb1-4442-b340-f6975ed4f902
+2026-04-28T20:58:34.347-05:00  WARN 8964 --- [sgi-backend] [nio-8080-exec-9] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [java.lang.IllegalArgumentException: Transición de estado no permitida: MIEMBRO → VISITOR para miembro 8ed1abbd-7cb1-4442-b340-f6975ed4f902]
+2026-04-28T20:58:34.371-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-1] c.m.sgi_backend.security.JwtAuthFilter   : Schema de sede establecido: sede_pai_bog
+2026-04-28T20:58:34.374-05:00  WARN 8964 --- [sgi-backend] [nio-8080-exec-1] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.web.bind.MethodArgumentNotValidException: Validation failed for argument [1] in public org.springframework.http.ResponseEntity<com.miltonbass.sgi_backend.miembros.dto.MiembroDtos$MiembroResponse> com.miltonbass.sgi_backend.miembros.controller.MiembroController.cambiarEstado(java.util.UUID,com.miltonbass.sgi_backend.miembros.dto.MiembroDtos$CambiarEstadoRequest,org.springframework.security.core.Authentication): [Field error in object 'cambiarEstadoRequest' on field 'motivo': rejected value []; codes [NotBlank.cambiarEstadoRequest.motivo,NotBlank.motivo,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [cambiarEstadoRequest.motivo,motivo]; arguments []; default message [motivo]]; default message [no debe estar vacío]] ]
+2026-04-28T20:58:55.261-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        us1_0.id,
+        us1_0.activo,
+        us1_0.updated_at,
+        us1_0.apellido,
+        us1_0.bloqueado_hasta,
+        us1_0.created_at,
+        us1_0.debe_cambiar_password,
+        us1_0.email,
+        us1_0.intentos_fallidos,
+        us1_0.nombre,
+        us1_0.password_hash,
+        us1_0.super_admin,
+        us1_0.telefono,
+        us1_0.token_reset_expira,
+        us1_0.token_reset_password,
+        us1_0.ultimo_login,
+        us1_0.username 
+    from
+        shared.usuarios_sistema us1_0 
+    where
+        upper(us1_0.email)=upper(?)
+Hibernate: 
+    select
+        us1_0.id,
+        us1_0.activo,
+        us1_0.updated_at,
+        us1_0.apellido,
+        us1_0.bloqueado_hasta,
+        us1_0.created_at,
+        us1_0.debe_cambiar_password,
+        us1_0.email,
+        us1_0.intentos_fallidos,
+        us1_0.nombre,
+        us1_0.password_hash,
+        us1_0.super_admin,
+        us1_0.telefono,
+        us1_0.token_reset_expira,
+        us1_0.token_reset_password,
+        us1_0.ultimo_login,
+        us1_0.username 
+    from
+        shared.usuarios_sistema us1_0 
+    where
+        upper(us1_0.email)=upper(?)
+2026-04-28T20:58:55.742-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-2] org.hibernate.SQL                        : 
+    update
+        shared.usuarios_sistema us1_0 
+    set
+        intentos_fallidos=0,
+        bloqueado_hasta=null,
+        ultimo_login=? 
+    where
+        us1_0.id=?
+Hibernate: 
+    update
+        shared.usuarios_sistema us1_0 
+    set
+        intentos_fallidos=0,
+        bloqueado_hasta=null,
+        ultimo_login=? 
+    where
+        us1_0.id=?
+2026-04-28T20:58:55.746-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        us1_0.id,
+        us1_0.activo,
+        us1_0.roles,
+        us1_0.sede_id,
+        us1_0.usuario_id 
+    from
+        shared.usuarios_sedes us1_0 
+    where
+        us1_0.usuario_id=? 
+        and us1_0.activo
+Hibernate: 
+    select
+        us1_0.id,
+        us1_0.activo,
+        us1_0.roles,
+        us1_0.sede_id,
+        us1_0.usuario_id 
+    from
+        shared.usuarios_sedes us1_0 
+    where
+        us1_0.usuario_id=? 
+        and us1_0.activo
+2026-04-28T20:58:55.750-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        s1_0.id,
+        s1_0.activa,
+        s1_0.updated_at,
+        s1_0.ciudad,
+        s1_0.codigo,
+        s1_0.config,
+        s1_0.created_at,
+        s1_0.deleted_at,
+        s1_0.departamento,
+        s1_0.descripcion,
+        s1_0.direccion,
+        s1_0.email,
+        s1_0.fecha_fundacion,
+        s1_0.logo_url,
+        s1_0.nombre,
+        s1_0.pais,
+        s1_0.schema_name,
+        s1_0.telefono,
+        s1_0.zona_horaria 
+    from
+        shared.sedes s1_0 
+    where
+        s1_0.id=? 
+        and s1_0.activa
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.activa,
+        s1_0.updated_at,
+        s1_0.ciudad,
+        s1_0.codigo,
+        s1_0.config,
+        s1_0.created_at,
+        s1_0.deleted_at,
+        s1_0.departamento,
+        s1_0.descripcion,
+        s1_0.direccion,
+        s1_0.email,
+        s1_0.fecha_fundacion,
+        s1_0.logo_url,
+        s1_0.nombre,
+        s1_0.pais,
+        s1_0.schema_name,
+        s1_0.telefono,
+        s1_0.zona_horaria 
+    from
+        shared.sedes s1_0 
+    where
+        s1_0.id=? 
+        and s1_0.activa
+2026-04-28T20:58:55.755-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        s1_0.id,
+        s1_0.activa,
+        s1_0.updated_at,
+        s1_0.ciudad,
+        s1_0.codigo,
+        s1_0.config,
+        s1_0.created_at,
+        s1_0.deleted_at,
+        s1_0.departamento,
+        s1_0.descripcion,
+        s1_0.direccion,
+        s1_0.email,
+        s1_0.fecha_fundacion,
+        s1_0.logo_url,
+        s1_0.nombre,
+        s1_0.pais,
+        s1_0.schema_name,
+        s1_0.telefono,
+        s1_0.zona_horaria 
+    from
+        shared.sedes s1_0 
+    where
+        s1_0.id=? 
+        and s1_0.activa
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.activa,
+        s1_0.updated_at,
+        s1_0.ciudad,
+        s1_0.codigo,
+        s1_0.config,
+        s1_0.created_at,
+        s1_0.deleted_at,
+        s1_0.departamento,
+        s1_0.descripcion,
+        s1_0.direccion,
+        s1_0.email,
+        s1_0.fecha_fundacion,
+        s1_0.logo_url,
+        s1_0.nombre,
+        s1_0.pais,
+        s1_0.schema_name,
+        s1_0.telefono,
+        s1_0.zona_horaria 
+    from
+        shared.sedes s1_0 
+    where
+        s1_0.id=? 
+        and s1_0.activa
+2026-04-28T20:58:55.759-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-2] c.m.s.auth.service.RefreshTokenService   : Refresh token creado para usuario b2c3d4e5-f6a7-8901-bcde-f12345678901
+2026-04-28T20:58:55.760-05:00  INFO 8964 --- [sgi-backend] [nio-8080-exec-2] c.m.s.auth.service.AuthService           : Login exitoso: admin@iglesiapaibog.com → sede PAI_BOG
+2026-04-28T20:58:55.760-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-2] org.hibernate.SQL                        : 
+    insert 
+    into
+        shared.refresh_tokens
+        (activo, created_at, dispositivo, expira_en, token_hash, usuario_id, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        shared.refresh_tokens
+        (activo, created_at, dispositivo, expira_en, token_hash, usuario_id, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?)
+2026-04-28T20:58:55.832-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-3] c.m.sgi_backend.security.JwtAuthFilter   : Schema de sede establecido: sede_pai_bog
+2026-04-28T20:58:55.834-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        m1_0.id,
+        m1_0.updated_at,
+        m1_0.apellidos,
+        m1_0.cedula,
+        m1_0.ciudad,
+        m1_0.consolidador_id,
+        m1_0.created_at,
+        m1_0.creado_por,
+        m1_0.deleted_at,
+        m1_0.direccion,
+        m1_0.email,
+        m1_0.estado,
+        m1_0.estado_civil,
+        m1_0.fecha_bautismo,
+        m1_0.fecha_ingreso,
+        m1_0.fecha_nacimiento,
+        m1_0.foto_url,
+        m1_0.genero,
+        m1_0.grupo_id,
+        m1_0.metadata,
+        m1_0.nombres,
+        m1_0.numero_miembro,
+        m1_0.sede_id,
+        m1_0.telefono,
+        m1_0.usuario_id 
+    from
+        miembros m1_0 
+    where
+        m1_0.id=? 
+        and m1_0.deleted_at is null
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.updated_at,
+        m1_0.apellidos,
+        m1_0.cedula,
+        m1_0.ciudad,
+        m1_0.consolidador_id,
+        m1_0.created_at,
+        m1_0.creado_por,
+        m1_0.deleted_at,
+        m1_0.direccion,
+        m1_0.email,
+        m1_0.estado,
+        m1_0.estado_civil,
+        m1_0.fecha_bautismo,
+        m1_0.fecha_ingreso,
+        m1_0.fecha_nacimiento,
+        m1_0.foto_url,
+        m1_0.genero,
+        m1_0.grupo_id,
+        m1_0.metadata,
+        m1_0.nombres,
+        m1_0.numero_miembro,
+        m1_0.sede_id,
+        m1_0.telefono,
+        m1_0.usuario_id 
+    from
+        miembros m1_0 
+    where
+        m1_0.id=? 
+        and m1_0.deleted_at is null
+2026-04-28T20:58:55.889-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-4] c.m.sgi_backend.security.JwtAuthFilter   : Schema de sede establecido: sede_pai_bog
+2026-04-28T20:58:55.896-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        m1_0.id,
+        m1_0.updated_at,
+        m1_0.apellidos,
+        m1_0.cedula,
+        m1_0.ciudad,
+        m1_0.consolidador_id,
+        m1_0.created_at,
+        m1_0.creado_por,
+        m1_0.deleted_at,
+        m1_0.direccion,
+        m1_0.email,
+        m1_0.estado,
+        m1_0.estado_civil,
+        m1_0.fecha_bautismo,
+        m1_0.fecha_ingreso,
+        m1_0.fecha_nacimiento,
+        m1_0.foto_url,
+        m1_0.genero,
+        m1_0.grupo_id,
+        m1_0.metadata,
+        m1_0.nombres,
+        m1_0.numero_miembro,
+        m1_0.sede_id,
+        m1_0.telefono,
+        m1_0.usuario_id 
+    from
+        miembros m1_0 
+    where
+        m1_0.id=? 
+        and m1_0.deleted_at is null
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.updated_at,
+        m1_0.apellidos,
+        m1_0.cedula,
+        m1_0.ciudad,
+        m1_0.consolidador_id,
+        m1_0.created_at,
+        m1_0.creado_por,
+        m1_0.deleted_at,
+        m1_0.direccion,
+        m1_0.email,
+        m1_0.estado,
+        m1_0.estado_civil,
+        m1_0.fecha_bautismo,
+        m1_0.fecha_ingreso,
+        m1_0.fecha_nacimiento,
+        m1_0.foto_url,
+        m1_0.genero,
+        m1_0.grupo_id,
+        m1_0.metadata,
+        m1_0.nombres,
+        m1_0.numero_miembro,
+        m1_0.sede_id,
+        m1_0.telefono,
+        m1_0.usuario_id 
+    from
+        miembros m1_0 
+    where
+        m1_0.id=? 
+        and m1_0.deleted_at is null
+2026-04-28T20:58:55.910-05:00  INFO 8964 --- [sgi-backend] [nio-8080-exec-4] c.m.s.miembros.service.MiembroService    : [Miembros] Consolidador asignado: miembro=cd337038-bd11-4949-af22-133b91ee0f00 consolidador=8ed1abbd-7cb1-4442-b340-f6975ed4f902
+2026-04-28T20:58:55.919-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-5] c.m.sgi_backend.security.JwtAuthFilter   : Schema de sede establecido: sede_pai_bog
+2026-04-28T20:58:55.922-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-5] org.hibernate.SQL                        : 
+    select
+        m1_0.id,
+        m1_0.updated_at,
+        m1_0.apellidos,
+        m1_0.cedula,
+        m1_0.ciudad,
+        m1_0.consolidador_id,
+        m1_0.created_at,
+        m1_0.creado_por,
+        m1_0.deleted_at,
+        m1_0.direccion,
+        m1_0.email,
+        m1_0.estado,
+        m1_0.estado_civil,
+        m1_0.fecha_bautismo,
+        m1_0.fecha_ingreso,
+        m1_0.fecha_nacimiento,
+        m1_0.foto_url,
+        m1_0.genero,
+        m1_0.grupo_id,
+        m1_0.metadata,
+        m1_0.nombres,
+        m1_0.numero_miembro,
+        m1_0.sede_id,
+        m1_0.telefono,
+        m1_0.usuario_id 
+    from
+        miembros m1_0 
+    where
+        m1_0.id=? 
+        and m1_0.deleted_at is null
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.updated_at,
+        m1_0.apellidos,
+        m1_0.cedula,
+        m1_0.ciudad,
+        m1_0.consolidador_id,
+        m1_0.created_at,
+        m1_0.creado_por,
+        m1_0.deleted_at,
+        m1_0.direccion,
+        m1_0.email,
+        m1_0.estado,
+        m1_0.estado_civil,
+        m1_0.fecha_bautismo,
+        m1_0.fecha_ingreso,
+        m1_0.fecha_nacimiento,
+        m1_0.foto_url,
+        m1_0.genero,
+        m1_0.grupo_id,
+        m1_0.metadata,
+        m1_0.nombres,
+        m1_0.numero_miembro,
+        m1_0.sede_id,
+        m1_0.telefono,
+        m1_0.usuario_id 
+    from
+        miembros m1_0 
+    where
+        m1_0.id=? 
+        and m1_0.deleted_at is null
+2026-04-28T20:58:55.936-05:00  INFO 8964 --- [sgi-backend] [nio-8080-exec-5] c.m.s.miembros.service.MiembroService    : [Miembros] Estado cambiado: MIEMBRO → INACTIVO | miembro=cd337038-bd11-4949-af22-133b91ee0f00
+2026-04-28T20:58:55.943-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-6] c.m.sgi_backend.security.JwtAuthFilter   : Schema de sede establecido: sede_pai_bog
+2026-04-28T20:58:55.946-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-6] org.hibernate.SQL                        : 
+    select
+        m1_0.id,
+        m1_0.updated_at,
+        m1_0.apellidos,
+        m1_0.cedula,
+        m1_0.ciudad,
+        m1_0.consolidador_id,
+        m1_0.created_at,
+        m1_0.creado_por,
+        m1_0.deleted_at,
+        m1_0.direccion,
+        m1_0.email,
+        m1_0.estado,
+        m1_0.estado_civil,
+        m1_0.fecha_bautismo,
+        m1_0.fecha_ingreso,
+        m1_0.fecha_nacimiento,
+        m1_0.foto_url,
+        m1_0.genero,
+        m1_0.grupo_id,
+        m1_0.metadata,
+        m1_0.nombres,
+        m1_0.numero_miembro,
+        m1_0.sede_id,
+        m1_0.telefono,
+        m1_0.usuario_id 
+    from
+        miembros m1_0 
+    where
+        m1_0.id=? 
+        and m1_0.deleted_at is null
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.updated_at,
+        m1_0.apellidos,
+        m1_0.cedula,
+        m1_0.ciudad,
+        m1_0.consolidador_id,
+        m1_0.created_at,
+        m1_0.creado_por,
+        m1_0.deleted_at,
+        m1_0.direccion,
+        m1_0.email,
+        m1_0.estado,
+        m1_0.estado_civil,
+        m1_0.fecha_bautismo,
+        m1_0.fecha_ingreso,
+        m1_0.fecha_nacimiento,
+        m1_0.foto_url,
+        m1_0.genero,
+        m1_0.grupo_id,
+        m1_0.metadata,
+        m1_0.nombres,
+        m1_0.numero_miembro,
+        m1_0.sede_id,
+        m1_0.telefono,
+        m1_0.usuario_id 
+    from
+        miembros m1_0 
+    where
+        m1_0.id=? 
+        and m1_0.deleted_at is null
+2026-04-28T20:58:55.955-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-6] c.m.s.exception.GlobalExceptionHandler   : IllegalArgumentException: Solo se puede asignar consolidador a miembros en estado MIEMBRO o RESTAURADO. Estado actual: INACTIVO
+2026-04-28T20:58:55.956-05:00  WARN 8964 --- [sgi-backend] [nio-8080-exec-6] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [java.lang.IllegalArgumentException: Solo se puede asignar consolidador a miembros en estado MIEMBRO o RESTAURADO. Estado actual: INACTIVO]
+2026-04-28T20:58:55.981-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-7] c.m.sgi_backend.security.JwtAuthFilter   : Schema de sede establecido: sede_pai_bog
+2026-04-28T20:58:55.984-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-7] org.hibernate.SQL                        : 
+    select
+        m1_0.id,
+        m1_0.updated_at,
+        m1_0.apellidos,
+        m1_0.cedula,
+        m1_0.ciudad,
+        m1_0.consolidador_id,
+        m1_0.created_at,
+        m1_0.creado_por,
+        m1_0.deleted_at,
+        m1_0.direccion,
+        m1_0.email,
+        m1_0.estado,
+        m1_0.estado_civil,
+        m1_0.fecha_bautismo,
+        m1_0.fecha_ingreso,
+        m1_0.fecha_nacimiento,
+        m1_0.foto_url,
+        m1_0.genero,
+        m1_0.grupo_id,
+        m1_0.metadata,
+        m1_0.nombres,
+        m1_0.numero_miembro,
+        m1_0.sede_id,
+        m1_0.telefono,
+        m1_0.usuario_id 
+    from
+        miembros m1_0 
+    where
+        m1_0.id=? 
+        and m1_0.deleted_at is null
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.updated_at,
+        m1_0.apellidos,
+        m1_0.cedula,
+        m1_0.ciudad,
+        m1_0.consolidador_id,
+        m1_0.created_at,
+        m1_0.creado_por,
+        m1_0.deleted_at,
+        m1_0.direccion,
+        m1_0.email,
+        m1_0.estado,
+        m1_0.estado_civil,
+        m1_0.fecha_bautismo,
+        m1_0.fecha_ingreso,
+        m1_0.fecha_nacimiento,
+        m1_0.foto_url,
+        m1_0.genero,
+        m1_0.grupo_id,
+        m1_0.metadata,
+        m1_0.nombres,
+        m1_0.numero_miembro,
+        m1_0.sede_id,
+        m1_0.telefono,
+        m1_0.usuario_id 
+    from
+        miembros m1_0 
+    where
+        m1_0.id=? 
+        and m1_0.deleted_at is null
+2026-04-28T20:58:55.995-05:00  INFO 8964 --- [sgi-backend] [nio-8080-exec-7] c.m.s.miembros.service.MiembroService    : [Miembros] Consolidador quitado: miembro=8ed1abbd-7cb1-4442-b340-f6975ed4f902 consolidador=null
+2026-04-28T20:59:13.832-05:00 DEBUG 8964 --- [sgi-backend] [io-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        us1_0.id,
+        us1_0.activo,
+        us1_0.updated_at,
+        us1_0.apellido,
+        us1_0.bloqueado_hasta,
+        us1_0.created_at,
+        us1_0.debe_cambiar_password,
+        us1_0.email,
+        us1_0.intentos_fallidos,
+        us1_0.nombre,
+        us1_0.password_hash,
+        us1_0.super_admin,
+        us1_0.telefono,
+        us1_0.token_reset_expira,
+        us1_0.token_reset_password,
+        us1_0.ultimo_login,
+        us1_0.username 
+    from
+        shared.usuarios_sistema us1_0 
+    where
+        upper(us1_0.email)=upper(?)
+Hibernate: 
+    select
+        us1_0.id,
+        us1_0.activo,
+        us1_0.updated_at,
+        us1_0.apellido,
+        us1_0.bloqueado_hasta,
+        us1_0.created_at,
+        us1_0.debe_cambiar_password,
+        us1_0.email,
+        us1_0.intentos_fallidos,
+        us1_0.nombre,
+        us1_0.password_hash,
+        us1_0.super_admin,
+        us1_0.telefono,
+        us1_0.token_reset_expira,
+        us1_0.token_reset_password,
+        us1_0.ultimo_login,
+        us1_0.username 
+    from
+        shared.usuarios_sistema us1_0 
+    where
+        upper(us1_0.email)=upper(?)
+2026-04-28T20:59:14.288-05:00 DEBUG 8964 --- [sgi-backend] [io-8080-exec-10] org.hibernate.SQL                        : 
+    update
+        shared.usuarios_sistema us1_0 
+    set
+        intentos_fallidos=0,
+        bloqueado_hasta=null,
+        ultimo_login=? 
+    where
+        us1_0.id=?
+Hibernate: 
+    update
+        shared.usuarios_sistema us1_0 
+    set
+        intentos_fallidos=0,
+        bloqueado_hasta=null,
+        ultimo_login=? 
+    where
+        us1_0.id=?
+2026-04-28T20:59:14.292-05:00 DEBUG 8964 --- [sgi-backend] [io-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        us1_0.id,
+        us1_0.activo,
+        us1_0.roles,
+        us1_0.sede_id,
+        us1_0.usuario_id 
+    from
+        shared.usuarios_sedes us1_0 
+    where
+        us1_0.usuario_id=? 
+        and us1_0.activo
+Hibernate: 
+    select
+        us1_0.id,
+        us1_0.activo,
+        us1_0.roles,
+        us1_0.sede_id,
+        us1_0.usuario_id 
+    from
+        shared.usuarios_sedes us1_0 
+    where
+        us1_0.usuario_id=? 
+        and us1_0.activo
+2026-04-28T20:59:14.296-05:00 DEBUG 8964 --- [sgi-backend] [io-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        s1_0.id,
+        s1_0.activa,
+        s1_0.updated_at,
+        s1_0.ciudad,
+        s1_0.codigo,
+        s1_0.config,
+        s1_0.created_at,
+        s1_0.deleted_at,
+        s1_0.departamento,
+        s1_0.descripcion,
+        s1_0.direccion,
+        s1_0.email,
+        s1_0.fecha_fundacion,
+        s1_0.logo_url,
+        s1_0.nombre,
+        s1_0.pais,
+        s1_0.schema_name,
+        s1_0.telefono,
+        s1_0.zona_horaria 
+    from
+        shared.sedes s1_0 
+    where
+        s1_0.id=? 
+        and s1_0.activa
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.activa,
+        s1_0.updated_at,
+        s1_0.ciudad,
+        s1_0.codigo,
+        s1_0.config,
+        s1_0.created_at,
+        s1_0.deleted_at,
+        s1_0.departamento,
+        s1_0.descripcion,
+        s1_0.direccion,
+        s1_0.email,
+        s1_0.fecha_fundacion,
+        s1_0.logo_url,
+        s1_0.nombre,
+        s1_0.pais,
+        s1_0.schema_name,
+        s1_0.telefono,
+        s1_0.zona_horaria 
+    from
+        shared.sedes s1_0 
+    where
+        s1_0.id=? 
+        and s1_0.activa
+2026-04-28T20:59:14.301-05:00 DEBUG 8964 --- [sgi-backend] [io-8080-exec-10] org.hibernate.SQL                        : 
+    select
+        s1_0.id,
+        s1_0.activa,
+        s1_0.updated_at,
+        s1_0.ciudad,
+        s1_0.codigo,
+        s1_0.config,
+        s1_0.created_at,
+        s1_0.deleted_at,
+        s1_0.departamento,
+        s1_0.descripcion,
+        s1_0.direccion,
+        s1_0.email,
+        s1_0.fecha_fundacion,
+        s1_0.logo_url,
+        s1_0.nombre,
+        s1_0.pais,
+        s1_0.schema_name,
+        s1_0.telefono,
+        s1_0.zona_horaria 
+    from
+        shared.sedes s1_0 
+    where
+        s1_0.id=? 
+        and s1_0.activa
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.activa,
+        s1_0.updated_at,
+        s1_0.ciudad,
+        s1_0.codigo,
+        s1_0.config,
+        s1_0.created_at,
+        s1_0.deleted_at,
+        s1_0.departamento,
+        s1_0.descripcion,
+        s1_0.direccion,
+        s1_0.email,
+        s1_0.fecha_fundacion,
+        s1_0.logo_url,
+        s1_0.nombre,
+        s1_0.pais,
+        s1_0.schema_name,
+        s1_0.telefono,
+        s1_0.zona_horaria 
+    from
+        shared.sedes s1_0 
+    where
+        s1_0.id=? 
+        and s1_0.activa
+2026-04-28T20:59:14.305-05:00 DEBUG 8964 --- [sgi-backend] [io-8080-exec-10] c.m.s.auth.service.RefreshTokenService   : Refresh token creado para usuario b2c3d4e5-f6a7-8901-bcde-f12345678901
+2026-04-28T20:59:14.305-05:00  INFO 8964 --- [sgi-backend] [io-8080-exec-10] c.m.s.auth.service.AuthService           : Login exitoso: admin@iglesiapaibog.com → sede PAI_BOG
+2026-04-28T20:59:14.305-05:00 DEBUG 8964 --- [sgi-backend] [io-8080-exec-10] org.hibernate.SQL                        : 
+    insert 
+    into
+        shared.refresh_tokens
+        (activo, created_at, dispositivo, expira_en, token_hash, usuario_id, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        shared.refresh_tokens
+        (activo, created_at, dispositivo, expira_en, token_hash, usuario_id, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?)
+2026-04-28T20:59:14.380-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-9] c.m.sgi_backend.security.JwtAuthFilter   : Schema de sede establecido: sede_pai_bog
+2026-04-28T20:59:14.387-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-9] org.hibernate.SQL                        : 
+    select
+        m1_0.id,
+        m1_0.updated_at,
+        m1_0.apellidos,
+        m1_0.cedula,
+        m1_0.ciudad,
+        m1_0.consolidador_id,
+        m1_0.created_at,
+        m1_0.creado_por,
+        m1_0.deleted_at,
+        m1_0.direccion,
+        m1_0.email,
+        m1_0.estado,
+        m1_0.estado_civil,
+        m1_0.fecha_bautismo,
+        m1_0.fecha_ingreso,
+        m1_0.fecha_nacimiento,
+        m1_0.foto_url,
+        m1_0.genero,
+        m1_0.grupo_id,
+        m1_0.metadata,
+        m1_0.nombres,
+        m1_0.numero_miembro,
+        m1_0.sede_id,
+        m1_0.telefono,
+        m1_0.usuario_id 
+    from
+        miembros m1_0 
+    where
+        m1_0.id=? 
+        and m1_0.deleted_at is null
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.updated_at,
+        m1_0.apellidos,
+        m1_0.cedula,
+        m1_0.ciudad,
+        m1_0.consolidador_id,
+        m1_0.created_at,
+        m1_0.creado_por,
+        m1_0.deleted_at,
+        m1_0.direccion,
+        m1_0.email,
+        m1_0.estado,
+        m1_0.estado_civil,
+        m1_0.fecha_bautismo,
+        m1_0.fecha_ingreso,
+        m1_0.fecha_nacimiento,
+        m1_0.foto_url,
+        m1_0.genero,
+        m1_0.grupo_id,
+        m1_0.metadata,
+        m1_0.nombres,
+        m1_0.numero_miembro,
+        m1_0.sede_id,
+        m1_0.telefono,
+        m1_0.usuario_id 
+    from
+        miembros m1_0 
+    where
+        m1_0.id=? 
+        and m1_0.deleted_at is null
+2026-04-28T20:59:14.403-05:00  INFO 8964 --- [sgi-backend] [nio-8080-exec-9] c.m.s.miembros.service.MiembroService    : [Miembros] Estado cambiado: MIEMBRO → INACTIVO | miembro=8ed1abbd-7cb1-4442-b340-f6975ed4f902
+2026-04-28T20:59:14.404-05:00  INFO 8964 --- [sgi-backend] [nio-8080-exec-9] c.m.s.miembros.service.MiembroService    : [Miembros] Inactivado via DELETE: 8ed1abbd-7cb1-4442-b340-f6975ed4f902
+2026-04-28T20:59:14.415-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-1] c.m.sgi_backend.security.JwtAuthFilter   : Schema de sede establecido: sede_pai_bog
+2026-04-28T20:59:14.418-05:00  WARN 8964 --- [sgi-backend] [nio-8080-exec-1] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.web.bind.MethodArgumentNotValidException: Validation failed for argument [1] in public org.springframework.http.ResponseEntity<java.lang.Void> com.miltonbass.sgi_backend.miembros.controller.MiembroController.eliminar(java.util.UUID,com.miltonbass.sgi_backend.miembros.dto.MiembroDtos$InactivarRequest,org.springframework.security.core.Authentication): [Field error in object 'inactivarRequest' on field 'motivo': rejected value []; codes [NotBlank.inactivarRequest.motivo,NotBlank.motivo,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [inactivarRequest.motivo,motivo]; arguments []; default message [motivo]]; default message [no debe estar vacío]] ]
+2026-04-28T20:59:14.451-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-2] c.m.sgi_backend.security.JwtAuthFilter   : Schema de sede establecido: sede_pai_bog
+2026-04-28T20:59:14.454-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        m1_0.id,
+        m1_0.updated_at,
+        m1_0.apellidos,
+        m1_0.cedula,
+        m1_0.ciudad,
+        m1_0.consolidador_id,
+        m1_0.created_at,
+        m1_0.creado_por,
+        m1_0.deleted_at,
+        m1_0.direccion,
+        m1_0.email,
+        m1_0.estado,
+        m1_0.estado_civil,
+        m1_0.fecha_bautismo,
+        m1_0.fecha_ingreso,
+        m1_0.fecha_nacimiento,
+        m1_0.foto_url,
+        m1_0.genero,
+        m1_0.grupo_id,
+        m1_0.metadata,
+        m1_0.nombres,
+        m1_0.numero_miembro,
+        m1_0.sede_id,
+        m1_0.telefono,
+        m1_0.usuario_id 
+    from
+        miembros m1_0 
+    where
+        m1_0.id=? 
+        and m1_0.deleted_at is null
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.updated_at,
+        m1_0.apellidos,
+        m1_0.cedula,
+        m1_0.ciudad,
+        m1_0.consolidador_id,
+        m1_0.created_at,
+        m1_0.creado_por,
+        m1_0.deleted_at,
+        m1_0.direccion,
+        m1_0.email,
+        m1_0.estado,
+        m1_0.estado_civil,
+        m1_0.fecha_bautismo,
+        m1_0.fecha_ingreso,
+        m1_0.fecha_nacimiento,
+        m1_0.foto_url,
+        m1_0.genero,
+        m1_0.grupo_id,
+        m1_0.metadata,
+        m1_0.nombres,
+        m1_0.numero_miembro,
+        m1_0.sede_id,
+        m1_0.telefono,
+        m1_0.usuario_id 
+    from
+        miembros m1_0 
+    where
+        m1_0.id=? 
+        and m1_0.deleted_at is null
+2026-04-28T20:59:14.515-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-3] c.m.sgi_backend.security.JwtAuthFilter   : Schema de sede establecido: sede_pai_bog
+2026-04-28T20:59:14.521-05:00 DEBUG 8964 --- [sgi-backend] [nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        m1_0.id,
+        m1_0.updated_at,
+        m1_0.apellidos,
+        m1_0.cedula,
+        m1_0.ciudad,
+        m1_0.consolidador_id,
+        m1_0.created_at,
+        m1_0.creado_por,
+        m1_0.deleted_at,
+        m1_0.direccion,
+        m1_0.email,
+        m1_0.estado,
+        m1_0.estado_civil,
+        m1_0.fecha_bautismo,
+        m1_0.fecha_ingreso,
+        m1_0.fecha_nacimiento,
+        m1_0.foto_url,
+        m1_0.genero,
+        m1_0.grupo_id,
+        m1_0.metadata,
+        m1_0.nombres,
+        m1_0.numero_miembro,
+        m1_0.sede_id,
+        m1_0.telefono,
+        m1_0.usuario_id 
+    from
+        miembros m1_0 
+    where
+        m1_0.id=? 
+        and m1_0.deleted_at is null
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.updated_at,
+        m1_0.apellidos,
+        m1_0.cedula,
+        m1_0.ciudad,
+        m1_0.consolidador_id,
+        m1_0.created_at,
+        m1_0.creado_por,
+        m1_0.deleted_at,
+        m1_0.direccion,
+        m1_0.email,
+        m1_0.estado,
+        m1_0.estado_civil,
+        m1_0.fecha_bautismo,
+        m1_0.fecha_ingreso,
+        m1_0.fecha_nacimiento,
+        m1_0.foto_url,
+        m1_0.genero,
+        m1_0.grupo_id,
+        m1_0.metadata,
+        m1_0.nombres,
+        m1_0.numero_miembro,
+        m1_0.sede_id,
+        m1_0.telefono,
+        m1_0.usuario_id 
+    from
+        miembros m1_0 
+    where
+        m1_0.id=? 
+        and m1_0.deleted_at is null

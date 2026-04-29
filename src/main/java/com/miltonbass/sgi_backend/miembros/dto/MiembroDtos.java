@@ -58,18 +58,25 @@ public final class MiembroDtos {
             LocalDate fechaIngreso,
             LocalDate fechaBautismo,
             UUID grupoId,
-
-            /**
-             * Transiciones de estado permitidas:
-             * VISITOR → MIEMBRO, INACTIVO
-             * MIEMBRO → INACTIVO, RESTAURADO
-             * INACTIVO → RESTAURADO
-             * RESTAURADO → MIEMBRO, INACTIVO
-             * Validadas en MiembroService.validarTransicionEstado()
-             */
-            @Pattern(regexp = "VISITOR|MIEMBRO|INACTIVO|RESTAURADO", message = "Estado debe ser VISITOR, MIEMBRO, INACTIVO o RESTAURADO") String estado,
-
             Map<String, Object> metadata) {
+    }
+
+    /** Usado por PATCH /miembros/{id}/estado */
+    public record CambiarEstadoRequest(
+            @NotBlank
+            @Pattern(regexp = "VISITOR|MIEMBRO|INACTIVO|RESTAURADO",
+                     message = "Estado debe ser VISITOR, MIEMBRO, INACTIVO o RESTAURADO")
+            String estado,
+
+            @NotBlank String motivo) {
+    }
+
+    /** Usado por DELETE /miembros/{id} — alias de transición a INACTIVO */
+    public record InactivarRequest(@NotBlank String motivo) {
+    }
+
+    /** Usado por PATCH /miembros/{id}/consolidador — null = quitar consolidador */
+    public record AsignarConsolidadorRequest(UUID consolidadorId) {
     }
 
     // ─── Responses ───────────────────────────────────────────
@@ -94,6 +101,7 @@ public final class MiembroDtos {
             LocalDate fechaIngreso,
             LocalDate fechaBautismo,
             UUID grupoId,
+            UUID consolidadorId,
             Map<String, Object> metadata,
             Instant creadoEn,
             Instant actualizadoEn) {
@@ -105,5 +113,17 @@ public final class MiembroDtos {
             int pageSize,
             long totalElements,
             int totalPages) {
+    }
+
+    public record EstadoHistorialItem(
+            UUID id,
+            String estadoAnterior,
+            String estadoNuevo,
+            String motivo,
+            UUID cambiadoPor,
+            Instant creadoEn) {
+    }
+
+    public record EstadoHistorialResponse(List<EstadoHistorialItem> historial) {
     }
 }

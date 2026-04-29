@@ -75,6 +75,9 @@ public class Miembro {
     @Column(name = "grupo_id")
     private UUID grupoId;
 
+    @Column(name = "consolidador_id")
+    private UUID consolidadorId;
+
     @Column(columnDefinition = "jsonb")
     @JdbcTypeCode(SqlTypes.JSON)
     private Map<String, Object> metadata;
@@ -264,6 +267,14 @@ public class Miembro {
 
     public void setGrupoId(UUID v) {
         this.grupoId = v;
+    }
+
+    public UUID getConsolidadorId() {
+        return consolidadorId;
+    }
+
+    public void setConsolidadorId(UUID v) {
+        this.consolidadorId = v;
     }
 
     public Map<String, Object> getMetadata() {

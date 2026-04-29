@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -73,7 +74,6 @@ public class MiembroService {
             throw new IllegalStateException("No hay tenant activo");
         }
 
-        // Validación email único en el schema del tenant
         Long count = jdbc.queryForObject(
                 "SELECT COUNT(*) FROM " + tenant + ".miembros WHERE email = ? AND deleted_at IS NULL",
                 Long.class, req.email());
@@ -115,7 +115,6 @@ public class MiembroService {
         log.info("[Miembros] Creado: {} {} | sede={} | creadoPor={}",
                 req.nombres(), req.apellidos(), sedeId, creadoPorId);
 
-        // Retornar el response directamente sin pasar por el repo (evita el bug)
         return new MiembroResponse(
                 id, sedeId, creadoPorId,
                 req.numeroMiembro(), req.cedula(),
@@ -125,11 +124,13 @@ public class MiembroService {
                 req.fotoUrl(), "VISITOR",
                 req.fechaIngreso() != null ? req.fechaIngreso() : hoy,
                 req.fechaBautismo(), req.grupoId(),
+                null, // consolidadorId — nuevo miembro no tiene consolidador
                 req.metadata() != null ? req.metadata() : Map.of(),
                 ahora, ahora);
     }
 
-    // ── Actualizar ────────────────────────────────────────────────────
+    // ── Actualizar (datos del perfil) ────────────────────────────────
+    @SuppressWarnings("null") // falso positivo JDT con generics de Spring Data save()
     @Transactional
     public MiembroResponse actualizar(UUID id, UpdateMiembroRequest req) {
         Miembro m = buscarPorId(id);
@@ -139,11 +140,6 @@ public class MiembroService {
                 throw new IllegalArgumentException(
                         "Ya existe un miembro con el email: " + req.email());
             }
-        }
-
-        if (req.estado() != null && !req.estado().equals(m.getEstado())) {
-            validarTransicion(m.getEstado(), req.estado(), id);
-            m.setEstado(req.estado());
         }
 
         if (req.nombres() != null)
@@ -177,19 +173,103 @@ public class MiembroService {
         if (req.metadata() != null)
             m.setMetadata(req.metadata());
 
-        m = miembroRepo.save(m);
+        Miembro saved = miembroRepo.save(m); // save() nunca retorna null — warning JDT es falso positivo
         log.info("[Miembros] Actualizado: {}", id);
+        return toResponse(saved);
+    }
+
+    // ── Cambiar estado — JdbcTemplate + INSERT en historial ──────────
+    public MiembroResponse cambiarEstado(UUID id, CambiarEstadoRequest req, UUID cambiadoPorId) {
+        String tenant = com.miltonbass.sgi_backend.config.TenantContext.getCurrentTenant();
+        if (tenant == null || tenant.equals("shared")) {
+            throw new IllegalStateException("No hay tenant activo");
+        }
+
+        Miembro m = buscarPorId(id);
+        validarTransicion(m.getEstado(), req.estado(), id);
+
+        String estadoAnterior = m.getEstado();
+
+        jdbc.update(
+                "UPDATE " + tenant + ".miembros SET estado = ? WHERE id = ?",
+                req.estado(), id);
+
+        jdbc.update(
+                "INSERT INTO " + tenant + ".miembro_estado_historial "
+                + "(id, miembro_id, estado_anterior, estado_nuevo, motivo, cambiado_por) "
+                + "VALUES (?, ?, ?, ?, ?, ?)",
+                UUID.randomUUID(), id, estadoAnterior, req.estado(),
+                req.motivo(), cambiadoPorId);
+
+        log.info("[Miembros] Estado cambiado: {} → {} | miembro={}", estadoAnterior, req.estado(), id);
+
+        m.setEstado(req.estado());
         return toResponse(m);
     }
 
-    // ── Eliminar (soft delete) ────────────────────────────────────────
-    @Transactional
-    public void eliminar(UUID id) {
+    // ── Obtener historial de estado ───────────────────────────────────
+    public EstadoHistorialResponse obtenerHistorialEstado(UUID id) {
+        String tenant = com.miltonbass.sgi_backend.config.TenantContext.getCurrentTenant();
+        if (tenant == null || tenant.equals("shared")) {
+            throw new IllegalStateException("No hay tenant activo");
+        }
+
+        buscarPorId(id); // valida que el miembro existe
+
+        String sql = "SELECT id, estado_anterior, estado_nuevo, motivo, cambiado_por, cambiado_en "
+                + "FROM " + tenant + ".miembro_estado_historial "
+                + "WHERE miembro_id = ? ORDER BY cambiado_en DESC";
+
+        List<EstadoHistorialItem> items = jdbc.query(sql, (rs, rowNum) -> new EstadoHistorialItem(
+                rs.getObject("id", UUID.class),
+                rs.getString("estado_anterior"),
+                rs.getString("estado_nuevo"),
+                rs.getString("motivo"),
+                rs.getObject("cambiado_por", UUID.class),
+                rs.getTimestamp("cambiado_en").toInstant()), id);
+
+        return new EstadoHistorialResponse(items);
+    }
+
+    // ── Asignar / quitar consolidador ─────────────────────────────────
+    public MiembroResponse asignarConsolidador(UUID id, AsignarConsolidadorRequest req) {
+        String tenant = com.miltonbass.sgi_backend.config.TenantContext.getCurrentTenant();
+        if (tenant == null || tenant.equals("shared")) {
+            throw new IllegalStateException("No hay tenant activo");
+        }
+
         Miembro m = buscarPorId(id);
-        m.setDeletedAt(Instant.now());
-        m.setEstado("INACTIVO");
-        miembroRepo.save(m);
-        log.info("[Miembros] Eliminado (soft): {}", id);
+
+        if (!Set.of("MIEMBRO", "RESTAURADO").contains(m.getEstado())) {
+            throw new IllegalArgumentException(
+                    "Solo se puede asignar consolidador a miembros en estado MIEMBRO o RESTAURADO. "
+                    + "Estado actual: " + m.getEstado());
+        }
+
+        if (req.consolidadorId() != null) {
+            Long count = jdbc.queryForObject(
+                    "SELECT COUNT(*) FROM " + tenant + ".miembros WHERE id = ? AND deleted_at IS NULL",
+                    Long.class, req.consolidadorId());
+            if (count == null || count == 0) {
+                throw new IllegalArgumentException("El consolidador especificado no existe en esta sede");
+            }
+        }
+
+        jdbc.update(
+                "UPDATE " + tenant + ".miembros SET consolidador_id = ? WHERE id = ?",
+                req.consolidadorId(), id);
+
+        log.info("[Miembros] Consolidador {}: miembro={} consolidador={}",
+                req.consolidadorId() == null ? "quitado" : "asignado", id, req.consolidadorId());
+
+        m.setConsolidadorId(req.consolidadorId());
+        return toResponse(m);
+    }
+
+    // ── Eliminar — alias de transición a INACTIVO con motivo ─────────
+    public void eliminar(UUID id, String motivo, UUID cambiadoPorId) {
+        cambiarEstado(id, new CambiarEstadoRequest("INACTIVO", motivo), cambiadoPorId);
+        log.info("[Miembros] Inactivado via DELETE: {}", id);
     }
 
     // ── Helpers ───────────────────────────────────────────────────────
@@ -225,6 +305,7 @@ public class MiembroService {
                 m.getTelefono(), m.getEmail(), m.getDireccion(), m.getCiudad(),
                 m.getFotoUrl(), m.getEstado(),
                 m.getFechaIngreso(), m.getFechaBautismo(), m.getGrupoId(),
+                m.getConsolidadorId(),
                 m.getMetadata(), m.getCreadoEn(), m.getActualizadoEn());
     }
 }

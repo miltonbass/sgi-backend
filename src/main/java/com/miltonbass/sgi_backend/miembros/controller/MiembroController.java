@@ -27,10 +27,9 @@ public class MiembroController {
 
     /**
      * GET /api/v1/miembros
-     * Query params: estado, page, size
      */
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','SECRETARIA','REGISTRO_SEDE')")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','SECRETARIA','REGISTRO_SEDE')")
     public ResponseEntity<MiembroPageResponse> listar(
             @RequestParam(required = false) String estado,
             @RequestParam(defaultValue = "0") int page,
@@ -44,7 +43,7 @@ public class MiembroController {
      * GET /api/v1/miembros/buscar?q=Garcia&estado=VISITOR
      */
     @GetMapping("/buscar")
-    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','SECRETARIA','REGISTRO_SEDE')")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','SECRETARIA','REGISTRO_SEDE')")
     public ResponseEntity<MiembroPageResponse> buscar(
             @RequestParam(required = false) String q,
             @RequestParam(required = false) String estado,
@@ -59,14 +58,13 @@ public class MiembroController {
      * GET /api/v1/miembros/{id}
      */
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','SECRETARIA','REGISTRO_SEDE')")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','SECRETARIA','REGISTRO_SEDE')")
     public ResponseEntity<MiembroResponse> obtener(@PathVariable UUID id) {
         return ResponseEntity.ok(miembroService.obtener(id));
     }
 
     /**
      * POST /api/v1/miembros
-     * El estado inicial VISITOR lo fuerza el servicio, no el cliente.
      */
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','SECRETARIA','REGISTRO_SEDE')")
@@ -80,8 +78,7 @@ public class MiembroController {
     }
 
     /**
-     * PUT /api/v1/miembros/{id}
-     * Incluye posibilidad de cambiar estado (con validación de transiciones).
+     * PUT /api/v1/miembros/{id} — actualiza datos del perfil (NO el estado)
      */
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','SECRETARIA','REGISTRO_SEDE')")
@@ -92,13 +89,53 @@ public class MiembroController {
     }
 
     /**
-     * DELETE /api/v1/miembros/{id} — soft delete
-     * Restringido a admins y secretaria, no a REGISTRO_SEDE.
+     * PATCH /api/v1/miembros/{id}/estado
+     * Cambia el estado espiritual del miembro con motivo obligatorio.
+     */
+    @PatchMapping("/{id}/estado")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE')")
+    public ResponseEntity<MiembroResponse> cambiarEstado(
+            @PathVariable UUID id,
+            @Valid @RequestBody CambiarEstadoRequest req,
+            Authentication auth) {
+        UUID cambiadoPorId = extraerUsuarioId(auth);
+        return ResponseEntity.ok(miembroService.cambiarEstado(id, req, cambiadoPorId));
+    }
+
+    /**
+     * GET /api/v1/miembros/{id}/historial-estado
+     */
+    @GetMapping("/{id}/historial-estado")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','SECRETARIA','REGISTRO_SEDE')")
+    public ResponseEntity<EstadoHistorialResponse> historialEstado(@PathVariable UUID id) {
+        return ResponseEntity.ok(miembroService.obtenerHistorialEstado(id));
+    }
+
+    /**
+     * PATCH /api/v1/miembros/{id}/consolidador
+     * Asigna o quita consolidador. Solo válido si el miembro está en MIEMBRO o RESTAURADO.
+     * consolidadorId null = quitar consolidador.
+     */
+    @PatchMapping("/{id}/consolidador")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE')")
+    public ResponseEntity<MiembroResponse> asignarConsolidador(
+            @PathVariable UUID id,
+            @Valid @RequestBody AsignarConsolidadorRequest req) {
+        return ResponseEntity.ok(miembroService.asignarConsolidador(id, req));
+    }
+
+    /**
+     * DELETE /api/v1/miembros/{id}
+     * Alias de transición a INACTIVO. El motivo es obligatorio.
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','SECRETARIA')")
-    public ResponseEntity<Void> eliminar(@PathVariable UUID id) {
-        miembroService.eliminar(id);
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE')")
+    public ResponseEntity<Void> eliminar(
+            @PathVariable UUID id,
+            @Valid @RequestBody InactivarRequest req,
+            Authentication auth) {
+        UUID cambiadoPorId = extraerUsuarioId(auth);
+        miembroService.eliminar(id, req.motivo(), cambiadoPorId);
         return ResponseEntity.noContent().build();
     }
 
