@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -42,6 +43,16 @@ public class GlobalExceptionHandler {
 
         ErrorResponse body = ErrorResponse.of(400, "VALIDACION_FALLIDA", mensajes);
         return ResponseEntity.badRequest().body(body);
+    }
+
+    /**
+     * Acceso denegado por regla de negocio (ej: CONSOLIDACION_SEDE intentando ver un miembro no asignado).
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException ex) {
+        log.debug("AccessDeniedException: {}", ex.getMessage());
+        ErrorResponse body = ErrorResponse.of(403, "ACCESO_DENEGADO", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(body);
     }
 
     /**

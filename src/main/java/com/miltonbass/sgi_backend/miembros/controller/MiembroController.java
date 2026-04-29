@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -143,6 +144,25 @@ public class MiembroController {
         UUID cambiadoPorId = extraerUsuarioId(auth);
         miembroService.eliminar(id, req.motivo(), cambiadoPorId);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * GET /api/v1/miembros/{id}/perfil
+     * Perfil completo del miembro con historial, grupos y asistencia reciente.
+     * - REGISTRO_SEDE: solo datos básicos (nivelAcceso=BASICO)
+     * - PASTOR_PRINCIPAL: teléfono y dirección ocultos
+     * - CONSOLIDACION_SEDE: solo puede ver sus miembros asignados
+     */
+    @GetMapping("/{id}/perfil")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','CONSOLIDACION_SEDE','REGISTRO_SEDE','SECRETARIA')")
+    public ResponseEntity<PerfilMiembroResponse> perfil(
+            @PathVariable UUID id,
+            Authentication auth) {
+        UUID usuarioId = extraerUsuarioId(auth);
+        List<String> roles = auth.getAuthorities().stream()
+                .map(a -> a.getAuthority().replace("ROLE_", ""))
+                .toList();
+        return ResponseEntity.ok(miembroService.obtenerPerfil(id, usuarioId, roles));
     }
 
     /**

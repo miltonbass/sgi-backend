@@ -3,6 +3,7 @@ package com.miltonbass.sgi_backend.miembros.service;
 
 import com.miltonbass.sgi_backend.exception.AuthException;
 import com.miltonbass.sgi_backend.miembros.dto.MiembroDtos.*;
+import org.springframework.security.access.AccessDeniedException;
 import com.miltonbass.sgi_backend.miembros.entity.Miembro;
 import com.miltonbass.sgi_backend.miembros.repository.MiembroRepository;
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -264,6 +266,131 @@ public class MiembroService {
 
         m.setConsolidadorId(req.consolidadorId());
         return toResponse(m);
+    }
+
+    // ── Perfil detallado (H2.5) ───────────────────────────────────────
+    private static final Set<String> ROLES_ADMIN     = Set.of("ADMIN_GLOBAL", "ADMIN_SEDE");
+    private static final Set<String> ROLES_COMPLETO  = Set.of("ADMIN_GLOBAL", "ADMIN_SEDE",
+            "PASTOR_SEDE", "PASTOR_PRINCIPAL", "SECRETARIA", "CONSOLIDACION_SEDE");
+
+    public PerfilMiembroResponse obtenerPerfil(UUID miembroId, UUID usuarioId, List<String> roles) {
+        String tenant = com.miltonbass.sgi_backend.config.TenantContext.getCurrentTenant();
+        if (tenant == null || tenant.equals("shared")) {
+            throw new IllegalStateException("No hay tenant activo");
+        }
+
+        Miembro m = buscarPorId(miembroId);
+
+        boolean esAdmin         = roles.stream().anyMatch(ROLES_ADMIN::contains);
+        boolean esPastorSede    = roles.contains("PASTOR_SEDE");
+        boolean esConsolidador  = roles.contains("CONSOLIDACION_SEDE") && !esAdmin && !esPastorSede;
+        boolean esPastorPpal    = roles.contains("PASTOR_PRINCIPAL")   && !esAdmin && !esPastorSede;
+        boolean esRegistroSolo  = roles.contains("REGISTRO_SEDE")
+                && roles.stream().noneMatch(ROLES_COMPLETO::contains);
+
+        // CONSOLIDACION_SEDE: solo puede ver los miembros que consolida
+        if (esConsolidador) {
+            verificarAccesoConsolidador(tenant, miembroId, usuarioId);
+        }
+
+        // Datos personales (teléfono y dirección ocultos para PASTOR_PRINCIPAL)
+        MiembroResponse datos = buildDatosPersonales(m, esPastorPpal);
+
+        // REGISTRO_SEDE: solo datos básicos, sin sección pastoral
+        if (esRegistroSolo) {
+            return new PerfilMiembroResponse(datos, List.of(), List.of(), List.of(), "BASICO");
+        }
+
+        List<EstadoHistorialItem> historial  = fetchHistorialPerfil(tenant, miembroId);
+        List<GrupoMembresiaItem>  grupos     = fetchGruposPerfil(tenant, miembroId);
+        List<AsistenciaItem>      asistencia = fetchAsistenciaReciente(tenant, miembroId);
+
+        return new PerfilMiembroResponse(datos, historial, grupos, asistencia, "COMPLETO");
+    }
+
+    private void verificarAccesoConsolidador(String tenant, UUID miembroId, UUID usuarioId) {
+        // Buscar el miembro cuyo usuario_id sea el del solicitante
+        List<UUID> misIds = jdbc.queryForList(
+                "SELECT id FROM " + tenant + ".miembros WHERE usuario_id = ? AND deleted_at IS NULL",
+                UUID.class, usuarioId);
+
+        if (misIds.isEmpty()) {
+            throw new AccessDeniedException(
+                    "No tiene un perfil de miembro activo en esta sede");
+        }
+
+        boolean tieneAcceso = misIds.stream().anyMatch(miId -> {
+            Long n = jdbc.queryForObject(
+                    "SELECT COUNT(*) FROM " + tenant + ".miembros WHERE id = ? AND consolidador_id = ? AND deleted_at IS NULL",
+                    Long.class, miembroId, miId);
+            return n != null && n > 0;
+        });
+
+        if (!tieneAcceso) {
+            throw new AccessDeniedException(
+                    "CONSOLIDACION_SEDE solo puede ver el perfil de sus miembros asignados");
+        }
+    }
+
+    private MiembroResponse buildDatosPersonales(Miembro m, boolean enmascararSensibles) {
+        return new MiembroResponse(
+                m.getId(), m.getSedeId(), m.getCreadoPor(),
+                m.getNumeroMiembro(), m.getCedula(),
+                m.getNombres(), m.getApellidos(), m.getFechaNacimiento(),
+                m.getGenero(), m.getEstadoCivil(),
+                enmascararSensibles ? null : m.getTelefono(),
+                m.getEmail(),
+                enmascararSensibles ? null : m.getDireccion(),
+                m.getCiudad(), m.getFotoUrl(), m.getEstado(),
+                m.getFechaIngreso(), m.getFechaBautismo(), m.getGrupoId(),
+                m.getConsolidadorId(), m.getMetadata(),
+                m.getCreadoEn(), m.getActualizadoEn());
+    }
+
+    private List<EstadoHistorialItem> fetchHistorialPerfil(String tenant, UUID miembroId) {
+        return jdbc.query(
+                "SELECT id, estado_anterior, estado_nuevo, motivo, cambiado_por, cambiado_en "
+                + "FROM " + tenant + ".miembro_estado_historial "
+                + "WHERE miembro_id = ? ORDER BY cambiado_en DESC",
+                (rs, i) -> new EstadoHistorialItem(
+                        rs.getObject("id", UUID.class),
+                        rs.getString("estado_anterior"),
+                        rs.getString("estado_nuevo"),
+                        rs.getString("motivo"),
+                        rs.getObject("cambiado_por", UUID.class),
+                        rs.getTimestamp("cambiado_en").toInstant()),
+                miembroId);
+    }
+
+    private List<GrupoMembresiaItem> fetchGruposPerfil(String tenant, UUID miembroId) {
+        return jdbc.query(
+                "SELECT mg.grupo_id, g.nombre, g.tipo, mg.rol, mg.fecha_ingreso "
+                + "FROM " + tenant + ".miembro_grupos mg "
+                + "JOIN " + tenant + ".grupos g ON g.id = mg.grupo_id "
+                + "WHERE mg.miembro_id = ? ORDER BY mg.fecha_ingreso DESC",
+                (rs, i) -> {
+                    Date fi = rs.getDate("fecha_ingreso");
+                    return new GrupoMembresiaItem(
+                            rs.getObject("grupo_id", UUID.class),
+                            rs.getString("nombre"),
+                            rs.getString("tipo"),
+                            rs.getString("rol"),
+                            fi != null ? fi.toLocalDate() : null);
+                },
+                miembroId);
+    }
+
+    private List<AsistenciaItem> fetchAsistenciaReciente(String tenant, UUID miembroId) {
+        return jdbc.query(
+                "SELECT evento_id, presente, observacion, created_at "
+                + "FROM " + tenant + ".asistencias "
+                + "WHERE miembro_id = ? ORDER BY created_at DESC LIMIT 10",
+                (rs, i) -> new AsistenciaItem(
+                        rs.getObject("evento_id", UUID.class),
+                        rs.getBoolean("presente"),
+                        rs.getString("observacion"),
+                        rs.getTimestamp("created_at").toInstant()),
+                miembroId);
     }
 
     // ── Eliminar — alias de transición a INACTIVO con motivo ─────────

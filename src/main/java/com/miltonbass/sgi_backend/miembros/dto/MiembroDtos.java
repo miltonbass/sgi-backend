@@ -127,6 +127,34 @@ public final class MiembroDtos {
     public record EstadoHistorialResponse(List<EstadoHistorialItem> historial) {
     }
 
+    // ─── Perfil detallado (H2.5) ─────────────────────────────
+
+    public record GrupoMembresiaItem(
+            UUID grupoId,
+            String nombre,
+            String tipo,
+            String rol,
+            LocalDate fechaIngreso) {
+    }
+
+    public record AsistenciaItem(
+            UUID eventoId,
+            boolean presente,
+            String observacion,
+            Instant registradoEn) {
+    }
+
+    /**
+     * nivelAcceso: COMPLETO (todos los datos) | BASICO (solo datos personales, sin historial pastoral)
+     */
+    public record PerfilMiembroResponse(
+            MiembroResponse datos,
+            List<EstadoHistorialItem> historialEstado,
+            List<GrupoMembresiaItem> grupos,
+            List<AsistenciaItem> asistenciaReciente,
+            String nivelAcceso) {
+    }
+
     // ─── Import (H2.4) ───────────────────────────────────────
 
     public record FilaImportError(
