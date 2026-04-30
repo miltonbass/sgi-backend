@@ -7,6 +7,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * Controlador REST de autenticación.
  *
@@ -79,6 +81,17 @@ public class AuthController {
     public ResponseEntity<Void> logout(@Valid @RequestBody LogoutRequest request) {
         authService.logout(request);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * GET /api/auth/sedes?email=usuario@email.com
+     *
+     * Retorna las sedes activas del usuario para mostrar el selector antes del login.
+     * Público — no requiere token. Devuelve [] si el email no existe.
+     */
+    @GetMapping("/sedes")
+    public ResponseEntity<List<SedeInfo>> obtenerSedes(@RequestParam String email) {
+        return ResponseEntity.ok(authService.obtenerSedesPorEmail(email));
     }
 
     // ─── Utilidades ──────────────────────────────────────────────────────────

@@ -180,6 +180,24 @@ public class AuthService {
                                 sedeSeleccionada.getRoles(), sedesInfo);
         }
 
+        // ─── Sedes por email (pre-login) ─────────────────────────────────────────
+
+        /**
+         * Retorna las sedes activas de un usuario dado su email.
+         * Usado por el frontend para mostrar el selector de sede antes del login.
+         * Devuelve lista vacía si el email no existe (sin revelar si existe o no).
+         */
+        public List<SedeInfo> obtenerSedesPorEmail(String email) {
+                return usuarioRepo.findByEmailIgnoreCase(email)
+                                .filter(UsuarioSistema::isActivo)
+                                .map(u -> {
+                                        List<UsuarioSede> sedes = usuarioSedeRepo
+                                                        .findByUsuarioIdAndActivoTrue(u.getId());
+                                        return construirSedesInfo(sedes);
+                                })
+                                .orElse(List.of());
+        }
+
         // ─── Logout ───────────────────────────────────────────────────────────────
 
         /**
