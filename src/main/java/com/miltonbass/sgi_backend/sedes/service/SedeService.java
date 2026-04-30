@@ -108,6 +108,20 @@ public class SedeService {
         return toResponse(sedeRepo.save(sede));
     }
 
+    // ── Activar ──────────────────────────────────────────────────────
+    @Transactional
+    public void activar(UUID id) {
+        Sede sede = buscarPorId(id);
+        if (sede.isActiva()) {
+            throw AuthException.sedeYaActiva();
+        }
+        sede.setActiva(true);
+        sede.setDeletedAt(null);
+        sede.setActualizadoEn(Instant.now());
+        sedeRepo.save(sede);
+        log.info("[Sedes] Sede {} activada", sede.getCodigo());
+    }
+
     // ── Desactivar (delete lógico) ───────────────────────────────────
     @Transactional
     public void desactivar(UUID id) {

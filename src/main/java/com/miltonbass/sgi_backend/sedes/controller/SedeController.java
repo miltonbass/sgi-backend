@@ -49,6 +49,12 @@ public class SedeController {
         return ResponseEntity.ok(sedeService.actualizar(id, req));
     }
 
+    @PatchMapping("/{id}/activar")
+    public ResponseEntity<Void> activar(@PathVariable UUID id) {
+        sedeService.activar(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> desactivar(@PathVariable UUID id) {
         sedeService.desactivar(id);

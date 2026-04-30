@@ -97,6 +97,11 @@ public class AuthException extends RuntimeException {
         return new AuthException(400, "SEDE_YA_INACTIVA", "La sede ya está inactiva");
     }
 
+    /** 400 - Sede ya activa */
+    public static AuthException sedeYaActiva() {
+        return new AuthException(400, "SEDE_YA_ACTIVA", "La sede ya está activa");
+    }
+
     // ─── Getters ─────────────────────────────────────────────────────────────
 
     public int getHttpStatus() { return httpStatus; }
