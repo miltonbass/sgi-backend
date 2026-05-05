@@ -9,6 +9,7 @@ import com.miltonbass.sgi_backend.usuarios.dto.UsuarioDtos.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ public class UsuarioService {
     private static final Logger log = LoggerFactory.getLogger(UsuarioService.class);
     private static final String PLACEHOLDER_HASH =
         "$2a$10$PLACEHOLDER_HASH_HASTA_ACTIVACION_xxxxxxxxxxxxxxxxxxxxxxxxxx";
+    private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     private final UsuarioSistemaRepository usuarioRepo;
     private final UsuarioSedeRepository usuarioSedeRepo;
@@ -206,5 +208,49 @@ public class UsuarioService {
         validarAsignacion(sedeId, List.of(), rolLlamante, sedeIdLlamante);
         usuarioSedeRepo.deleteByUsuarioIdAndSedeId(usuarioId, sedeId);
         log.info("Usuario {} desvinculado de sede {}", usuarioId, sedeId);
+    }
+
+    // ─── Cambiar contraseña propia ───────────────────────────
+    @Transactional
+    public void cambiarPasswordPropia(UUID userId, CambiarPasswordRequest req) {
+        UsuarioSistema u = usuarioRepo.findById(userId)
+                .orElseThrow(AuthException::usuarioNoEncontrado);
+
+        if (!passwordEncoder.matches(req.passwordActual(), u.getPasswordHash())) {
+            throw new IllegalArgumentException("La contraseña actual es incorrecta");
+        }
+        if (req.passwordActual().equals(req.passwordNueva())) {
+            throw new IllegalArgumentException("La nueva contraseña debe ser diferente a la actual");
+        }
+
+        u.setPasswordHash(passwordEncoder.encode(req.passwordNueva()));
+        u.setDebeCambiarPassword(false);
+        u.setTokenResetPassword(null);
+        usuarioRepo.save(u);
+        log.info("[Usuarios] Contraseña cambiada por el propio usuario: {}", u.getEmail());
+    }
+
+    // ─── Reset de contraseña por admin ───────────────────────
+    @Transactional
+    public void resetPasswordAdmin(UUID targetId, ResetPasswordAdminRequest req,
+                                   String rolLlamante, String sedeIdLlamante) {
+        UsuarioSistema u = usuarioRepo.findById(targetId)
+                .orElseThrow(AuthException::usuarioNoEncontrado);
+
+        boolean esAdminGlobal = "ADMIN_GLOBAL".equals(rolLlamante) || "SUPER_ADMIN".equals(rolLlamante);
+        if (!esAdminGlobal) {
+            boolean mismaSedeAdminSede = usuarioSedeRepo.findByUsuarioId(targetId).stream()
+                    .anyMatch(us -> us.getSedeId().toString().equals(sedeIdLlamante));
+            if (!mismaSedeAdminSede) {
+                throw AuthException.sedeNoAsignada();
+            }
+        }
+
+        u.setPasswordHash(passwordEncoder.encode(req.passwordNueva()));
+        u.setDebeCambiarPassword(true);
+        u.setActivo(true);
+        u.setTokenResetPassword(null);
+        usuarioRepo.save(u);
+        log.info("[Usuarios] Contraseña reseteada por admin {} para usuario: {}", rolLlamante, u.getEmail());
     }
 }

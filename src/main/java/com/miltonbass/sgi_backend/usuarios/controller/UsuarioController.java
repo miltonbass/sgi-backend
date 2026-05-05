@@ -87,6 +87,29 @@ public class UsuarioController {
         return ResponseEntity.noContent().build();
     }
 
+    // ─── PATCH /api/v1/usuarios/me/password ──────────────────
+    @PatchMapping("/me/password")
+    public ResponseEntity<Void> cambiarPasswordPropia(
+            @Valid @RequestBody CambiarPasswordRequest req,
+            Authentication auth) {
+        UUID userId = extraerUserId(auth);
+        usuarioService.cambiarPasswordPropia(userId, req);
+        return ResponseEntity.noContent().build();
+    }
+
+    // ─── PATCH /api/v1/usuarios/{id}/password ────────────────
+    @PatchMapping("/{id}/password")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','SUPER_ADMIN','ADMIN_SEDE')")
+    public ResponseEntity<Void> resetPasswordAdmin(
+            @PathVariable UUID id,
+            @Valid @RequestBody ResetPasswordAdminRequest req,
+            Authentication auth) {
+        String rolLlamante = extraerRolPrincipal(auth);
+        String sedeIdLlamante = extraerSedeId(auth);
+        usuarioService.resetPasswordAdmin(id, req, rolLlamante, sedeIdLlamante);
+        return ResponseEntity.noContent().build();
+    }
+
     // ─── Helpers JWT ─────────────────────────────────────────
     private String extraerRolPrincipal(Authentication auth) {
     return auth.getAuthorities().stream()
@@ -98,10 +121,17 @@ public class UsuarioController {
     }
 
     private String extraerSedeId(Authentication auth) {
-        // El JwtAuthFilter pone el claim "sedeId" en los details
         if (auth.getDetails() instanceof Claims claims) {
             return claims.get("sedeId", String.class);
         }
         return null;
+    }
+
+    private UUID extraerUserId(Authentication auth) {
+        if (auth.getDetails() instanceof Claims claims) {
+            String userId = claims.get("userId", String.class);
+            if (userId != null) return UUID.fromString(userId);
+        }
+        throw new IllegalStateException("Token sin userId");
     }
 }

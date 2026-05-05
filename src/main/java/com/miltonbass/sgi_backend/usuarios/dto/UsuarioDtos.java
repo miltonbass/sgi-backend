@@ -39,6 +39,17 @@ public final class UsuarioDtos {
         List<String> roles
     ) {}
 
+    public record CambiarPasswordRequest(
+        @NotBlank
+        String passwordActual,
+
+        @NotBlank @Size(min = 8, message = "La nueva contraseña debe tener al menos 8 caracteres")
+        String passwordNueva) {}
+
+    public record ResetPasswordAdminRequest(
+        @NotBlank @Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres")
+        String passwordNueva) {}
+
     public record UpdateUsuarioRequest(
         @Size(min = 2, max = 50)
         String nombre,
