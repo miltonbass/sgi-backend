@@ -213,7 +213,7 @@ public class UsuarioService {
     // ─── Cambiar contraseña propia ───────────────────────────
     @Transactional
     public void cambiarPasswordPropia(UUID userId, CambiarPasswordRequest req) {
-        UsuarioSistema u = usuarioRepo.findById(userId)
+        UsuarioSistema u = usuarioRepo.findById(Objects.requireNonNull(userId))
                 .orElseThrow(AuthException::usuarioNoEncontrado);
 
         if (!passwordEncoder.matches(req.passwordActual(), u.getPasswordHash())) {
@@ -234,7 +234,7 @@ public class UsuarioService {
     @Transactional
     public void resetPasswordAdmin(UUID targetId, ResetPasswordAdminRequest req,
                                    String rolLlamante, String sedeIdLlamante) {
-        UsuarioSistema u = usuarioRepo.findById(targetId)
+        UsuarioSistema u = usuarioRepo.findById(Objects.requireNonNull(targetId))
                 .orElseThrow(AuthException::usuarioNoEncontrado);
 
         boolean esAdminGlobal = "ADMIN_GLOBAL".equals(rolLlamante) || "SUPER_ADMIN".equals(rolLlamante);
