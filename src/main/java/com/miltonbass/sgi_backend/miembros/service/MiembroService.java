@@ -84,6 +84,10 @@ public class MiembroService {
                     "Ya existe un miembro con el email: " + req.email());
         }
 
+        if (req.consolidadorId() != null) {
+            validarConsolidador(tenant, req.consolidadorId());
+        }
+
         UUID id = UUID.randomUUID();
         Instant ahora = Instant.now();
         LocalDate hoy = LocalDate.now();
@@ -94,14 +98,14 @@ public class MiembroService {
                 + "fecha_nacimiento, direccion, estado_civil, "
                 + "cedula, numero_miembro, genero, ciudad, foto_url, "
                 + "fecha_ingreso, fecha_bautismo, grupo_id, "
-                + "estado, created_at, updated_at"
+                + "consolidador_id, estado, created_at, updated_at"
                 + ") VALUES ("
                 + "?, ?, ?, "
                 + "?, ?, ?, ?, "
                 + "?, ?, ?, "
                 + "?, ?, ?, ?, ?, "
                 + "?, ?, ?, "
-                + "?, ?, ?)";
+                + "?, ?, ?, ?)";
 
         jdbc.update(sql,
                 id, sedeId, creadoPorId,
@@ -111,8 +115,13 @@ public class MiembroService {
                 req.ciudad(), req.fotoUrl(),
                 req.fechaIngreso() != null ? req.fechaIngreso() : hoy,
                 req.fechaBautismo(), req.grupoId(),
+                req.consolidadorId(),
                 "VISITOR",
                 Timestamp.from(ahora), Timestamp.from(ahora));
+
+        if (req.consolidadorId() != null) {
+            crearTareaPrimerContacto(tenant, id, req.consolidadorId(), sedeId);
+        }
 
         log.info("[Miembros] Creado: {} {} | sede={} | creadoPor={}",
                 req.nombres(), req.apellidos(), sedeId, creadoPorId);
@@ -126,7 +135,7 @@ public class MiembroService {
                 req.fotoUrl(), "VISITOR",
                 req.fechaIngreso() != null ? req.fechaIngreso() : hoy,
                 req.fechaBautismo(), req.grupoId(),
-                null, // consolidadorId — nuevo miembro no tiene consolidador
+                req.consolidadorId(),
                 req.metadata() != null ? req.metadata() : Map.of(),
                 ahora, ahora);
     }
@@ -242,24 +251,23 @@ public class MiembroService {
 
         Miembro m = buscarPorId(id);
 
-        if (!Set.of("MIEMBRO", "RESTAURADO").contains(m.getEstado())) {
+        if (!Set.of("VISITOR", "MIEMBRO", "RESTAURADO").contains(m.getEstado())) {
             throw new IllegalArgumentException(
-                    "Solo se puede asignar consolidador a miembros en estado MIEMBRO o RESTAURADO. "
+                    "Solo se puede asignar consolidador a miembros en estado VISITOR, MIEMBRO o RESTAURADO. "
                     + "Estado actual: " + m.getEstado());
         }
 
         if (req.consolidadorId() != null) {
-            Long count = jdbc.queryForObject(
-                    "SELECT COUNT(*) FROM " + tenant + ".miembros WHERE id = ? AND deleted_at IS NULL",
-                    Long.class, req.consolidadorId());
-            if (count == null || count == 0) {
-                throw new IllegalArgumentException("El consolidador especificado no existe en esta sede");
-            }
+            validarConsolidador(tenant, req.consolidadorId());
         }
 
         jdbc.update(
                 "UPDATE " + tenant + ".miembros SET consolidador_id = ? WHERE id = ?",
                 req.consolidadorId(), id);
+
+        if (req.consolidadorId() != null) {
+            crearTareaPrimerContacto(tenant, m.getId(), req.consolidadorId(), m.getSedeId());
+        }
 
         log.info("[Miembros] Consolidador {}: miembro={} consolidador={}",
                 req.consolidadorId() == null ? "quitado" : "asignado", id, req.consolidadorId());
@@ -400,6 +408,53 @@ public class MiembroService {
     }
 
     // ── Helpers ───────────────────────────────────────────────────────
+
+    private void validarConsolidador(String tenant, UUID consolidadorId) {
+        Long count = jdbc.queryForObject(
+                "SELECT COUNT(*) FROM " + tenant + ".miembros WHERE id = ? AND deleted_at IS NULL",
+                Long.class, consolidadorId);
+        if (count == null || count == 0) {
+            throw new IllegalArgumentException("El consolidador especificado no existe en esta sede");
+        }
+
+        Long roleCount = jdbc.queryForObject(
+                "SELECT COUNT(*) FROM " + tenant + ".miembros m "
+                + "JOIN shared.usuarios_sedes us ON us.usuario_id = m.usuario_id "
+                + "JOIN shared.sedes s ON s.schema_name = ? "
+                + "WHERE m.id = ? AND m.deleted_at IS NULL AND m.usuario_id IS NOT NULL "
+                + "AND us.sede_id = s.id AND us.activo = TRUE "
+                + "AND 'CONSOLIDACION_SEDE' = ANY(us.roles)",
+                Long.class, tenant, consolidadorId);
+        if (roleCount == null || roleCount == 0) {
+            throw new IllegalArgumentException("El consolidador debe tener el rol CONSOLIDACION_SEDE");
+        }
+
+        Integer maxAsignados = jdbc.queryForObject(
+                "SELECT max_asignados_consolidador FROM shared.sedes WHERE schema_name = ?",
+                Integer.class, tenant);
+        int max = maxAsignados != null ? maxAsignados : 10;
+
+        Long asignados = jdbc.queryForObject(
+                "SELECT COUNT(*) FROM " + tenant + ".miembros "
+                + "WHERE consolidador_id = ? AND deleted_at IS NULL "
+                + "AND estado NOT IN ('INACTIVO','RETIRADO','TRANSFERIDO','FALLECIDO')",
+                Long.class, consolidadorId);
+        if (asignados != null && asignados >= max) {
+            throw new IllegalArgumentException(
+                    "El consolidador ya tiene el máximo de asignados permitido (" + max + ")");
+        }
+    }
+
+    private void crearTareaPrimerContacto(String tenant, UUID miembroId,
+                                          UUID consolidadorId, UUID sedeId) {
+        String descripcion = "Primer contacto: visitar o llamar al nuevo visitante/miembro "
+                + "para dar la bienvenida y coordinar acompañamiento.";
+        jdbc.update(
+                "INSERT INTO " + tenant + ".tareas_consolidacion "
+                + "(id, sede_id, miembro_id, consolidador_id, descripcion) "
+                + "VALUES (?,?,?,?,?)",
+                UUID.randomUUID(), sedeId, miembroId, consolidadorId, descripcion);
+    }
 
     private void validarTransicion(String estadoActual, String estadoNuevo, UUID id) {
         Set<String> permitidos = TRANSICIONES.getOrDefault(estadoActual, Set.of());

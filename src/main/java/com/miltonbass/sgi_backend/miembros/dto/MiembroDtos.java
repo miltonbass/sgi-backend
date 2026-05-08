@@ -40,6 +40,7 @@ public final class MiembroDtos {
             LocalDate fechaIngreso, // si null → hoy (en @PrePersist)
             LocalDate fechaBautismo,
             UUID grupoId,
+            UUID consolidadorId, // opcional — debe tener rol CONSOLIDACION_SEDE
             Map<String, Object> metadata) {
     }
 
