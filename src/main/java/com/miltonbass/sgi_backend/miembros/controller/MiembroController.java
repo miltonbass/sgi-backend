@@ -36,36 +36,40 @@ public class MiembroController {
      * GET /api/v1/miembros
      */
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','SECRETARIA','REGISTRO_SEDE')")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','SECRETARIA','REGISTRO_SEDE','CONSOLIDACION_SEDE')")
     public ResponseEntity<MiembroPageResponse> listar(
             @RequestParam(required = false) String estado,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size) {
+            @RequestParam(defaultValue = "20") int size,
+            Authentication auth) {
         var pageable = PageRequest.of(page, size,
                 Sort.by("apellidos").ascending().and(Sort.by("nombres").ascending()));
-        return ResponseEntity.ok(miembroService.listar(estado, pageable));
+        return ResponseEntity.ok(miembroService.listar(estado, pageable,
+                extraerUsuarioId(auth), extraerRoles(auth)));
     }
 
     /**
      * GET /api/v1/miembros/buscar?q=Garcia&estado=VISITOR
      */
     @GetMapping("/buscar")
-    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','SECRETARIA','REGISTRO_SEDE')")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','SECRETARIA','REGISTRO_SEDE','CONSOLIDACION_SEDE')")
     public ResponseEntity<MiembroPageResponse> buscar(
             @RequestParam(required = false) String q,
             @RequestParam(required = false) String estado,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size) {
+            @RequestParam(defaultValue = "20") int size,
+            Authentication auth) {
         var pageable = PageRequest.of(page, size,
                 Sort.by("apellidos").ascending().and(Sort.by("nombres").ascending()));
-        return ResponseEntity.ok(miembroService.buscar(q, estado, pageable));
+        return ResponseEntity.ok(miembroService.buscar(q, estado, pageable,
+                extraerUsuarioId(auth), extraerRoles(auth)));
     }
 
     /**
      * GET /api/v1/miembros/{id}
      */
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','SECRETARIA','REGISTRO_SEDE')")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','SECRETARIA','REGISTRO_SEDE','CONSOLIDACION_SEDE')")
     public ResponseEntity<MiembroResponse> obtener(@PathVariable UUID id) {
         return ResponseEntity.ok(miembroService.obtener(id));
     }
@@ -113,7 +117,7 @@ public class MiembroController {
      * GET /api/v1/miembros/{id}/historial-estado
      */
     @GetMapping("/{id}/historial-estado")
-    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','SECRETARIA','REGISTRO_SEDE')")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','SECRETARIA','REGISTRO_SEDE','CONSOLIDACION_SEDE')")
     public ResponseEntity<EstadoHistorialResponse> historialEstado(@PathVariable UUID id) {
         return ResponseEntity.ok(miembroService.obtenerHistorialEstado(id));
     }
@@ -187,6 +191,12 @@ public class MiembroController {
     }
 
     // ─── Helpers JWT ──────────────────────────────────────────────────
+
+    private List<String> extraerRoles(Authentication auth) {
+        return auth.getAuthorities().stream()
+                .map(a -> a.getAuthority().replace("ROLE_", ""))
+                .toList();
+    }
 
     private UUID extraerSedeId(Authentication auth) {
         if (auth.getDetails() instanceof Claims claims) {

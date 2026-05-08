@@ -44,7 +44,16 @@ public class MiembroService {
 
     // ── Listar ────────────────────────────────────────────────────────
     @Transactional(readOnly = true)
-    public MiembroPageResponse listar(String estado, Pageable pageable) {
+    public MiembroPageResponse listar(String estado, Pageable pageable,
+                                      UUID usuarioId, List<String> roles) {
+        if (esConsolidadorSolo(roles)) {
+            UUID miembroId = buscarMiembroIdDeUsuario(usuarioId);
+            if (miembroId == null) return paginaVacia(pageable);
+            Page<Miembro> page = (estado != null && !estado.isBlank())
+                    ? miembroRepo.findAllByConsolidadorIdAndEstadoAndDeletedAtIsNull(miembroId, estado, pageable)
+                    : miembroRepo.findAllByConsolidadorIdAndDeletedAtIsNull(miembroId, pageable);
+            return toPageResponse(page);
+        }
         Page<Miembro> page = (estado != null && !estado.isBlank())
                 ? miembroRepo.findAllByEstadoAndDeletedAtIsNull(estado, pageable)
                 : miembroRepo.findAllByDeletedAtIsNull(pageable);
@@ -53,9 +62,15 @@ public class MiembroService {
 
     // ── Buscar ────────────────────────────────────────────────────────
     @Transactional(readOnly = true)
-    public MiembroPageResponse buscar(String q, String estado, Pageable pageable) {
+    public MiembroPageResponse buscar(String q, String estado, Pageable pageable,
+                                      UUID usuarioId, List<String> roles) {
         if (q == null || q.isBlank()) {
-            return listar(estado, pageable);
+            return listar(estado, pageable, usuarioId, roles);
+        }
+        if (esConsolidadorSolo(roles)) {
+            UUID miembroId = buscarMiembroIdDeUsuario(usuarioId);
+            if (miembroId == null) return paginaVacia(pageable);
+            return toPageResponse(miembroRepo.buscarPorConsolidador(miembroId, q.trim(), estado, pageable));
         }
         return toPageResponse(miembroRepo.buscar(q.trim(), estado, pageable));
     }
@@ -454,6 +469,26 @@ public class MiembroService {
                 + "(id, sede_id, miembro_id, consolidador_id, descripcion) "
                 + "VALUES (?,?,?,?,?)",
                 UUID.randomUUID(), sedeId, miembroId, consolidadorId, descripcion);
+    }
+
+    private static final Set<String> ROLES_SUPERIORES =
+            Set.of("ADMIN_GLOBAL", "ADMIN_SEDE", "PASTOR_SEDE", "PASTOR_PRINCIPAL");
+
+    private boolean esConsolidadorSolo(List<String> roles) {
+        return roles.contains("CONSOLIDACION_SEDE")
+                && roles.stream().noneMatch(ROLES_SUPERIORES::contains);
+    }
+
+    private UUID buscarMiembroIdDeUsuario(UUID usuarioId) {
+        String tenant = com.miltonbass.sgi_backend.config.TenantContext.getCurrentTenant();
+        List<UUID> ids = jdbc.queryForList(
+                "SELECT id FROM " + tenant + ".miembros WHERE usuario_id = ? AND deleted_at IS NULL",
+                UUID.class, usuarioId);
+        return ids.isEmpty() ? null : ids.get(0);
+    }
+
+    private MiembroPageResponse paginaVacia(Pageable pageable) {
+        return new MiembroPageResponse(List.of(), pageable.getPageNumber(), pageable.getPageSize(), 0, 0);
     }
 
     private void validarTransicion(String estadoActual, String estadoNuevo, UUID id) {

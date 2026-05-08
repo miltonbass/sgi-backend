@@ -26,6 +26,27 @@ public interface MiembroRepository extends JpaRepository<Miembro, UUID> {
 
   Page<Miembro> findAllByEstadoAndDeletedAtIsNull(String estado, Pageable pageable);
 
+  Page<Miembro> findAllByConsolidadorIdAndDeletedAtIsNull(UUID consolidadorId, Pageable pageable);
+
+  Page<Miembro> findAllByConsolidadorIdAndEstadoAndDeletedAtIsNull(UUID consolidadorId, String estado, Pageable pageable);
+
+  @Query("""
+      SELECT m FROM Miembro m
+      WHERE m.deletedAt IS NULL
+        AND m.consolidadorId = :consolidadorId
+        AND (:estado IS NULL OR m.estado = :estado)
+        AND (
+             LOWER(m.nombres)   LIKE LOWER(CONCAT('%', :q, '%'))
+          OR LOWER(m.apellidos) LIKE LOWER(CONCAT('%', :q, '%'))
+          OR LOWER(m.email)     LIKE LOWER(CONCAT('%', :q, '%'))
+        )
+      ORDER BY m.apellidos ASC, m.nombres ASC
+      """)
+  Page<Miembro> buscarPorConsolidador(@Param("consolidadorId") UUID consolidadorId,
+      @Param("q") String q,
+      @Param("estado") String estado,
+      Pageable pageable);
+
   Optional<Miembro> findByIdAndDeletedAtIsNull(UUID id);
 
   /** Email único dentro del tenant (search_path ya está seteado) */
