@@ -2,8 +2,10 @@ package com.miltonbass.sgi_backend.consolidacion.controller;
 
 import com.miltonbass.sgi_backend.consolidacion.dto.ConsolidacionDtos.*;
 import com.miltonbass.sgi_backend.consolidacion.dto.ContactoDtos.*;
+import com.miltonbass.sgi_backend.consolidacion.dto.DashboardDtos.*;
 import com.miltonbass.sgi_backend.consolidacion.service.ConsolidacionService;
 import com.miltonbass.sgi_backend.consolidacion.service.ContactoService;
+import com.miltonbass.sgi_backend.consolidacion.service.DashboardService;
 import io.jsonwebtoken.Claims;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -22,11 +24,14 @@ public class ConsolidacionController {
 
     private final ConsolidacionService consolidacionService;
     private final ContactoService contactoService;
+    private final DashboardService dashboardService;
 
     public ConsolidacionController(ConsolidacionService consolidacionService,
-                                   ContactoService contactoService) {
+                                   ContactoService contactoService,
+                                   DashboardService dashboardService) {
         this.consolidacionService = consolidacionService;
         this.contactoService = contactoService;
+        this.dashboardService = dashboardService;
     }
 
     @GetMapping("/consolidadores")
@@ -65,6 +70,21 @@ public class ConsolidacionController {
     public ResponseEntity<ConfiguracionConsolidacionResponse> actualizarConfiguracion(
             @Valid @RequestBody ConfiguracionConsolidacionRequest req) {
         return ResponseEntity.ok(consolidacionService.actualizarConfiguracion(req));
+    }
+
+    // ── H4.3 Dashboard ───────────────────────────────────────────────────────
+
+    @GetMapping("/dashboard")
+    @PreAuthorize("hasRole('CONSOLIDACION_SEDE')")
+    public ResponseEntity<DashboardResponse> dashboard(
+            @RequestParam(required = false) String estado,
+            @RequestParam(required = false) String prioridad,
+            @RequestParam(defaultValue = "false") boolean soloVencidas,
+            @RequestParam(defaultValue = "0")  int page,
+            @RequestParam(defaultValue = "20") int size,
+            Authentication auth) {
+        return ResponseEntity.ok(dashboardService.obtener(
+                extraerUserId(auth), estado, prioridad, soloVencidas, page, size));
     }
 
     // ── H4.2 Contactos ────────────────────────────────────────────────────────
