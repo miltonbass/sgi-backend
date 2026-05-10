@@ -3,17 +3,21 @@ package com.miltonbass.sgi_backend.consolidacion.controller;
 import com.miltonbass.sgi_backend.consolidacion.dto.ConsolidacionDtos.*;
 import com.miltonbass.sgi_backend.consolidacion.dto.ContactoDtos.*;
 import com.miltonbass.sgi_backend.consolidacion.dto.DashboardDtos.*;
+import com.miltonbass.sgi_backend.consolidacion.dto.ReporteDtos.*;
 import com.miltonbass.sgi_backend.consolidacion.service.ConsolidacionService;
 import com.miltonbass.sgi_backend.consolidacion.service.ContactoService;
 import com.miltonbass.sgi_backend.consolidacion.service.DashboardService;
+import com.miltonbass.sgi_backend.consolidacion.service.ReporteService;
 import io.jsonwebtoken.Claims;
 import jakarta.validation.Valid;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,13 +29,16 @@ public class ConsolidacionController {
     private final ConsolidacionService consolidacionService;
     private final ContactoService contactoService;
     private final DashboardService dashboardService;
+    private final ReporteService reporteService;
 
     public ConsolidacionController(ConsolidacionService consolidacionService,
                                    ContactoService contactoService,
-                                   DashboardService dashboardService) {
+                                   DashboardService dashboardService,
+                                   ReporteService reporteService) {
         this.consolidacionService = consolidacionService;
         this.contactoService = contactoService;
         this.dashboardService = dashboardService;
+        this.reporteService = reporteService;
     }
 
     @GetMapping("/consolidadores")
@@ -70,6 +77,18 @@ public class ConsolidacionController {
     public ResponseEntity<ConfiguracionConsolidacionResponse> actualizarConfiguracion(
             @Valid @RequestBody ConfiguracionConsolidacionRequest req) {
         return ResponseEntity.ok(consolidacionService.actualizarConfiguracion(req));
+    }
+
+    // ── H4.4 Reporte para el Pastor ──────────────────────────────────────────
+
+    @GetMapping("/reporte")
+    @PreAuthorize("hasAnyRole('ADMIN_SEDE','PASTOR_SEDE','ADMIN_GLOBAL')")
+    public ResponseEntity<ReporteConsolidacionResponse> reporte(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaDesde,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaHasta) {
+        LocalDate hasta = fechaHasta != null ? fechaHasta : LocalDate.now();
+        LocalDate desde = fechaDesde != null ? fechaDesde : hasta.minusDays(6);
+        return ResponseEntity.ok(reporteService.obtener(desde, hasta));
     }
 
     // ── H4.3 Dashboard ───────────────────────────────────────────────────────
