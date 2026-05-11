@@ -90,7 +90,6 @@ public class DashboardSedeService {
 
     // ── Crecimiento (granularidad automática) ─────────────────────────────────
 
-    @SuppressWarnings("null")
     private List<CrecimientoItem> calcularCrecimiento(String tenant,
                                                        LocalDate desde,
                                                        LocalDate hasta,
@@ -101,6 +100,7 @@ public class DashboardSedeService {
         return crecimientoDiario(tenant, desde, hasta);
     }
 
+    @SuppressWarnings("null")
     private List<CrecimientoItem> crecimientoMensual(String tenant,
                                                       LocalDate desde,
                                                       LocalDate hasta) {
@@ -138,6 +138,7 @@ public class DashboardSedeService {
         }, Date.valueOf(desde), Date.valueOf(hasta));
     }
 
+    @SuppressWarnings("null")
     private List<CrecimientoItem> crecimientoDiario(String tenant,
                                                      LocalDate desde,
                                                      LocalDate hasta) {
