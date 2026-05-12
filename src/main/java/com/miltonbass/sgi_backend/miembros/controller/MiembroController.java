@@ -2,12 +2,15 @@
 package com.miltonbass.sgi_backend.miembros.controller;
 
 import com.miltonbass.sgi_backend.miembros.dto.MiembroDtos.*;
+import com.miltonbass.sgi_backend.miembros.service.ExportacionMiembrosService;
 import com.miltonbass.sgi_backend.miembros.service.MiembroImportService;
 import com.miltonbass.sgi_backend.miembros.service.MiembroService;
 import io.jsonwebtoken.Claims;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,11 +29,14 @@ public class MiembroController {
 
     private final MiembroService miembroService;
     private final MiembroImportService miembroImportService;
+    private final ExportacionMiembrosService exportacionService;
 
     public MiembroController(MiembroService miembroService,
-                              MiembroImportService miembroImportService) {
+                              MiembroImportService miembroImportService,
+                              ExportacionMiembrosService exportacionService) {
         this.miembroService       = miembroService;
         this.miembroImportService = miembroImportService;
+        this.exportacionService   = exportacionService;
     }
 
     /**
@@ -188,6 +195,36 @@ public class MiembroController {
         UUID creadoPorId = extraerUsuarioId(auth);
         ImportMiembrosResult resultado = miembroImportService.importar(archivo, estadoDefault, sedeId, creadoPorId);
         return ResponseEntity.ok(resultado);
+    }
+
+    /**
+     * GET /api/v1/miembros/exportar?formato=EXCEL|PDF&estado=&grupoId=&fechaDesde=&fechaHasta=
+     */
+    @GetMapping("/exportar")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_SEDE')")
+    public ResponseEntity<byte[]> exportar(
+            @RequestParam(defaultValue = "EXCEL") String formato,
+            @RequestParam(required = false) String estado,
+            @RequestParam(required = false) UUID grupoId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaDesde,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaHasta,
+            Authentication auth) {
+
+        List<String> roles = extraerRoles(auth);
+        byte[] archivo = exportacionService.exportar(formato, estado, grupoId,
+                fechaDesde, fechaHasta, roles);
+
+        boolean esPdf = "PDF".equalsIgnoreCase(formato);
+        String contentType = esPdf
+                ? "application/pdf"
+                : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        String extension = esPdf ? ".pdf" : ".xlsx";
+        String filename  = "directorio-miembros" + extension;
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(archivo);
     }
 
     // ─── Helpers JWT ──────────────────────────────────────────────────

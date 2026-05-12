@@ -66,3 +66,6 @@ startup.log
 login*.json
 *.docx
 SGI-BACKEND-API-REFERENCIA.md
+
+# Documentación técnica local (no va a git)
+docs/

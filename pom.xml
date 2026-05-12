@@ -89,11 +89,18 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
-        <!-- ─── APACHE POI (importación CSV/Excel H2.4) ─────── -->
+        <!-- ─── APACHE POI (importación/exportación Excel) ──── -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>5.3.0</version>
+        </dependency>
+
+        <!-- ─── OPENPDF (exportación PDF H5.3) ──────────────── -->
+        <dependency>
+            <groupId>com.github.librepdf</groupId>
+            <artifactId>openpdf</artifactId>
+            <version>2.0.3</version>
         </dependency>
 
         <!-- ─── UTILIDADES ───────────────────────────────────── -->
