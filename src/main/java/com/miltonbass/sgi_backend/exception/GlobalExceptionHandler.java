@@ -10,6 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.stream.Collectors;
 
@@ -63,6 +64,18 @@ public class GlobalExceptionHandler {
         log.debug("IllegalArgumentException: {}", ex.getMessage());
         ErrorResponse body = ErrorResponse.of(400, "PARAMETRO_INVALIDO", ex.getMessage());
         return ResponseEntity.badRequest().body(body);
+    }
+
+    /**
+     * ResponseStatusException — para errores de negocio con código HTTP explícito (ej. 404 recurso no encontrado).
+     */
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<ErrorResponse> handleResponseStatus(ResponseStatusException ex) {
+        int status = ex.getStatusCode().value();
+        String codigo = status == 404 ? "RECURSO_NO_ENCONTRADO" : "ERROR_SOLICITUD";
+        ErrorResponse body = ErrorResponse.of(status, codigo,
+                ex.getReason() != null ? ex.getReason() : ex.getMessage());
+        return ResponseEntity.status(ex.getStatusCode()).body(body);
     }
 
     /**

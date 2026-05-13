@@ -1,7 +1,9 @@
 // src/main/java/com/miltonbass/sgi_backend/miembros/controller/MiembroController.java
 package com.miltonbass.sgi_backend.miembros.controller;
 
+import com.miltonbass.sgi_backend.miembros.dto.AsistenciaHistorialDtos.AsistenciaHistorialResponse;
 import com.miltonbass.sgi_backend.miembros.dto.MiembroDtos.*;
+import com.miltonbass.sgi_backend.miembros.service.AsistenciaHistorialService;
 import com.miltonbass.sgi_backend.miembros.service.ExportacionMiembrosService;
 import com.miltonbass.sgi_backend.miembros.service.MiembroImportService;
 import com.miltonbass.sgi_backend.miembros.service.MiembroService;
@@ -30,13 +32,16 @@ public class MiembroController {
     private final MiembroService miembroService;
     private final MiembroImportService miembroImportService;
     private final ExportacionMiembrosService exportacionService;
+    private final AsistenciaHistorialService asistenciaHistorialService;
 
     public MiembroController(MiembroService miembroService,
                               MiembroImportService miembroImportService,
-                              ExportacionMiembrosService exportacionService) {
-        this.miembroService       = miembroService;
-        this.miembroImportService = miembroImportService;
-        this.exportacionService   = exportacionService;
+                              ExportacionMiembrosService exportacionService,
+                              AsistenciaHistorialService asistenciaHistorialService) {
+        this.miembroService             = miembroService;
+        this.miembroImportService       = miembroImportService;
+        this.exportacionService         = exportacionService;
+        this.asistenciaHistorialService = asistenciaHistorialService;
     }
 
     /**
@@ -127,6 +132,19 @@ public class MiembroController {
     @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','SECRETARIA','REGISTRO_SEDE','CONSOLIDACION_SEDE')")
     public ResponseEntity<EstadoHistorialResponse> historialEstado(@PathVariable UUID id) {
         return ResponseEntity.ok(miembroService.obtenerHistorialEstado(id));
+    }
+
+    /**
+     * GET /api/v1/miembros/{id}/asistencia
+     * Historial de asistencia a eventos del miembro con racha y resumen.
+     */
+    @GetMapping("/{id}/asistencia")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_SEDE')")
+    public ResponseEntity<AsistenciaHistorialResponse> historialAsistencia(
+            @PathVariable UUID id,
+            @RequestParam(defaultValue = "20") int limite) {
+        int lim = Math.max(1, Math.min(limite, 50));
+        return ResponseEntity.ok(asistenciaHistorialService.obtener(id, lim));
     }
 
     /**
