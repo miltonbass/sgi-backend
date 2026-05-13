@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/eventos")
-@PreAuthorize("hasAnyRole('ADMIN_SEDE','PASTOR_SEDE','LIDER_GRUPO','SECRETARIO_SEDE')")
+@PreAuthorize("hasAnyRole('ADMIN_SEDE','PASTOR_SEDE','LIDER_GRUPO','SECRETARIO_SEDE','REGISTRO_SEDE')")
 public class EventoController {
 
     private final EventoService eventoService;
