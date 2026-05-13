@@ -10,6 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.stream.Collectors;
@@ -63,6 +64,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException ex) {
         log.debug("IllegalArgumentException: {}", ex.getMessage());
         ErrorResponse body = ErrorResponse.of(400, "PARAMETRO_INVALIDO", ex.getMessage());
+        return ResponseEntity.badRequest().body(body);
+    }
+
+    /**
+     * MethodArgumentTypeMismatchException — path variable o query param con tipo incompatible
+     * (ej: UUID invalido en /{id}).
+     */
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        log.debug("MethodArgumentTypeMismatchException: param={} value={}", ex.getName(), ex.getValue());
+        String msg = "Valor invalido para el parametro '" + ex.getName() + "': " + ex.getValue();
+        ErrorResponse body = ErrorResponse.of(400, "PARAMETRO_INVALIDO", msg);
         return ResponseEntity.badRequest().body(body);
     }
 
