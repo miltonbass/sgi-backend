@@ -14,7 +14,7 @@ public class GrupoDtos {
 
     public record CreateGrupoRequest(
             @NotBlank String nombre,
-            @NotBlank @Pattern(regexp = "CELULA|MINISTERIO|CLASE") String tipo,
+            @Pattern(regexp = "CELULA|MINISTERIO|CLASE") String tipo,
             UUID liderId,
             UUID grupoPadreId,
             String descripcion,
@@ -73,4 +73,22 @@ public class GrupoDtos {
             String nombre,
             String tipo,
             List<MiembroGrupoResponse> miembros) {}
+
+    // ─── H6.2 Vista Jerárquica ────────────────────────────────────────────────
+
+    public record GrupoHijoResumen(
+            UUID id,
+            String nombre,
+            String tipo,
+            UUID grupoPadreId,
+            String liderNombre,
+            int nivel,
+            int totalMiembros,
+            LocalDate ultimaSesionFecha,
+            Double promedioAsistencia30d) {}
+
+    public record GrupoArbolResponse(
+            UUID grupoRaizId,
+            String grupoRaizNombre,
+            List<GrupoHijoResumen> subArbol) {}
 }

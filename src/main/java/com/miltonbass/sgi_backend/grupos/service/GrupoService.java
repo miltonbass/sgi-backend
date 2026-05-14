@@ -242,6 +242,89 @@ public class GrupoService {
         }
     }
 
+    // ── Validar que el grupo es propio o descendiente del árbol del líder ─────
+    public void validarLiderOSubArbol(String tenant, UUID grupoId, UUID usuarioId) {
+        Integer count = jdbc.queryForObject(
+                "WITH RECURSIVE sub AS ("
+                + "  SELECT g.id FROM " + tenant + ".grupos g "
+                + "  JOIN " + tenant + ".miembro_grupos mg ON mg.grupo_id = g.id "
+                + "  JOIN " + tenant + ".miembros m ON m.id = mg.miembro_id "
+                + "  WHERE m.usuario_id = ? AND mg.rol = 'LIDER' "
+                + "  UNION ALL "
+                + "  SELECT g.id FROM " + tenant + ".grupos g "
+                + "  JOIN sub ON g.grupo_padre_id = sub.id "
+                + ") "
+                + "SELECT COUNT(*) FROM sub WHERE id = ?",
+                Integer.class, usuarioId, grupoId);
+        if (count == null || count == 0) {
+            throw new org.springframework.security.access.AccessDeniedException(
+                    "No tienes acceso a este grupo");
+        }
+    }
+
+    // ── Sub-árbol del líder (H6.2) ────────────────────────────────────────────
+    public GrupoArbolResponse obtenerSubArbol(UUID usuarioId) {
+        String tenant = tenant();
+
+        // Grupo raíz donde el usuario es LIDER
+        List<UUID> raizIds = jdbc.query(
+                "SELECT mg.grupo_id FROM " + tenant + ".miembro_grupos mg "
+                + "JOIN " + tenant + ".miembros m ON m.id = mg.miembro_id "
+                + "WHERE m.usuario_id = ? AND mg.rol = 'LIDER'",
+                (rs, i) -> rs.getObject("grupo_id", UUID.class), usuarioId);
+
+        if (raizIds.isEmpty()) {
+            throw new IllegalArgumentException("No tienes ningún grupo asignado como líder");
+        }
+
+        UUID raizId = raizIds.get(0);
+        GrupoResponse raiz = obtener(raizId);
+
+        String sql = "WITH RECURSIVE sub AS ("
+                + "  SELECT g.id, g.nombre, g.tipo, g.lider_id, g.grupo_padre_id, 1 AS nivel "
+                + "  FROM " + tenant + ".grupos g "
+                + "  WHERE g.grupo_padre_id = ? AND g.activo = TRUE "
+                + "  UNION ALL "
+                + "  SELECT g.id, g.nombre, g.tipo, g.lider_id, g.grupo_padre_id, sub.nivel + 1 "
+                + "  FROM " + tenant + ".grupos g "
+                + "  JOIN sub ON g.grupo_padre_id = sub.id "
+                + "  WHERE g.activo = TRUE "
+                + ") "
+                + "SELECT sub.id, sub.nombre, sub.tipo, sub.lider_id, sub.grupo_padre_id, sub.nivel, "
+                + "  (SELECT m.nombres || ' ' || m.apellidos FROM " + tenant + ".miembros m "
+                + "   WHERE m.id = sub.lider_id) AS lider_nombre, "
+                + "  (SELECT COUNT(*) FROM " + tenant + ".miembro_grupos mg "
+                + "   WHERE mg.grupo_id = sub.id) AS total_miembros, "
+                + "  (SELECT MAX(sg.fecha) FROM " + tenant + ".sesiones_grupo sg "
+                + "   WHERE sg.grupo_id = sub.id) AS ultima_sesion_fecha, "
+                + "  (SELECT AVG(cnt) FROM ("
+                + "     SELECT COUNT(*) AS cnt FROM " + tenant + ".asistencias_sesion a "
+                + "     JOIN " + tenant + ".sesiones_grupo sg ON sg.id = a.sesion_id "
+                + "     WHERE sg.grupo_id = sub.id AND a.presente = TRUE "
+                + "       AND sg.fecha >= CURRENT_DATE - INTERVAL '30 days' "
+                + "     GROUP BY sg.id"
+                + "  ) t) AS promedio_asistencia_30d "
+                + "FROM sub "
+                + "ORDER BY sub.nivel ASC, sub.nombre ASC";
+
+        List<GrupoHijoResumen> hijos = jdbc.query(sql, (rs, rowNum) -> {
+            java.sql.Date ultimaFecha = rs.getDate("ultima_sesion_fecha");
+            Object prom = rs.getObject("promedio_asistencia_30d");
+            return new GrupoHijoResumen(
+                    rs.getObject("id", UUID.class),
+                    rs.getString("nombre"),
+                    rs.getString("tipo"),
+                    rs.getObject("grupo_padre_id", UUID.class),
+                    rs.getString("lider_nombre"),
+                    rs.getInt("nivel"),
+                    rs.getInt("total_miembros"),
+                    ultimaFecha != null ? ultimaFecha.toLocalDate() : null,
+                    prom != null ? ((Number) prom).doubleValue() : null);
+        }, raizId);
+
+        return new GrupoArbolResponse(raizId, raiz.nombre(), hijos);
+    }
+
     // ── Helpers ───────────────────────────────────────────────────────────────
 
     private String tenant() {

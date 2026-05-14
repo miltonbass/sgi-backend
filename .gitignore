@@ -69,3 +69,4 @@ SGI-BACKEND-API-REFERENCIA.md
 
 # Documentación técnica local (no va a git)
 docs/
+startup-err.log

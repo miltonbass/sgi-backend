@@ -34,7 +34,7 @@ public class SesionGrupoService {
     // ── Listar sesiones ───────────────────────────────────────────────────────
     public List<SesionResponse> listar(UUID grupoId, UUID usuarioId) {
         String tenant = tenant();
-        validarAcceso(tenant, grupoId, usuarioId);
+        if (usuarioId != null) grupoService.validarLiderOSubArbol(tenant, grupoId, usuarioId);
 
         String sql = "SELECT s.id, s.grupo_id, g.nombre AS grupo_nombre, s.fecha, s.lugar, s.tema, "
                 + "s.comentarios, s.ofrenda_monto, s.creado_por, s.created_at, s.updated_at, "
@@ -65,33 +65,21 @@ public class SesionGrupoService {
                 req.ofrendaMonto(), creadoPor);
 
         log.info("[Sesiones] Creada en grupo={} fecha={}", grupoId, req.fecha());
-        return obtener(grupoId, id, usuarioId);
+        return obtenerInterno(tenant, grupoId, id);
     }
 
-    // ── Obtener sesión ────────────────────────────────────────────────────────
+    // ── Obtener sesión (lectura: propio o sub-árbol) ──────────────────────────
     public SesionResponse obtener(UUID grupoId, UUID sesionId, UUID usuarioId) {
         String tenant = tenant();
-        validarAcceso(tenant, grupoId, usuarioId);
-
-        String sql = "SELECT s.id, s.grupo_id, g.nombre AS grupo_nombre, s.fecha, s.lugar, s.tema, "
-                + "s.comentarios, s.ofrenda_monto, s.creado_por, s.created_at, s.updated_at, "
-                + "(SELECT COUNT(*) FROM " + tenant + ".asistencias_sesion a "
-                + " WHERE a.sesion_id = s.id AND a.presente = TRUE) AS total_presentes, "
-                + "(SELECT COUNT(*) FROM " + tenant + ".miembro_grupos mg WHERE mg.grupo_id = s.grupo_id) AS total_miembros "
-                + "FROM " + tenant + ".sesiones_grupo s "
-                + "JOIN " + tenant + ".grupos g ON g.id = s.grupo_id "
-                + "WHERE s.id = ? AND s.grupo_id = ?";
-
-        return jdbc.query(sql, this::mapSesion, sesionId, grupoId)
-                .stream().findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Sesión no encontrada: " + sesionId));
+        if (usuarioId != null) grupoService.validarLiderOSubArbol(tenant, grupoId, usuarioId);
+        return obtenerInterno(tenant, grupoId, sesionId);
     }
 
     // ── Actualizar sesión ─────────────────────────────────────────────────────
     public SesionResponse actualizar(UUID grupoId, UUID sesionId, UpdateSesionRequest req, UUID usuarioId) {
         String tenant = tenant();
         validarAcceso(tenant, grupoId, usuarioId);
-        SesionResponse actual = obtener(grupoId, sesionId, usuarioId);
+        SesionResponse actual = obtenerInterno(tenant, grupoId, sesionId);
 
         LocalDate fecha        = req.fecha()        != null ? req.fecha()        : actual.fecha();
         String lugar           = req.lugar()        != null ? req.lugar()        : actual.lugar();
@@ -105,7 +93,7 @@ public class SesionGrupoService {
                 Date.valueOf(fecha), lugar, tema, comentarios, ofrenda, sesionId, grupoId);
 
         log.info("[Sesiones] Actualizada: {}", sesionId);
-        return obtener(grupoId, sesionId, usuarioId);
+        return obtenerInterno(tenant, grupoId, sesionId);
     }
 
     // ── Eliminar sesión ───────────────────────────────────────────────────────
@@ -123,8 +111,8 @@ public class SesionGrupoService {
     // ── Listar asistencias de una sesión ──────────────────────────────────────
     public AsistenciaSesionListResponse listarAsistencias(UUID grupoId, UUID sesionId, UUID usuarioId) {
         String tenant = tenant();
-        validarAcceso(tenant, grupoId, usuarioId);
-        SesionResponse sesion = obtener(grupoId, sesionId, usuarioId);
+        if (usuarioId != null) grupoService.validarLiderOSubArbol(tenant, grupoId, usuarioId);
+        SesionResponse sesion = obtenerInterno(tenant, grupoId, sesionId);
 
         String sql = "SELECT a.id, a.sesion_id, a.miembro_id, "
                 + "m.nombres, m.apellidos, "
@@ -148,7 +136,7 @@ public class SesionGrupoService {
                                                          UUID usuarioId) {
         String tenant = tenant();
         validarAcceso(tenant, grupoId, usuarioId);
-        obtener(grupoId, sesionId, usuarioId); // valida que la sesión existe
+        obtenerInterno(tenant, grupoId, sesionId); // valida que la sesión existe
 
         if (req.miembroId() == null && (req.visitanteNombre() == null || req.visitanteNombre().isBlank())) {
             throw new IllegalArgumentException("Debe indicar miembroId o visitanteNombre");
@@ -197,6 +185,20 @@ public class SesionGrupoService {
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
+
+    private SesionResponse obtenerInterno(String tenant, UUID grupoId, UUID sesionId) {
+        String sql = "SELECT s.id, s.grupo_id, g.nombre AS grupo_nombre, s.fecha, s.lugar, s.tema, "
+                + "s.comentarios, s.ofrenda_monto, s.creado_por, s.created_at, s.updated_at, "
+                + "(SELECT COUNT(*) FROM " + tenant + ".asistencias_sesion a "
+                + " WHERE a.sesion_id = s.id AND a.presente = TRUE) AS total_presentes, "
+                + "(SELECT COUNT(*) FROM " + tenant + ".miembro_grupos mg WHERE mg.grupo_id = s.grupo_id) AS total_miembros "
+                + "FROM " + tenant + ".sesiones_grupo s "
+                + "JOIN " + tenant + ".grupos g ON g.id = s.grupo_id "
+                + "WHERE s.id = ? AND s.grupo_id = ?";
+        return jdbc.query(sql, this::mapSesion, sesionId, grupoId)
+                .stream().findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Sesión no encontrada: " + sesionId));
+    }
 
     private void validarAcceso(String tenant, UUID grupoId, UUID usuarioId) {
         if (usuarioId != null) {

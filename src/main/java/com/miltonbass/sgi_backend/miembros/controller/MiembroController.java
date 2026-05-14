@@ -81,7 +81,7 @@ public class MiembroController {
      * GET /api/v1/miembros/{id}
      */
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','SECRETARIA','REGISTRO_SEDE','CONSOLIDACION_SEDE')")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','SECRETARIA','REGISTRO_SEDE','CONSOLIDACION_SEDE','LIDER_CELULA')")
     public ResponseEntity<MiembroResponse> obtener(@PathVariable UUID id) {
         return ResponseEntity.ok(miembroService.obtener(id));
     }
@@ -183,7 +183,7 @@ public class MiembroController {
      * - CONSOLIDACION_SEDE: solo puede ver sus miembros asignados
      */
     @GetMapping("/{id}/perfil")
-    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','CONSOLIDACION_SEDE','REGISTRO_SEDE','SECRETARIA')")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','CONSOLIDACION_SEDE','REGISTRO_SEDE','SECRETARIA','LIDER_CELULA')")
     public ResponseEntity<PerfilMiembroResponse> perfil(
             @PathVariable UUID id,
             Authentication auth) {

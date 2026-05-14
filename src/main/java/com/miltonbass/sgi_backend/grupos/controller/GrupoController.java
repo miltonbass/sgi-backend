@@ -22,6 +22,13 @@ public class GrupoController {
         this.grupoService = grupoService;
     }
 
+    @GetMapping("/mi-arbol")
+    @PreAuthorize("hasRole('LIDER_CELULA')")
+    public ResponseEntity<GrupoArbolResponse> miArbol(Authentication auth) {
+        UUID usuarioId = extraerUsuarioId(auth);
+        return ResponseEntity.ok(grupoService.obtenerSubArbol(usuarioId));
+    }
+
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','SECRETARIA','REGISTRO_SEDE','LIDER_CELULA')")
     public ResponseEntity<GrupoPageResponse> listar(
@@ -42,7 +49,7 @@ public class GrupoController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE')")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','LIDER_CELULA')")
     public ResponseEntity<GrupoResponse> crear(
             @Valid @RequestBody CreateGrupoRequest req,
             Authentication auth) {
