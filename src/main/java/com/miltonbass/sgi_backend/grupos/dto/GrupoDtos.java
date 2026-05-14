@@ -3,6 +3,7 @@ package com.miltonbass.sgi_backend.grupos.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -15,13 +16,17 @@ public class GrupoDtos {
             @NotBlank String nombre,
             @NotBlank @Pattern(regexp = "CELULA|MINISTERIO|CLASE") String tipo,
             UUID liderId,
-            String descripcion) {}
+            UUID grupoPadreId,
+            String descripcion,
+            @Size(max = 200) String lugar) {}
 
     public record UpdateGrupoRequest(
             String nombre,
             @Pattern(regexp = "CELULA|MINISTERIO|CLASE") String tipo,
             UUID liderId,
+            UUID grupoPadreId,
             String descripcion,
+            @Size(max = 200) String lugar,
             Boolean activo) {}
 
     public record GrupoResponse(
@@ -31,7 +36,9 @@ public class GrupoDtos {
             String tipo,
             UUID liderId,
             String liderNombre,
+            UUID grupoPadreId,
             String descripcion,
+            String lugar,
             boolean activo,
             int totalMiembros,
             Instant creadoEn,

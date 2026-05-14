@@ -22,54 +22,43 @@ public class GrupoController {
         this.grupoService = grupoService;
     }
 
-    /**
-     * GET /api/v1/grupos?activo=true&page=0&size=20
-     */
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','SECRETARIA','REGISTRO_SEDE')")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','SECRETARIA','REGISTRO_SEDE','LIDER_CELULA')")
     public ResponseEntity<GrupoPageResponse> listar(
             @RequestParam(required = false) Boolean activo,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size) {
-        return ResponseEntity.ok(grupoService.listar(activo, page, size));
+            @RequestParam(defaultValue = "20") int size,
+            Authentication auth) {
+        UUID usuarioId = esLiderCelula(auth) ? extraerUsuarioId(auth) : null;
+        return ResponseEntity.ok(grupoService.listar(activo, page, size, usuarioId));
     }
 
-    /**
-     * GET /api/v1/grupos/{id}
-     */
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','SECRETARIA','REGISTRO_SEDE')")
-    public ResponseEntity<GrupoResponse> obtener(@PathVariable UUID id) {
-        return ResponseEntity.ok(grupoService.obtener(id));
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','SECRETARIA','REGISTRO_SEDE','LIDER_CELULA')")
+    public ResponseEntity<GrupoResponse> obtener(@PathVariable UUID id, Authentication auth) {
+        UUID usuarioId = esLiderCelula(auth) ? extraerUsuarioId(auth) : null;
+        return ResponseEntity.ok(grupoService.obtenerConAcceso(id, usuarioId));
     }
 
-    /**
-     * POST /api/v1/grupos
-     */
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE')")
     public ResponseEntity<GrupoResponse> crear(
             @Valid @RequestBody CreateGrupoRequest req,
             Authentication auth) {
         UUID sedeId = extraerSedeId(auth);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(grupoService.crear(req, sedeId));
+        return ResponseEntity.status(HttpStatus.CREATED).body(grupoService.crear(req, sedeId));
     }
 
-    /**
-     * PUT /api/v1/grupos/{id}
-     */
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE')")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','LIDER_CELULA')")
     public ResponseEntity<GrupoResponse> actualizar(
             @PathVariable UUID id,
-            @Valid @RequestBody UpdateGrupoRequest req) {
-        return ResponseEntity.ok(grupoService.actualizar(id, req));
+            @Valid @RequestBody UpdateGrupoRequest req,
+            Authentication auth) {
+        UUID usuarioId = esLiderCelula(auth) ? extraerUsuarioId(auth) : null;
+        return ResponseEntity.ok(grupoService.actualizar(id, req, usuarioId));
     }
 
-    /**
-     * DELETE /api/v1/grupos/{id} — desactiva el grupo (soft delete)
-     */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE')")
     public ResponseEntity<Void> desactivar(@PathVariable UUID id) {
@@ -77,30 +66,21 @@ public class GrupoController {
         return ResponseEntity.noContent().build();
     }
 
-    /**
-     * POST /api/v1/grupos/{id}/miembros — asigna un miembro al grupo
-     */
     @PostMapping("/{id}/miembros")
     @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','SECRETARIA')")
     public ResponseEntity<MiembroGrupoResponse> asignarMiembro(
             @PathVariable UUID id,
             @Valid @RequestBody AsignarMiembroRequest req) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(grupoService.asignarMiembro(id, req));
+        return ResponseEntity.status(HttpStatus.CREATED).body(grupoService.asignarMiembro(id, req));
     }
 
-    /**
-     * GET /api/v1/grupos/{id}/miembros
-     */
     @GetMapping("/{id}/miembros")
-    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','SECRETARIA','REGISTRO_SEDE')")
-    public ResponseEntity<GrupoMiembrosResponse> listarMiembros(@PathVariable UUID id) {
-        return ResponseEntity.ok(grupoService.listarMiembros(id));
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','SECRETARIA','REGISTRO_SEDE','LIDER_CELULA')")
+    public ResponseEntity<GrupoMiembrosResponse> listarMiembros(@PathVariable UUID id, Authentication auth) {
+        UUID usuarioId = esLiderCelula(auth) ? extraerUsuarioId(auth) : null;
+        return ResponseEntity.ok(grupoService.listarMiembros(id, usuarioId));
     }
 
-    /**
-     * DELETE /api/v1/grupos/{id}/miembros/{miembroId} — remueve miembro del grupo
-     */
     @DeleteMapping("/{id}/miembros/{miembroId}")
     @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','SECRETARIA')")
     public ResponseEntity<Void> removerMiembro(
@@ -110,14 +90,26 @@ public class GrupoController {
         return ResponseEntity.noContent().build();
     }
 
-    // ─── Helper JWT ───────────────────────────────────────────────────
+    // ─── Helpers JWT ──────────────────────────────────────────────────────────
+
+    private boolean esLiderCelula(Authentication auth) {
+        return auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_LIDER_CELULA"));
+    }
+
+    private UUID extraerUsuarioId(Authentication auth) {
+        if (auth.getDetails() instanceof Claims claims) {
+            String userId = claims.get("userId", String.class);
+            if (userId != null) return UUID.fromString(userId);
+        }
+        throw new IllegalStateException("Token sin userId");
+    }
 
     private UUID extraerSedeId(Authentication auth) {
         if (auth.getDetails() instanceof Claims claims) {
             String sedeId = claims.get("sedeId", String.class);
-            if (sedeId != null)
-                return UUID.fromString(sedeId);
+            if (sedeId != null) return UUID.fromString(sedeId);
         }
-        throw new IllegalStateException("Token sin sedeId — acceso denegado");
+        throw new IllegalStateException("Token sin sedeId");
     }
 }

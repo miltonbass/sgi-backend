@@ -1,5 +1,6 @@
 package com.miltonbass.sgi_backend.grupos.service;
 
+import com.miltonbass.sgi_backend.config.TenantContext;
 import com.miltonbass.sgi_backend.grupos.dto.GrupoDtos.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,45 +28,57 @@ public class GrupoService {
         this.jdbc = jdbc;
     }
 
-    // ── Listar ────────────────────────────────────────────────────────
-    public GrupoPageResponse listar(Boolean activo, int page, int size) {
+    // ── Listar ────────────────────────────────────────────────────────────────
+    // usuarioId != null → filtrar solo grupos donde ese usuario es LIDER (LIDER_CELULA)
+    public GrupoPageResponse listar(Boolean activo, int page, int size, UUID usuarioId) {
         String tenant = tenant();
+        List<Object> params = new ArrayList<>();
 
-        String whereClause = activo != null
-                ? "WHERE g.activo = " + activo
-                : "";
+        StringBuilder where = new StringBuilder();
+        if (activo != null) {
+            where.append("WHERE g.activo = ?");
+            params.add(activo);
+        }
+        if (usuarioId != null) {
+            String op = where.length() == 0 ? "WHERE " : " AND ";
+            where.append(op).append("g.id IN ("
+                    + "SELECT mg.grupo_id FROM ").append(tenant).append(".miembro_grupos mg "
+                    + "JOIN ").append(tenant).append(".miembros m ON m.id = mg.miembro_id "
+                    + "WHERE m.usuario_id = ? AND mg.rol = 'LIDER')");
+            params.add(usuarioId);
+        }
 
-        String countSql = "SELECT COUNT(*) FROM " + tenant + ".grupos g " + whereClause;
-        Long total = jdbc.queryForObject(countSql, Long.class);
+        String countSql = "SELECT COUNT(*) FROM " + tenant + ".grupos g " + where;
+        Long total = jdbc.queryForObject(countSql, Long.class, params.toArray());
         if (total == null) total = 0L;
 
-        String sql = "SELECT g.id, g.sede_id, g.nombre, g.tipo, g.lider_id, "
+        params.add(size);
+        params.add((long) page * size);
+
+        String sql = "SELECT g.id, g.sede_id, g.nombre, g.tipo, g.lider_id, g.grupo_padre_id, "
                 + "  CASE WHEN g.lider_id IS NOT NULL THEN "
                 + "    (SELECT m.nombres || ' ' || m.apellidos FROM " + tenant + ".miembros m WHERE m.id = g.lider_id) "
                 + "  END AS lider_nombre, "
-                + "  g.descripcion, g.activo, g.created_at, g.updated_at, "
+                + "  g.descripcion, g.lugar, g.activo, g.created_at, g.updated_at, "
                 + "  (SELECT COUNT(*) FROM " + tenant + ".miembro_grupos mg WHERE mg.grupo_id = g.id) AS total_miembros "
                 + "FROM " + tenant + ".grupos g "
-                + whereClause
-                + " ORDER BY g.nombre ASC "
-                + " LIMIT ? OFFSET ?";
+                + where
+                + " ORDER BY g.nombre ASC LIMIT ? OFFSET ?";
 
-        List<GrupoResponse> content = jdbc.query(sql,
-                (rs, rowNum) -> mapGrupo(rs),
-                size, (long) page * size);
+        List<GrupoResponse> content = jdbc.query(sql, (rs, rowNum) -> mapGrupo(rs), params.toArray());
 
-        int totalPages = (int) Math.ceil((double) total / size);
+        int totalPages = size > 0 ? (int) Math.ceil((double) total / size) : 0;
         return new GrupoPageResponse(content, page, size, total, totalPages);
     }
 
-    // ── Obtener ───────────────────────────────────────────────────────
+    // ── Obtener ───────────────────────────────────────────────────────────────
     public GrupoResponse obtener(UUID id) {
         String tenant = tenant();
-        String sql = "SELECT g.id, g.sede_id, g.nombre, g.tipo, g.lider_id, "
+        String sql = "SELECT g.id, g.sede_id, g.nombre, g.tipo, g.lider_id, g.grupo_padre_id, "
                 + "  CASE WHEN g.lider_id IS NOT NULL THEN "
                 + "    (SELECT m.nombres || ' ' || m.apellidos FROM " + tenant + ".miembros m WHERE m.id = g.lider_id) "
                 + "  END AS lider_nombre, "
-                + "  g.descripcion, g.activo, g.created_at, g.updated_at, "
+                + "  g.descripcion, g.lugar, g.activo, g.created_at, g.updated_at, "
                 + "  (SELECT COUNT(*) FROM " + tenant + ".miembro_grupos mg WHERE mg.grupo_id = g.id) AS total_miembros "
                 + "FROM " + tenant + ".grupos g WHERE g.id = ?";
 
@@ -73,7 +87,16 @@ public class GrupoService {
                 .orElseThrow(() -> new IllegalArgumentException("Grupo no encontrado: " + id));
     }
 
-    // ── Crear ─────────────────────────────────────────────────────────
+    // ── Obtener con validación de liderazgo ───────────────────────────────────
+    public GrupoResponse obtenerConAcceso(UUID id, UUID usuarioId) {
+        GrupoResponse grupo = obtener(id);
+        if (usuarioId != null) {
+            validarLiderDelGrupo(tenant(), id, usuarioId);
+        }
+        return grupo;
+    }
+
+    // ── Crear ─────────────────────────────────────────────────────────────────
     public GrupoResponse crear(CreateGrupoRequest req, UUID sedeId) {
         String tenant = tenant();
 
@@ -85,55 +108,70 @@ public class GrupoService {
         Instant ahora = Instant.now();
 
         jdbc.update(
-                "INSERT INTO " + tenant + ".grupos (id, sede_id, nombre, tipo, lider_id, descripcion, activo, created_at, updated_at) "
-                + "VALUES (?, ?, ?, ?, ?, ?, TRUE, ?, ?)",
+                "INSERT INTO " + tenant + ".grupos "
+                + "(id, sede_id, nombre, tipo, lider_id, grupo_padre_id, descripcion, lugar, activo, created_at, updated_at) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, TRUE, ?, ?)",
                 id, sedeId, req.nombre(), req.tipo() != null ? req.tipo() : "CELULA",
-                req.liderId(), req.descripcion(),
+                req.liderId(), req.grupoPadreId(), req.descripcion(), req.lugar(),
                 Timestamp.from(ahora), Timestamp.from(ahora));
 
         log.info("[Grupos] Creado: {} tipo={} | sede={}", req.nombre(), req.tipo(), sedeId);
         return obtener(id);
     }
 
-    // ── Actualizar ────────────────────────────────────────────────────
-    public GrupoResponse actualizar(UUID id, UpdateGrupoRequest req) {
+    // ── Actualizar (admin/pastor: todos los campos; lider: solo nombre/descripcion/lugar) ──
+    public GrupoResponse actualizar(UUID id, UpdateGrupoRequest req, UUID usuarioId) {
         String tenant = tenant();
-
         GrupoResponse existing = obtener(id);
 
+        if (usuarioId != null) {
+            // LIDER_CELULA: validar que es su grupo y limitar campos editables
+            validarLiderDelGrupo(tenant, id, usuarioId);
+            String nombre      = req.nombre()      != null ? req.nombre()      : existing.nombre();
+            String descripcion = req.descripcion() != null ? req.descripcion() : existing.descripcion();
+            String lugar       = req.lugar()       != null ? req.lugar()       : existing.lugar();
+            jdbc.update(
+                    "UPDATE " + tenant + ".grupos SET nombre = ?, descripcion = ?, lugar = ? WHERE id = ?",
+                    nombre, descripcion, lugar, id);
+            log.info("[Grupos] Actualizado por lider {}: {}", usuarioId, id);
+            return obtener(id);
+        }
+
+        // Admin/Pastor: todos los campos
         if (req.liderId() != null) {
             validarMiembroExiste(tenant, req.liderId(), "lider");
         }
 
-        String nombre = req.nombre() != null ? req.nombre() : existing.nombre();
-        String tipo = req.tipo() != null ? req.tipo() : existing.tipo();
-        String descripcion = req.descripcion() != null ? req.descripcion() : existing.descripcion();
-        boolean activo = req.activo() != null ? req.activo() : existing.activo();
-        // liderId: null en request significa "no cambiar"; para quitar hay que enviar un flag especial
-        // En este diseño, si liderId es null en el request se mantiene el existente
-        UUID liderId = req.liderId() != null ? req.liderId() : existing.liderId();
+        String nombre        = req.nombre()        != null ? req.nombre()        : existing.nombre();
+        String tipo          = req.tipo()          != null ? req.tipo()          : existing.tipo();
+        String descripcion   = req.descripcion()   != null ? req.descripcion()   : existing.descripcion();
+        String lugar         = req.lugar()         != null ? req.lugar()         : existing.lugar();
+        boolean activo       = req.activo()        != null ? req.activo()        : existing.activo();
+        UUID liderId         = req.liderId()       != null ? req.liderId()       : existing.liderId();
+        UUID grupoPadreId    = req.grupoPadreId()  != null ? req.grupoPadreId()  : existing.grupoPadreId();
 
         jdbc.update(
-                "UPDATE " + tenant + ".grupos SET nombre = ?, tipo = ?, lider_id = ?, descripcion = ?, activo = ? WHERE id = ?",
-                nombre, tipo, liderId, descripcion, activo, id);
+                "UPDATE " + tenant + ".grupos SET nombre=?, tipo=?, lider_id=?, grupo_padre_id=?, "
+                + "descripcion=?, lugar=?, activo=? WHERE id=?",
+                nombre, tipo, liderId, grupoPadreId, descripcion, lugar, activo, id);
 
         log.info("[Grupos] Actualizado: {}", id);
         return obtener(id);
     }
 
-    // ── Desactivar ────────────────────────────────────────────────────
+    // ── Desactivar ────────────────────────────────────────────────────────────
     public void desactivar(UUID id) {
         String tenant = tenant();
-        obtener(id); // valida que existe
+        obtener(id);
         jdbc.update("UPDATE " + tenant + ".grupos SET activo = FALSE WHERE id = ?", id);
         log.info("[Grupos] Desactivado: {}", id);
     }
 
-    // ── Asignar miembro al grupo ───────────────────────────────────────
+    // ── Asignar miembro al grupo ──────────────────────────────────────────────
     public MiembroGrupoResponse asignarMiembro(UUID grupoId, AsignarMiembroRequest req) {
         String tenant = tenant();
 
-        obtener(grupoId); // valida que el grupo existe
+        obtener(grupoId);
         validarMiembroExiste(tenant, req.miembroId(), "miembro");
 
         Long exists = jdbc.queryForObject(
@@ -160,15 +198,18 @@ public class GrupoService {
                 .orElseThrow();
     }
 
-    // ── Listar miembros del grupo ──────────────────────────────────────
-    public GrupoMiembrosResponse listarMiembros(UUID grupoId) {
+    // ── Listar miembros del grupo ─────────────────────────────────────────────
+    public GrupoMiembrosResponse listarMiembros(UUID grupoId, UUID usuarioId) {
         String tenant = tenant();
+        if (usuarioId != null) {
+            validarLiderDelGrupo(tenant, grupoId, usuarioId);
+        }
         GrupoResponse grupo = obtener(grupoId);
         List<MiembroGrupoResponse> miembros = listarMiembrosInterno(tenant, grupoId);
         return new GrupoMiembrosResponse(grupoId, grupo.nombre(), grupo.tipo(), miembros);
     }
 
-    // ── Remover miembro del grupo ─────────────────────────────────────
+    // ── Remover miembro del grupo ─────────────────────────────────────────────
     public void removerMiembro(UUID grupoId, UUID miembroId) {
         String tenant = tenant();
 
@@ -183,10 +224,23 @@ public class GrupoService {
         log.info("[Grupos] Miembro {} removido de grupo {}", miembroId, grupoId);
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────
+    // ── Validar que el usuario es lider del grupo ─────────────────────────────
+    public void validarLiderDelGrupo(String tenant, UUID grupoId, UUID usuarioId) {
+        Integer count = jdbc.queryForObject(
+                "SELECT COUNT(*) FROM " + tenant + ".miembro_grupos mg "
+                + "JOIN " + tenant + ".miembros m ON m.id = mg.miembro_id "
+                + "WHERE mg.grupo_id = ? AND m.usuario_id = ? AND mg.rol = 'LIDER'",
+                Integer.class, grupoId, usuarioId);
+        if (count == null || count == 0) {
+            throw new org.springframework.security.access.AccessDeniedException(
+                    "No eres el lider de este grupo");
+        }
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
 
     private String tenant() {
-        String t = com.miltonbass.sgi_backend.config.TenantContext.getCurrentTenant();
+        String t = TenantContext.getCurrentTenant();
         if (t == null || t.equals("shared")) {
             throw new IllegalStateException("No hay tenant activo");
         }
@@ -217,6 +271,7 @@ public class GrupoService {
         Timestamp createdAt = rs.getTimestamp("created_at");
         Timestamp updatedAt = rs.getTimestamp("updated_at");
         Object liderIdObj = rs.getObject("lider_id");
+        Object padreIdObj = rs.getObject("grupo_padre_id");
         return new GrupoResponse(
                 rs.getObject("id", UUID.class),
                 rs.getObject("sede_id", UUID.class),
@@ -224,7 +279,9 @@ public class GrupoService {
                 rs.getString("tipo"),
                 liderIdObj != null ? UUID.fromString(liderIdObj.toString()) : null,
                 rs.getString("lider_nombre"),
+                padreIdObj != null ? UUID.fromString(padreIdObj.toString()) : null,
                 rs.getString("descripcion"),
+                rs.getString("lugar"),
                 rs.getBoolean("activo"),
                 rs.getInt("total_miembros"),
                 createdAt != null ? createdAt.toInstant() : null,
