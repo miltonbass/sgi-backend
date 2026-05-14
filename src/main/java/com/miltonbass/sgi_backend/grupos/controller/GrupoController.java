@@ -54,7 +54,15 @@ public class GrupoController {
             @Valid @RequestBody CreateGrupoRequest req,
             Authentication auth) {
         UUID sedeId = extraerSedeId(auth);
-        return ResponseEntity.status(HttpStatus.CREATED).body(grupoService.crear(req, sedeId));
+        boolean pendiente = esLiderCelula(auth);
+        return ResponseEntity.status(HttpStatus.CREATED).body(grupoService.crear(req, sedeId, pendiente));
+    }
+
+    @PatchMapping("/{id}/activar")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE')")
+    public ResponseEntity<Void> activar(@PathVariable UUID id) {
+        grupoService.activar(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")

@@ -9,6 +9,7 @@ import com.miltonbass.sgi_backend.usuarios.dto.UsuarioDtos.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,15 +29,18 @@ public class UsuarioService {
     private final UsuarioSedeRepository usuarioSedeRepo;
     private final SedeRepository sedeRepo;
     private final EmailService emailService;
+    private final JdbcTemplate jdbc;
 
     public UsuarioService(UsuarioSistemaRepository usuarioRepo,
                       UsuarioSedeRepository usuarioSedeRepo,
                       SedeRepository sedeRepo,
-                      EmailService emailService) {
+                      EmailService emailService,
+                      JdbcTemplate jdbc) {
     this.usuarioRepo     = usuarioRepo;
     this.usuarioSedeRepo = usuarioSedeRepo;
     this.sedeRepo        = sedeRepo;
     this.emailService    = emailService;
+    this.jdbc            = jdbc;
     }
 
     // ─── Crear usuario ───────────────────────────────────────
@@ -76,6 +80,7 @@ public class UsuarioService {
         if (req.sedeId() != null && req.roles() != null && !req.roles().isEmpty()) {
             validarAsignacion(req.sedeId(), req.roles(), rolLlamante, sedeIdLlamante);
             asignarSede(u.getId(), req.sedeId(), req.roles());
+            vincularMiembro(u.getId(), u.getEmail(), req.sedeId());
         }
 
         // 6. Email de bienvenida (mock en dev)
@@ -129,6 +134,20 @@ public class UsuarioService {
             usuarios.stream().map(this::toResponse).toList(),
             usuarios.size(), pagina, tamano
         );
+    }
+
+    // ─── Vincular usuario_id en miembros al crear acceso ─────
+
+    private void vincularMiembro(UUID usuarioId, String email, UUID sedeId) {
+        sedeRepo.findById(Objects.requireNonNull(sedeId)).ifPresent(sede -> {
+            int rows = jdbc.update(
+                "UPDATE " + sede.getSchemaName() + ".miembros "
+                + "SET usuario_id = ? WHERE email = ? AND usuario_id IS NULL",
+                usuarioId, email);
+            if (rows > 0) {
+                log.info("[Usuarios] miembros.usuario_id vinculado para {} en {}", email, sede.getSchemaName());
+            }
+        });
     }
 
     // ─── Helpers internos ────────────────────────────────────

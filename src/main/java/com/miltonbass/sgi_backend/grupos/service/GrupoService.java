@@ -102,7 +102,8 @@ public class GrupoService {
     }
 
     // ── Crear ─────────────────────────────────────────────────────────────────
-    public GrupoResponse crear(CreateGrupoRequest req, UUID sedeId) {
+    // pendienteAprobacion=true → activo=false (creado por LIDER_CELULA, requiere aprobación)
+    public GrupoResponse crear(CreateGrupoRequest req, UUID sedeId, boolean pendienteAprobacion) {
         String tenant = tenant();
 
         if (req.liderId() != null) {
@@ -111,17 +112,37 @@ public class GrupoService {
 
         UUID id = UUID.randomUUID();
         Instant ahora = Instant.now();
+        boolean activo = !pendienteAprobacion;
 
         jdbc.update(
                 "INSERT INTO " + tenant + ".grupos "
                 + "(id, sede_id, nombre, tipo, lider_id, grupo_padre_id, descripcion, lugar, activo, created_at, updated_at) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, TRUE, ?, ?)",
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 id, sedeId, req.nombre(), req.tipo() != null ? req.tipo() : "CELULA",
                 req.liderId(), req.grupoPadreId(), req.descripcion(), req.lugar(),
-                Timestamp.from(ahora), Timestamp.from(ahora));
+                activo, Timestamp.from(ahora), Timestamp.from(ahora));
 
-        log.info("[Grupos] Creado: {} tipo={} | sede={}", req.nombre(), req.tipo(), sedeId);
+        // Registrar líder en miembro_grupos para que /mi-arbol lo reconozca
+        if (req.liderId() != null) {
+            jdbc.update(
+                    "INSERT INTO " + tenant + ".miembro_grupos (id, grupo_id, miembro_id, rol, fecha_ingreso, created_at) "
+                    + "VALUES (?, ?, ?, 'LIDER', CURRENT_DATE, NOW()) "
+                    + "ON CONFLICT (grupo_id, miembro_id) DO UPDATE SET rol = 'LIDER'",
+                    UUID.randomUUID(), id, req.liderId());
+        }
+
+        log.info("[Grupos] Creado: {} tipo={} | sede={} | activo={}", req.nombre(), req.tipo(), sedeId, activo);
         return obtener(id);
+    }
+
+    // ── Activar (aprobar grupo pendiente) ─────────────────────────────────────
+    public void activar(UUID id) {
+        String tenant = tenant();
+        int rows = jdbc.update("UPDATE " + tenant + ".grupos SET activo = TRUE WHERE id = ?", id);
+        if (rows == 0) {
+            throw new IllegalArgumentException("Grupo no encontrado: " + id);
+        }
+        log.info("[Grupos] Activado: {}", id);
     }
 
     // ── Actualizar (admin/pastor: todos los campos; lider: solo nombre/descripcion/lugar) ──
@@ -159,6 +180,15 @@ public class GrupoService {
                 "UPDATE " + tenant + ".grupos SET nombre=?, tipo=?, lider_id=?, grupo_padre_id=?, "
                 + "descripcion=?, lugar=?, activo=? WHERE id=?",
                 nombre, tipo, liderId, grupoPadreId, descripcion, lugar, activo, id);
+
+        // Sincronizar miembro_grupos cuando hay líder asignado
+        if (liderId != null) {
+            jdbc.update(
+                    "INSERT INTO " + tenant + ".miembro_grupos (id, grupo_id, miembro_id, rol, fecha_ingreso, created_at) "
+                    + "VALUES (?, ?, ?, 'LIDER', CURRENT_DATE, NOW()) "
+                    + "ON CONFLICT (grupo_id, miembro_id) DO UPDATE SET rol = 'LIDER'",
+                    UUID.randomUUID(), id, liderId);
+        }
 
         log.info("[Grupos] Actualizado: {}", id);
         return obtener(id);
