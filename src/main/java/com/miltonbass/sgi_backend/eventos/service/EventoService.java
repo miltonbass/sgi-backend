@@ -60,7 +60,8 @@ public class EventoService {
         params.add(size);
         params.add((long) page * size);
         String dataSql = "SELECT * FROM " + tenant + ".eventos " + where
-                + "ORDER BY fecha_inicio ASC LIMIT ? OFFSET ?";
+                + "ORDER BY CASE estado WHEN 'ABIERTO' THEN 1 WHEN 'PROGRAMADO' THEN 2 "
+                + "WHEN 'CERRADO' THEN 3 ELSE 4 END, fecha_inicio ASC LIMIT ? OFFSET ?";
 
         List<EventoResponse> content = jdbc.query(dataSql, this::mapRow, params.toArray());
 
