@@ -30,7 +30,7 @@ public class GrupoService {
 
     // ── Listar ────────────────────────────────────────────────────────────────
     // usuarioId != null → filtrar solo grupos donde ese usuario es LIDER (LIDER_CELULA)
-    public GrupoPageResponse listar(Boolean activo, int page, int size, UUID usuarioId) {
+    public GrupoPageResponse listar(Boolean activo, String tipo, int page, int size, UUID usuarioId) {
         String tenant = tenant();
         List<Object> params = new ArrayList<>();
 
@@ -38,6 +38,11 @@ public class GrupoService {
         if (activo != null) {
             where.append("WHERE g.activo = ?");
             params.add(activo);
+        }
+        if (tipo != null && !tipo.isBlank()) {
+            String op = where.length() == 0 ? "WHERE " : " AND ";
+            where.append(op).append("g.tipo = ?");
+            params.add(tipo.toUpperCase());
         }
         if (usuarioId != null) {
             String op = where.length() == 0 ? "WHERE " : " AND ";

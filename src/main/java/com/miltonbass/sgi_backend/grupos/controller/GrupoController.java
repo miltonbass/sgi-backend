@@ -26,11 +26,12 @@ public class GrupoController {
     @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_PRINCIPAL','PASTOR_SEDE','SECRETARIA','REGISTRO_SEDE','LIDER_CELULA')")
     public ResponseEntity<GrupoPageResponse> listar(
             @RequestParam(required = false) Boolean activo,
+            @RequestParam(required = false) String tipo,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
             Authentication auth) {
         UUID usuarioId = esLiderCelula(auth) ? extraerUsuarioId(auth) : null;
-        return ResponseEntity.ok(grupoService.listar(activo, page, size, usuarioId));
+        return ResponseEntity.ok(grupoService.listar(activo, tipo, page, size, usuarioId));
     }
 
     @GetMapping("/{id}")
