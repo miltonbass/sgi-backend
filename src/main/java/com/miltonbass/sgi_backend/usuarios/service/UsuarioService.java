@@ -74,7 +74,7 @@ public class UsuarioService {
         u.setDebeCambiarPassword(true);
         u.setTokenResetPassword(tokenActivacion);
         u.setTokenResetExpira(expira);
-        usuarioRepo.save(u);
+        usuarioRepo.saveAndFlush(u);
 
         // 5. Asignacion inicial si viene en el request
         if (req.sedeId() != null && req.roles() != null && !req.roles().isEmpty()) {
