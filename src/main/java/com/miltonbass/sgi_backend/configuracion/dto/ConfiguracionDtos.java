@@ -88,4 +88,27 @@ public class ConfiguracionDtos {
             boolean exitoso,
             String  mensaje
     ) {}
+
+    // ── H7.3 — Branding / Logo ────────────────────────────────────────────────
+
+    public record BrandingResponse(
+            String  logoUrl,
+            String  logoCompactoUrl,
+            String  colorPrimario,
+            String  colorAcento,
+            boolean tieneLogoPersonalizado,
+            boolean tieneLogoCompacto
+    ) {}
+
+    public record ActualizarBrandingRequest(
+            @Pattern(regexp = "^#[0-9A-Fa-f]{6}$", message = "colorPrimario debe ser #RRGGBB")
+            String colorPrimario,
+            @Pattern(regexp = "^#[0-9A-Fa-f]{6}$", message = "colorAcento debe ser #RRGGBB")
+            String colorAcento
+    ) {}
+
+    public record SubirLogoResponse(
+            String logoUrl,
+            String mensaje
+    ) {}
 }

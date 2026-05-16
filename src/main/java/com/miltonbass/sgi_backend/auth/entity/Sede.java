@@ -59,6 +59,9 @@ public class Sede {
     @Column(name = "logo_url", length = 500)
     private String logoUrl;
 
+    @Column(name = "logo_compacto_url", length = 500)
+    private String logoCompactoUrl;
+
     @Column(name = "zona_horaria", length = 50)
     private String zonaHoraria = "America/Bogota";
 
@@ -128,8 +131,11 @@ public class Sede {
     public String getEmail()             { return email; }
     public void setEmail(String v)       { this.email = v; }
 
-    public String getLogoUrl()           { return logoUrl; }
-    public void setLogoUrl(String v)     { this.logoUrl = v; }
+    public String getLogoUrl()                    { return logoUrl; }
+    public void setLogoUrl(String v)              { this.logoUrl = v; }
+
+    public String getLogoCompactoUrl()            { return logoCompactoUrl; }
+    public void setLogoCompactoUrl(String v)      { this.logoCompactoUrl = v; }
 
     public String getZonaHoraria()       { return zonaHoraria; }
     public void setZonaHoraria(String v) { this.zonaHoraria = v; }
