@@ -2,6 +2,7 @@ package com.miltonbass.sgi_backend.configuracion.controller;
 
 import com.miltonbass.sgi_backend.configuracion.dto.ConfiguracionDtos.*;
 import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionBrandingService;
+import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionNotificacionesService;
 import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionSedeService;
 import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionSmtpService;
 import io.jsonwebtoken.Claims;
@@ -19,16 +20,19 @@ import java.util.UUID;
 @RequestMapping("/api/v1/configuracion")
 public class ConfiguracionController {
 
-    private final ConfiguracionSedeService     sedeService;
-    private final ConfiguracionSmtpService     smtpService;
-    private final ConfiguracionBrandingService brandingService;
+    private final ConfiguracionSedeService             sedeService;
+    private final ConfiguracionSmtpService             smtpService;
+    private final ConfiguracionBrandingService         brandingService;
+    private final ConfiguracionNotificacionesService   notifService;
 
     public ConfiguracionController(ConfiguracionSedeService sedeService,
                                    ConfiguracionSmtpService smtpService,
-                                   ConfiguracionBrandingService brandingService) {
+                                   ConfiguracionBrandingService brandingService,
+                                   ConfiguracionNotificacionesService notifService) {
         this.sedeService     = sedeService;
         this.smtpService     = smtpService;
         this.brandingService = brandingService;
+        this.notifService    = notifService;
     }
 
     // ── H7.1 — Configuración de la Sede ──────────────────────────────────────
@@ -103,6 +107,22 @@ public class ConfiguracionController {
     @GetMapping("/logo/compacto")
     public ResponseEntity<byte[]> servirLogoCompacto(Authentication auth) {
         return brandingService.servirLogo(sedeId(auth), true);
+    }
+
+    // ── H7.4 — Notificaciones por Email ───────────────────────────────────────
+
+    @GetMapping("/notificaciones")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE')")
+    public ResponseEntity<NotificacionesResponse> obtenerNotificaciones(Authentication auth) {
+        return ResponseEntity.ok(notifService.obtener(sedeId(auth)));
+    }
+
+    @PutMapping("/notificaciones")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE')")
+    public ResponseEntity<NotificacionesResponse> actualizarNotificaciones(
+            @RequestBody ActualizarNotificacionesRequest req,
+            Authentication auth) {
+        return ResponseEntity.ok(notifService.actualizar(sedeId(auth), req));
     }
 
     // ── Helpers JWT ───────────────────────────────────────────────────────────

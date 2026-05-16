@@ -111,4 +111,25 @@ public class ConfiguracionDtos {
             String logoUrl,
             String mensaje
     ) {}
+
+    // ── H7.4 — Notificaciones por Email ───────────────────────────────────────
+
+    public record ConfiguracionNotificacion(
+            boolean activo,
+            String  cc
+    ) {}
+
+    public record NotificacionesResponse(
+            ConfiguracionNotificacion nuevoMiembro,
+            ConfiguracionNotificacion cambioEstado,
+            ConfiguracionNotificacion alertaSeguimiento,
+            ConfiguracionNotificacion nuevoUsuario
+    ) {}
+
+    public record ActualizarNotificacionesRequest(
+            ConfiguracionNotificacion nuevoMiembro,
+            ConfiguracionNotificacion cambioEstado,
+            ConfiguracionNotificacion alertaSeguimiento,
+            ConfiguracionNotificacion nuevoUsuario
+    ) {}
 }
