@@ -73,6 +73,7 @@ public class ConfiguracionSmtpService {
 
     // ── POST /probar ──────────────────────────────────────────────────────────
 
+    @SuppressWarnings("null")
     public ProbarSmtpResponse probar(String emailDestino) {
         Map<String, Object> cfg = leerConfig();
         if (cfg == null) {

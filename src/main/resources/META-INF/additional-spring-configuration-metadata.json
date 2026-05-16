@@ -16,6 +16,23 @@
       "type": "java.lang.Long",
       "description": "Duración del refresh token en días.",
       "defaultValue": 30
+    },
+    {
+      "name": "sgi.encryption.key",
+      "type": "java.lang.String",
+      "description": "Clave AES para cifrar contraseñas SMTP y otros datos sensibles."
+    },
+    {
+      "name": "sgi.upload.path",
+      "type": "java.lang.String",
+      "description": "Ruta del sistema de archivos donde se almacenan los archivos subidos.",
+      "defaultValue": "/opt/sgi/uploads"
+    },
+    {
+      "name": "sgi.app.url",
+      "type": "java.lang.String",
+      "description": "URL base del frontend (usado en links de activación de cuenta).",
+      "defaultValue": "http://localhost:4200"
     }
   ]
 }
