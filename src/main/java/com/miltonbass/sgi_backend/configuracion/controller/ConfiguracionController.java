@@ -2,6 +2,7 @@ package com.miltonbass.sgi_backend.configuracion.controller;
 
 import com.miltonbass.sgi_backend.configuracion.dto.ConfiguracionDtos.*;
 import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionSedeService;
+import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionSmtpService;
 import io.jsonwebtoken.Claims;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,12 @@ import java.util.UUID;
 public class ConfiguracionController {
 
     private final ConfiguracionSedeService sedeService;
+    private final ConfiguracionSmtpService smtpService;
 
-    public ConfiguracionController(ConfiguracionSedeService sedeService) {
+    public ConfiguracionController(ConfiguracionSedeService sedeService,
+                                   ConfiguracionSmtpService smtpService) {
         this.sedeService = sedeService;
+        this.smtpService = smtpService;
     }
 
     // ── H7.1 — Configuración de la Sede ──────────────────────────────────────
@@ -37,7 +41,29 @@ public class ConfiguracionController {
         return ResponseEntity.ok(sedeService.actualizar(sedeId(auth), req));
     }
 
-    // ── Helper JWT ────────────────────────────────────────────────────────────
+    // ── H7.2 — Configuración SMTP ─────────────────────────────────────────────
+
+    @GetMapping("/smtp")
+    @PreAuthorize("hasRole('ADMIN_GLOBAL')")
+    public ResponseEntity<ConfiguracionSmtpResponse> obtenerSmtp() {
+        return ResponseEntity.ok(smtpService.obtener());
+    }
+
+    @PutMapping("/smtp")
+    @PreAuthorize("hasRole('ADMIN_GLOBAL')")
+    public ResponseEntity<ConfiguracionSmtpResponse> actualizarSmtp(
+            @Valid @RequestBody ActualizarSmtpRequest req,
+            Authentication auth) {
+        return ResponseEntity.ok(smtpService.actualizar(req, userId(auth)));
+    }
+
+    @PostMapping("/smtp/probar")
+    @PreAuthorize("hasRole('ADMIN_GLOBAL')")
+    public ResponseEntity<ProbarSmtpResponse> probarSmtp(Authentication auth) {
+        return ResponseEntity.ok(smtpService.probar(email(auth)));
+    }
+
+    // ── Helpers JWT ───────────────────────────────────────────────────────────
 
     private UUID sedeId(Authentication auth) {
         if (auth.getDetails() instanceof Claims claims) {
@@ -45,5 +71,17 @@ public class ConfiguracionController {
             if (id != null) return UUID.fromString(id);
         }
         throw new IllegalStateException("Token sin sedeId");
+    }
+
+    private UUID userId(Authentication auth) {
+        if (auth.getDetails() instanceof Claims claims) {
+            String id = claims.get("userId", String.class);
+            if (id != null) return UUID.fromString(id);
+        }
+        throw new IllegalStateException("Token sin userId");
+    }
+
+    private String email(Authentication auth) {
+        return auth.getName();
     }
 }
