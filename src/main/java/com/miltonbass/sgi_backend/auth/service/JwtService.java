@@ -1,6 +1,7 @@
 package com.miltonbass.sgi_backend.auth.service;
 
 import com.miltonbass.sgi_backend.config.JwtProperties;
+import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionSeguridadService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -34,10 +35,13 @@ public class JwtService {
 
     private static final Logger log = LoggerFactory.getLogger(JwtService.class);
 
-    private final JwtProperties jwtProperties;
+    private final JwtProperties                jwtProperties;
+    private final ConfiguracionSeguridadService seguridadService;
 
-    public JwtService(JwtProperties jwtProperties) {
-        this.jwtProperties = jwtProperties;
+    public JwtService(JwtProperties jwtProperties,
+                      ConfiguracionSeguridadService seguridadService) {
+        this.jwtProperties    = jwtProperties;
+        this.seguridadService = seguridadService;
     }
 
     // ─── Generación ──────────────────────────────────────────────────────────
@@ -58,7 +62,7 @@ public class JwtService {
                                      String sedeSchema,
                                      List<String> roles) {
         Instant ahora = Instant.now();
-        Instant expira = ahora.plus(jwtProperties.getExpirationMinutes(), ChronoUnit.MINUTES);
+        Instant expira = ahora.plus(seguridadService.getDuracionSesionMinutos(), ChronoUnit.MINUTES);
 
         return Jwts.builder()
                 .subject(email)

@@ -162,4 +162,29 @@ public class ConfiguracionDtos {
             @Min(value = 0, message = "limiteMiembrosCelula debe ser 0 o mayor")
             int limiteMiembrosCelula
     ) {}
+
+    // ── H7.6 — Políticas de Seguridad ─────────────────────────────────────────
+
+    public record PoliticasSeguridadResponse(
+            int longitudMinimaPassword,
+            int expiracionPasswordDias,
+            int maxIntentosFallidos,
+            int duracionSesionHoras
+    ) {}
+
+    public record ActualizarSeguridadRequest(
+            @Min(value = 6,  message = "longitudMinimaPassword debe ser al menos 6")
+            @Max(value = 32, message = "longitudMinimaPassword no puede superar 32")
+            int longitudMinimaPassword,
+
+            @Min(value = 0, message = "expiracionPasswordDias debe ser 0 o mayor")
+            int expiracionPasswordDias,
+
+            @Min(value = 1, message = "maxIntentosFallidos debe ser al menos 1")
+            int maxIntentosFallidos,
+
+            @Min(value = 1,   message = "duracionSesionHoras debe ser al menos 1")
+            @Max(value = 168, message = "duracionSesionHoras no puede superar 168 (1 semana)")
+            int duracionSesionHoras
+    ) {}
 }

@@ -5,6 +5,7 @@ import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionBrandingSer
 import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionNotificacionesService;
 import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionParametrosService;
 import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionSedeService;
+import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionSeguridadService;
 import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionSmtpService;
 import io.jsonwebtoken.Claims;
 import jakarta.validation.Valid;
@@ -26,17 +27,20 @@ public class ConfiguracionController {
     private final ConfiguracionBrandingService         brandingService;
     private final ConfiguracionNotificacionesService   notifService;
     private final ConfiguracionParametrosService       parametrosService;
+    private final ConfiguracionSeguridadService        seguridadService;
 
     public ConfiguracionController(ConfiguracionSedeService sedeService,
                                    ConfiguracionSmtpService smtpService,
                                    ConfiguracionBrandingService brandingService,
                                    ConfiguracionNotificacionesService notifService,
-                                   ConfiguracionParametrosService parametrosService) {
+                                   ConfiguracionParametrosService parametrosService,
+                                   ConfiguracionSeguridadService seguridadService) {
         this.sedeService       = sedeService;
         this.smtpService       = smtpService;
         this.brandingService   = brandingService;
         this.notifService      = notifService;
         this.parametrosService = parametrosService;
+        this.seguridadService  = seguridadService;
     }
 
     // ── H7.1 — Configuración de la Sede ──────────────────────────────────────
@@ -143,6 +147,22 @@ public class ConfiguracionController {
             @Valid @RequestBody ActualizarParametrosRequest req,
             Authentication auth) {
         return ResponseEntity.ok(parametrosService.actualizar(sedeId(auth), req));
+    }
+
+    // ── H7.6 — Políticas de Seguridad ────────────────────────────────────────
+
+    @GetMapping("/seguridad")
+    @PreAuthorize("hasRole('ADMIN_GLOBAL')")
+    public ResponseEntity<PoliticasSeguridadResponse> obtenerSeguridad() {
+        return ResponseEntity.ok(seguridadService.obtener());
+    }
+
+    @PutMapping("/seguridad")
+    @PreAuthorize("hasRole('ADMIN_GLOBAL')")
+    public ResponseEntity<PoliticasSeguridadResponse> actualizarSeguridad(
+            @Valid @RequestBody ActualizarSeguridadRequest req,
+            Authentication auth) {
+        return ResponseEntity.ok(seguridadService.actualizar(req, userId(auth)));
     }
 
     // ── Helpers JWT ───────────────────────────────────────────────────────────
