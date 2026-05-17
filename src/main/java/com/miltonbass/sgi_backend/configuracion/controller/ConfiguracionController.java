@@ -3,6 +3,7 @@ package com.miltonbass.sgi_backend.configuracion.controller;
 import com.miltonbass.sgi_backend.configuracion.dto.ConfiguracionDtos.*;
 import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionBrandingService;
 import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionNotificacionesService;
+import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionParametrosService;
 import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionSedeService;
 import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionSmtpService;
 import io.jsonwebtoken.Claims;
@@ -24,15 +25,18 @@ public class ConfiguracionController {
     private final ConfiguracionSmtpService             smtpService;
     private final ConfiguracionBrandingService         brandingService;
     private final ConfiguracionNotificacionesService   notifService;
+    private final ConfiguracionParametrosService       parametrosService;
 
     public ConfiguracionController(ConfiguracionSedeService sedeService,
                                    ConfiguracionSmtpService smtpService,
                                    ConfiguracionBrandingService brandingService,
-                                   ConfiguracionNotificacionesService notifService) {
-        this.sedeService     = sedeService;
-        this.smtpService     = smtpService;
-        this.brandingService = brandingService;
-        this.notifService    = notifService;
+                                   ConfiguracionNotificacionesService notifService,
+                                   ConfiguracionParametrosService parametrosService) {
+        this.sedeService       = sedeService;
+        this.smtpService       = smtpService;
+        this.brandingService   = brandingService;
+        this.notifService      = notifService;
+        this.parametrosService = parametrosService;
     }
 
     // ── H7.1 — Configuración de la Sede ──────────────────────────────────────
@@ -123,6 +127,22 @@ public class ConfiguracionController {
             @RequestBody ActualizarNotificacionesRequest req,
             Authentication auth) {
         return ResponseEntity.ok(notifService.actualizar(sedeId(auth), req));
+    }
+
+    // ── H7.5 — Parámetros del Sistema ────────────────────────────────────────
+
+    @GetMapping("/parametros")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE')")
+    public ResponseEntity<ParametrosResponse> obtenerParametros(Authentication auth) {
+        return ResponseEntity.ok(parametrosService.obtener(sedeId(auth)));
+    }
+
+    @PutMapping("/parametros")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE')")
+    public ResponseEntity<ParametrosResponse> actualizarParametros(
+            @Valid @RequestBody ActualizarParametrosRequest req,
+            Authentication auth) {
+        return ResponseEntity.ok(parametrosService.actualizar(sedeId(auth), req));
     }
 
     // ── Helpers JWT ───────────────────────────────────────────────────────────

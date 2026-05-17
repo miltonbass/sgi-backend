@@ -132,4 +132,34 @@ public class ConfiguracionDtos {
             ConfiguracionNotificacion alertaSeguimiento,
             ConfiguracionNotificacion nuevoUsuario
     ) {}
+
+    // ── H7.5 — Parámetros del Sistema ─────────────────────────────────────────
+
+    public record ParametrosResponse(
+            String estadoInicialMiembro,
+            int    diasSinContactoAlerta,
+            String moneda,
+            int    periodoReportesDias,
+            int    limiteMiembrosCelula
+    ) {}
+
+    public record ActualizarParametrosRequest(
+            @NotBlank(message = "estadoInicialMiembro es requerido")
+            @Pattern(regexp = "VISITOR|MIEMBRO",
+                     message = "estadoInicialMiembro debe ser VISITOR o MIEMBRO")
+            String estadoInicialMiembro,
+
+            @Min(value = 1, message = "diasSinContactoAlerta debe ser al menos 1")
+            int diasSinContactoAlerta,
+
+            @NotBlank(message = "moneda es requerida")
+            @Pattern(regexp = "COP|USD|EUR",
+                     message = "moneda debe ser COP, USD o EUR")
+            String moneda,
+
+            int periodoReportesDias,
+
+            @Min(value = 0, message = "limiteMiembrosCelula debe ser 0 o mayor")
+            int limiteMiembrosCelula
+    ) {}
 }
