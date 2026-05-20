@@ -4,6 +4,7 @@ import com.miltonbass.sgi_backend.configuracion.dto.ConfiguracionDtos.*;
 import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionBrandingService;
 import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionNotificacionesService;
 import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionParametrosService;
+import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionPlantillasService;
 import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionSedeService;
 import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionSeguridadService;
 import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionSmtpService;
@@ -28,19 +29,22 @@ public class ConfiguracionController {
     private final ConfiguracionNotificacionesService   notifService;
     private final ConfiguracionParametrosService       parametrosService;
     private final ConfiguracionSeguridadService        seguridadService;
+    private final ConfiguracionPlantillasService       plantillasService;
 
     public ConfiguracionController(ConfiguracionSedeService sedeService,
                                    ConfiguracionSmtpService smtpService,
                                    ConfiguracionBrandingService brandingService,
                                    ConfiguracionNotificacionesService notifService,
                                    ConfiguracionParametrosService parametrosService,
-                                   ConfiguracionSeguridadService seguridadService) {
+                                   ConfiguracionSeguridadService seguridadService,
+                                   ConfiguracionPlantillasService plantillasService) {
         this.sedeService       = sedeService;
         this.smtpService       = smtpService;
         this.brandingService   = brandingService;
         this.notifService      = notifService;
         this.parametrosService = parametrosService;
         this.seguridadService  = seguridadService;
+        this.plantillasService = plantillasService;
     }
 
     // ── H7.1 — Configuración de la Sede ──────────────────────────────────────
@@ -163,6 +167,33 @@ public class ConfiguracionController {
             @Valid @RequestBody ActualizarSeguridadRequest req,
             Authentication auth) {
         return ResponseEntity.ok(seguridadService.actualizar(req, userId(auth)));
+    }
+
+    // ── H7.7 — Plantillas de Correo ──────────────────────────────────────────
+
+    @GetMapping("/plantillas/{tipo}")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE')")
+    public ResponseEntity<PlantillaCorreoResponse> obtenerPlantilla(
+            @PathVariable String tipo,
+            Authentication auth) {
+        return ResponseEntity.ok(plantillasService.obtener(sedeId(auth), tipo));
+    }
+
+    @PutMapping("/plantillas/{tipo}")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE')")
+    public ResponseEntity<PlantillaCorreoResponse> actualizarPlantilla(
+            @PathVariable String tipo,
+            @Valid @RequestBody ActualizarPlantillaRequest req,
+            Authentication auth) {
+        return ResponseEntity.ok(plantillasService.actualizar(sedeId(auth), tipo, req));
+    }
+
+    @DeleteMapping("/plantillas/{tipo}")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE')")
+    public ResponseEntity<PlantillaCorreoResponse> restaurarPlantilla(
+            @PathVariable String tipo,
+            Authentication auth) {
+        return ResponseEntity.ok(plantillasService.restaurar(sedeId(auth), tipo));
     }
 
     // ── Helpers JWT ───────────────────────────────────────────────────────────

@@ -187,4 +187,21 @@ public class ConfiguracionDtos {
             @Max(value = 168, message = "duracionSesionHoras no puede superar 168 (1 semana)")
             int duracionSesionHoras
     ) {}
+
+    // ── H7.7 — Plantillas de Correo ───────────────────────────────────────────
+
+    public record PlantillaCorreoResponse(
+            String       tipo,
+            String       asunto,
+            String       cuerpo,
+            java.util.List<String> variables,
+            boolean      esPersonalizada
+    ) {}
+
+    public record ActualizarPlantillaRequest(
+            @NotBlank(message = "asunto es requerido")
+            String asunto,
+            @NotBlank(message = "cuerpo es requerido")
+            String cuerpo
+    ) {}
 }
