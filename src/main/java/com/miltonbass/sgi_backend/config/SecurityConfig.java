@@ -1,9 +1,14 @@
 package com.miltonbass.sgi_backend.config;
 
 import com.miltonbass.sgi_backend.security.JwtAuthFilter;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
+import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -68,10 +73,41 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
 
+            // 401 para token ausente/inválido/expirado, 403 para rol insuficiente
+            .exceptionHandling(ex -> ex
+                .authenticationEntryPoint((request, response, authException) ->
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized"))
+                .accessDeniedHandler((request, response, accessDeniedException) ->
+                    response.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden"))
+            )
+
             // Insertar JwtAuthFilter antes del filtro estándar de usuario/contraseña
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    /**
+     * Jerarquía de roles: ADMIN_GLOBAL hereda todos los permisos de ADMIN_SEDE.
+     * Cualquier @PreAuthorize que permita ADMIN_SEDE permite automáticamente ADMIN_GLOBAL,
+     * sin necesidad de declararlo explícitamente en cada anotación.
+     */
+    @Bean
+    public RoleHierarchy roleHierarchy() {
+        return RoleHierarchyImpl.withDefaultRolePrefix()
+                .role("ADMIN_GLOBAL").implies("ADMIN_SEDE")
+                .build();
+    }
+
+    /**
+     * Aplica la jerarquía de roles a @PreAuthorize y @PostAuthorize (method security).
+     * Debe ser static para evitar conflictos de ciclo de vida con el proxy de @Configuration.
+     */
+    @Bean
+    static MethodSecurityExpressionHandler methodSecurityExpressionHandler(RoleHierarchy roleHierarchy) {
+        DefaultMethodSecurityExpressionHandler handler = new DefaultMethodSecurityExpressionHandler();
+        handler.setRoleHierarchy(roleHierarchy);
+        return handler;
     }
 
     /**

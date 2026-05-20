@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/alertas")
-@PreAuthorize("hasAnyRole('ADMIN_SEDE','PASTOR_SEDE')")
+@PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_SEDE')")
 public class AlertaController {
 
     private final AlertaService alertaService;
@@ -62,7 +62,7 @@ public class AlertaController {
     }
 
     @PatchMapping("/configuracion")
-    @PreAuthorize("hasRole('ADMIN_SEDE')")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE')")
     public ResponseEntity<ConfiguracionAlertaResponse> actualizarConfiguracion(
             @Valid @RequestBody ConfiguracionAlertaRequest req) {
         return ResponseEntity.ok(alertaService.actualizarConfiguracion(req));

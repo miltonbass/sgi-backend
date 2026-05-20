@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/eventos/{eventoId}/asistencias")
-@PreAuthorize("hasAnyRole('ADMIN_SEDE','PASTOR_SEDE','SECRETARIO_SEDE','REGISTRO_SEDE','LIDER_CELULA')")
+@PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_SEDE','SECRETARIO_SEDE','REGISTRO_SEDE','LIDER_CELULA')")
 public class AsistenciaController {
 
     private final AsistenciaService asistenciaService;

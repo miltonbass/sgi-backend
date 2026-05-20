@@ -23,7 +23,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/consolidacion")
-@PreAuthorize("hasAnyRole('ADMIN_SEDE','PASTOR_SEDE','CONSOLIDACION_SEDE')")
+@PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_SEDE','CONSOLIDACION_SEDE')")
 public class ConsolidacionController {
 
     private final ConsolidacionService consolidacionService;
@@ -73,7 +73,7 @@ public class ConsolidacionController {
     }
 
     @PatchMapping("/configuracion")
-    @PreAuthorize("hasRole('ADMIN_SEDE')")
+    @PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE')")
     public ResponseEntity<ConfiguracionConsolidacionResponse> actualizarConfiguracion(
             @Valid @RequestBody ConfiguracionConsolidacionRequest req) {
         return ResponseEntity.ok(consolidacionService.actualizarConfiguracion(req));

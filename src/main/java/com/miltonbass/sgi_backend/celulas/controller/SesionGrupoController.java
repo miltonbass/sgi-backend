@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/grupos/{grupoId}/sesiones")
-@PreAuthorize("hasAnyRole('ADMIN_SEDE','PASTOR_SEDE','LIDER_CELULA')")
+@PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_SEDE','LIDER_CELULA')")
 public class SesionGrupoController {
 
     private final SesionGrupoService sesionService;

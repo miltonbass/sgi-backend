@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/eventos/{eventoId}/resumen")
-@PreAuthorize("hasAnyRole('ADMIN_SEDE','PASTOR_SEDE')")
+@PreAuthorize("hasAnyRole('ADMIN_GLOBAL','ADMIN_SEDE','PASTOR_SEDE')")
 public class ResumenController {
 
     private final ResumenService resumenService;
