@@ -223,4 +223,24 @@ public class ConfiguracionDtos {
             long total,
             int  totalPaginas
     ) {}
+
+    // ── H7.9 — Configuración de Dominio ──────────────────────────────────────
+
+    public record ConfiguracionDominioResponse(
+            String  dominioApp,
+            String  dominioApi,
+            String  corsOrigenes,
+            boolean configurado
+    ) {}
+
+    public record ActualizarDominioRequest(
+            @NotBlank(message = "dominioApp es requerido")
+            @Pattern(regexp = "https?://.+", message = "dominioApp debe ser una URL válida (http:// o https://)")
+            String dominioApp,
+
+            @Pattern(regexp = "https?://.+", message = "dominioApi debe ser una URL válida (http:// o https://)")
+            String dominioApi,
+
+            String corsOrigenes
+    ) {}
 }

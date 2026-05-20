@@ -3,6 +3,7 @@ package com.miltonbass.sgi_backend.configuracion.controller;
 import com.miltonbass.sgi_backend.configuracion.dto.ConfiguracionDtos.*;
 import com.miltonbass.sgi_backend.configuracion.service.AuditoriaConfiguracionService;
 import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionBrandingService;
+import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionDominioService;
 import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionNotificacionesService;
 import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionParametrosService;
 import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionPlantillasService;
@@ -36,6 +37,7 @@ public class ConfiguracionController {
     private final ConfiguracionSeguridadService      seguridadService;
     private final ConfiguracionPlantillasService     plantillasService;
     private final AuditoriaConfiguracionService      auditoriaService;
+    private final ConfiguracionDominioService        dominioService;
 
     public ConfiguracionController(ConfiguracionSedeService sedeService,
                                    ConfiguracionSmtpService smtpService,
@@ -44,15 +46,17 @@ public class ConfiguracionController {
                                    ConfiguracionParametrosService parametrosService,
                                    ConfiguracionSeguridadService seguridadService,
                                    ConfiguracionPlantillasService plantillasService,
-                                   AuditoriaConfiguracionService auditoriaService) {
-        this.sedeService      = sedeService;
-        this.smtpService      = smtpService;
-        this.brandingService  = brandingService;
-        this.notifService     = notifService;
+                                   AuditoriaConfiguracionService auditoriaService,
+                                   ConfiguracionDominioService dominioService) {
+        this.sedeService       = sedeService;
+        this.smtpService       = smtpService;
+        this.brandingService   = brandingService;
+        this.notifService      = notifService;
         this.parametrosService = parametrosService;
-        this.seguridadService = seguridadService;
+        this.seguridadService  = seguridadService;
         this.plantillasService = plantillasService;
-        this.auditoriaService = auditoriaService;
+        this.auditoriaService  = auditoriaService;
+        this.dominioService    = dominioService;
     }
 
     // ── H7.1 — Configuración de la Sede ──────────────────────────────────────
@@ -235,6 +239,25 @@ public class ConfiguracionController {
         return ResponseEntity.ok(result);
     }
 
+    // ── H7.9 — Configuración de Dominio ──────────────────────────────────────
+
+    @GetMapping("/dominio")
+    @PreAuthorize("hasRole('ADMIN_GLOBAL')")
+    public ResponseEntity<ConfiguracionDominioResponse> obtenerDominio() {
+        return ResponseEntity.ok(dominioService.obtener());
+    }
+
+    @PutMapping("/dominio")
+    @PreAuthorize("hasRole('ADMIN_GLOBAL')")
+    public ResponseEntity<ConfiguracionDominioResponse> actualizarDominio(
+            @Valid @RequestBody ActualizarDominioRequest req,
+            Authentication auth) {
+        var result = dominioService.actualizar(req, userId(auth));
+        auditoriaService.registrar(sedeId(auth), userId(auth), email(auth),
+                "dominio", "ACTUALIZAR", detalleDominio(req));
+        return ResponseEntity.ok(result);
+    }
+
     // ── H7.8 — Auditoría de Configuración ────────────────────────────────────
 
     @GetMapping("/auditoria")
@@ -353,5 +376,13 @@ public class ConfiguracionController {
                 "expiracionPasswordDias",  req.expiracionPasswordDias(),
                 "maxIntentosFallidos",     req.maxIntentosFallidos(),
                 "duracionSesionHoras",     req.duracionSesionHoras());
+    }
+
+    private Map<String, Object> detalleDominio(ActualizarDominioRequest req) {
+        var m = new LinkedHashMap<String, Object>();
+        m.put("dominioApp", req.dominioApp());
+        if (req.dominioApi()   != null) m.put("dominioApi",   req.dominioApi());
+        if (req.corsOrigenes() != null) m.put("corsOrigenes", req.corsOrigenes());
+        return m;
     }
 }
