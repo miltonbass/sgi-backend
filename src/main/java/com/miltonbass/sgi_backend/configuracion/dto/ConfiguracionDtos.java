@@ -204,4 +204,23 @@ public class ConfiguracionDtos {
             @NotBlank(message = "cuerpo es requerido")
             String cuerpo
     ) {}
+
+    // ── H7.8 — Auditoría de Configuración ────────────────────────────────────
+
+    public record AuditoriaRegistroResponse(
+            java.util.UUID              id,
+            String                      usuarioEmail,
+            String                      seccion,
+            String                      accion,
+            java.util.Map<String,Object> detalle,
+            java.time.Instant           realizadoEn
+    ) {}
+
+    public record AuditoriaPageResponse(
+            java.util.List<AuditoriaRegistroResponse> registros,
+            int  pagina,
+            int  tamano,
+            long total,
+            int  totalPaginas
+    ) {}
 }
