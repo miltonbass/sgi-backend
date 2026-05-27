@@ -52,8 +52,18 @@ public class ConsolidacionService {
 
     // ── Listar tareas de consolidación ────────────────────────────────────
     public TareaConsolidacionPageResponse listarTareas(
-            UUID consolidadorId, String estado, int page, int size) {
+            UUID consolidadorId, String estado, UUID userId, int page, int size) {
         String tenant = tenant();
+
+        // Si el llamante es solo CONSOLIDACION_SEDE, ignorar consolidadorId del query
+        // y filtrar por su propio miembro_id derivado del userId del token
+        if (userId != null) {
+            List<UUID> ids = jdbc.query(
+                    "SELECT id FROM " + tenant + ".miembros WHERE usuario_id = ? AND deleted_at IS NULL",
+                    (rs, i) -> rs.getObject("id", UUID.class), userId);
+            consolidadorId = ids.isEmpty() ? null : ids.get(0);
+        }
+
         String whereEstado = (estado != null && !estado.isBlank())
                 ? "AND t.estado = '" + estado.toUpperCase() + "' " : "";
         String whereCons = consolidadorId != null

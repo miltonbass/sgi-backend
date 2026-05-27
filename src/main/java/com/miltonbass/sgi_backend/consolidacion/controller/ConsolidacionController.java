@@ -51,9 +51,14 @@ public class ConsolidacionController {
             @RequestParam(required = false) UUID consolidadorId,
             @RequestParam(required = false) String estado,
             @RequestParam(defaultValue = "0")  int page,
-            @RequestParam(defaultValue = "20") int size) {
+            @RequestParam(defaultValue = "20") int size,
+            Authentication auth) {
+        boolean soloConsolidador = auth.getAuthorities().stream()
+                .map(a -> a.getAuthority())
+                .allMatch(r -> r.equals("ROLE_CONSOLIDACION_SEDE"));
+        UUID userId = soloConsolidador ? extraerUserId(auth) : null;
         return ResponseEntity.ok(
-                consolidacionService.listarTareas(consolidadorId, estado, page, size));
+                consolidacionService.listarTareas(consolidadorId, estado, userId, page, size));
     }
 
     @PatchMapping("/tareas/{id}/completar")

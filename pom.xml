@@ -109,6 +109,12 @@
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
 
+        <!-- ─── AOP (auditoría general H8.x) ────────────────── -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
         <!-- ─── UTILIDADES ───────────────────────────────────── -->
         <dependency>
             <groupId>org.projectlombok</groupId>
