@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionDominioService;
 
 import java.util.List;
 
@@ -40,9 +41,11 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
+    private final ConfiguracionDominioService dominioService;
 
-    public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
+    public SecurityConfig(JwtAuthFilter jwtAuthFilter, ConfiguracionDominioService dominioService) {
         this.jwtAuthFilter = jwtAuthFilter;
+        this.dominioService = dominioService;
     }
 
     @Bean
@@ -116,24 +119,43 @@ public class SecurityConfig {
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
+        return request -> {
+            CorsConfiguration config = new CorsConfiguration();
 
-        // Orígenes permitidos (dev + prod)
-        config.setAllowedOriginPatterns(List.of(
-                "http://localhost:4200",       // Angular dev
-                "http://localhost:4201",       // Angular segundo puerto
-                "https://*.iglesiapaibog.com", // Producción (ajustar dominio real)
-                "https://sgi.iglesiapaibog.com"
-        ));
+            // Orígenes por defecto (desarrollo local)
+            config.addAllowedOriginPattern("http://localhost:4200");
+            config.addAllowedOriginPattern("http://localhost:4201");
+            config.addAllowedOriginPattern("http://localhost:8080");
 
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Sede-Id"));
-        config.setExposedHeaders(List.of("Authorization"));
-        config.setAllowCredentials(true);
-        config.setMaxAge(3600L); // Pre-flight cache 1 hora
+            // Cargar orígenes dinámicamente desde la base de datos
+            try {
+                String corsOrigenes = dominioService.getCorsOrigenes();
+                if (corsOrigenes != null && !corsOrigenes.isBlank()) {
+                    for (String origin : corsOrigenes.split(",")) {
+                        String trimmed = origin.trim();
+                        // Remover barra diagonal al final si existe (los navegadores envían el Origin sin ella)
+                        if (trimmed.endsWith("/")) {
+                            trimmed = trimmed.substring(0, trimmed.length() - 1);
+                        }
+                        if (!trimmed.isEmpty()) {
+                            config.addAllowedOriginPattern(trimmed);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                // Fallback seguro a los dominios originales si la BD no está lista o falla
+                config.addAllowedOriginPattern("https://*.iglesiapaibog.com");
+                config.addAllowedOriginPattern("https://sgi.iglesiapaibog.com");
+                config.addAllowedOriginPattern("https://membresia.jovenescristianos.co");
+            }
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/**", config);
-        return source;
+            config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+            config.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Sede-Id"));
+            config.setExposedHeaders(List.of("Authorization"));
+            config.setAllowCredentials(true);
+            config.setMaxAge(3600L); // Pre-flight cache 1 hora
+
+            return config;
+        };
     }
 }

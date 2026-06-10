@@ -2,6 +2,7 @@ package com.miltonbass.sgi_backend.usuarios.service;
 
 import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionSmtpService;
 import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionSmtpService.SmtpActivo;
+import com.miltonbass.sgi_backend.configuracion.service.ConfiguracionDominioService;
 import jakarta.mail.internet.MimeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,12 +21,12 @@ public class ProdEmailService implements EmailService {
     private static final Logger log = LoggerFactory.getLogger(ProdEmailService.class);
 
     private final ConfiguracionSmtpService smtpService;
-    private final String appUrl;
+    private final ConfiguracionDominioService dominioService;
 
     public ProdEmailService(ConfiguracionSmtpService smtpService,
-                            @Value("${sgi.app.url:http://localhost:4200}") String appUrl) {
+                            ConfiguracionDominioService dominioService) {
         this.smtpService = smtpService;
-        this.appUrl      = appUrl;
+        this.dominioService = dominioService;
     }
 
     @Override
@@ -54,10 +55,14 @@ public class ProdEmailService implements EmailService {
     }
 
     private String cuerpoActivacion(String nombre, String token) {
+        String baseDominio = dominioService.getDominioApp();
+        if (baseDominio.endsWith("/")) {
+            baseDominio = baseDominio.substring(0, baseDominio.length() - 1);
+        }
         return "Hola " + nombre + ",\n\n"
              + "Tu acceso al Sistema de Gestión SGI ha sido creado.\n\n"
              + "Para activar tu cuenta visita:\n"
-             + appUrl + "/activar?token=" + token + "\n\n"
+             + baseDominio + "/activar?token=" + token + "\n\n"
              + "Si no solicitaste este acceso, ignora este mensaje.\n\n"
              + "— Equipo SGI";
     }
