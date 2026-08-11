@@ -49,7 +49,7 @@ public class AsistenciaService {
                 + "ORDER BY a.created_at ASC";
 
         List<AsistenciaResponse> asistencias = jdbc.query(sql, this::mapRow, eventoId);
-        int totalPresentes = (int) asistencias.stream().filter(AsistenciaResponse::presente).count();
+        int totalPresentes = (int) asistencias.stream().filter(a -> a.presente()).count();
 
         return new CheckInListResponse(asistencias, totalPresentes, capacidad, titulo, estado);
     }

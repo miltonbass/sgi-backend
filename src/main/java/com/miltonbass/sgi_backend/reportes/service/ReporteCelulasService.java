@@ -103,13 +103,14 @@ public class ReporteCelulasService {
                     rs.getBigDecimal("total_ofrenda"));
         }, params.toArray());
 
-        long totalMiembros = celulas.stream().mapToLong(CelulaReporteItem::totalMiembros).sum();
+        long totalMiembros = celulas.stream().mapToLong(c -> c.totalMiembros()).sum();
         BigDecimal totalOfrenda = celulas.stream()
-                .map(CelulaReporteItem::totalOfrenda)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .filter(c -> c.totalOfrenda() != null)
+                .map(c -> c.totalOfrenda())
+                .reduce(BigDecimal.ZERO, (a, b) -> a.add(b));
         Double promGeneral = celulas.stream()
                 .filter(c -> c.promedioAsistencia() != null)
-                .mapToDouble(CelulaReporteItem::promedioAsistencia)
+                .mapToDouble(c -> c.promedioAsistencia())
                 .average().stream().boxed().findFirst().orElse(null);
 
         return new ReporteCelulasResponse(
@@ -200,10 +201,10 @@ public class ReporteCelulasService {
 
         BigDecimal totalOfrenda = sesiones.stream()
                 .filter(s -> s.ofrendaMonto() != null)
-                .map(SesionDetalle::ofrendaMonto)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        long totalVisitantes = sesiones.stream().mapToLong(SesionDetalle::totalVisitantes).sum();
-        Double promedio = sesiones.stream().mapToInt(SesionDetalle::totalPresentes)
+                .map(s -> s.ofrendaMonto())
+                .reduce(BigDecimal.ZERO, (a, b) -> a.add(b));
+        long totalVisitantes = sesiones.stream().mapToLong(s -> s.totalVisitantes()).sum();
+        Double promedio = sesiones.stream().mapToInt(s -> s.totalPresentes())
                 .average().stream().boxed().findFirst().orElse(null);
 
         return new DetalleCelulaResponse(

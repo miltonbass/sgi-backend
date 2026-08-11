@@ -70,7 +70,7 @@ public class RefreshTokenService {
     public Optional<RefreshToken> validar(String tokenEnClaro) {
         String hash = hashSha256(tokenEnClaro);
         return refreshTokenRepository.findByTokenHash(hash)
-                .filter(RefreshToken::esValido);
+                .filter(rt -> rt.esValido());
     }
 
     // ─── Rotation ─────────────────────────────────────────────────────────────

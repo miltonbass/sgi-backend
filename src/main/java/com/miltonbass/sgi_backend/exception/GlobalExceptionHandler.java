@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -40,7 +39,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex) {
         String mensajes = ex.getBindingResult().getFieldErrors().stream()
-                .map(FieldError::getDefaultMessage)
+                .map(error -> error != null ? error.getDefaultMessage() : null)
+                .filter(msg -> msg != null)
                 .collect(Collectors.joining("; "));
 
         ErrorResponse body = ErrorResponse.of(400, "VALIDACION_FALLIDA", mensajes);
@@ -48,7 +48,8 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Acceso denegado por regla de negocio (ej: CONSOLIDACION_SEDE intentando ver un miembro no asignado).
+     * Acceso denegado por regla de negocio (ej: CONSOLIDACION_SEDE intentando ver
+     * un miembro no asignado).
      */
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException ex) {
@@ -58,7 +59,8 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * IllegalArgumentException — tipicamente UUID malformado u otros errores de parsing.
+     * IllegalArgumentException — tipicamente UUID malformado u otros errores de
+     * parsing.
      */
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException ex) {
@@ -68,7 +70,8 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * MethodArgumentTypeMismatchException — path variable o query param con tipo incompatible
+     * MethodArgumentTypeMismatchException — path variable o query param con tipo
+     * incompatible
      * (ej: UUID invalido en /{id}).
      */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -80,7 +83,8 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * ResponseStatusException — para errores de negocio con código HTTP explícito (ej. 404 recurso no encontrado).
+     * ResponseStatusException — para errores de negocio con código HTTP explícito
+     * (ej. 404 recurso no encontrado).
      */
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<ErrorResponse> handleResponseStatus(ResponseStatusException ex) {

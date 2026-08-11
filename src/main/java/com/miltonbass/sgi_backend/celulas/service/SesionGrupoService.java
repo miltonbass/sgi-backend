@@ -124,7 +124,7 @@ public class SesionGrupoService {
                 + "ORDER BY a.created_at ASC";
 
         List<AsistenciaSesionResponse> lista = jdbc.query(sql, this::mapAsistencia, sesionId);
-        int totalPresentes = (int) lista.stream().filter(AsistenciaSesionResponse::presente).count();
+        int totalPresentes = (int) lista.stream().filter(a -> a.presente()).count();
 
         return new AsistenciaSesionListResponse(lista, totalPresentes, sesion.totalMiembros(),
                 sesion.fecha(), sesion.grupoNombre());

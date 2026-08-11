@@ -189,7 +189,7 @@ public class AuthService {
          */
         public List<SedeInfo> obtenerSedesPorEmail(String email) {
                 return usuarioRepo.findByEmailIgnoreCase(email)
-                                .filter(UsuarioSistema::isActivo)
+                                .filter(u -> u.isActivo())
                                 .map(u -> {
                                         List<UsuarioSede> sedes = usuarioSedeRepo
                                                         .findByUsuarioIdAndActivoTrue(u.getId());

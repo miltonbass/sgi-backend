@@ -78,7 +78,7 @@ public class AsistenciaHistorialService {
             return new ResumenAsistencia(0, 0, 0, null, 0, "Sin historial de asistencia");
         }
 
-        int presentes = (int) historial.stream().filter(EventoAsistencia::presente).count();
+        int presentes = (int) historial.stream().filter(e -> e.presente()).count();
         int ausentes  = total - presentes;
         double porcentaje = Math.round(presentes * 1000.0 / total) / 10.0;
 

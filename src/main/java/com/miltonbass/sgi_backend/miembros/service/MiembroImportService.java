@@ -107,7 +107,7 @@ public class MiembroImportService {
                 if (row == null) continue;
 
                 List<String> cols = new ArrayList<>();
-                int lastCol = colIdx.values().stream().mapToInt(Integer::intValue).max().orElse(0);
+                int lastCol = colIdx.values().stream().mapToInt(i -> i).max().orElse(0);
                 for (int c = 0; c <= lastCol; c++) {
                     Cell cell = row.getCell(c, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
                     cols.add(cell != null ? fmt.formatCellValue(cell).trim() : "");
