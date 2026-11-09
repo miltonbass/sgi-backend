@@ -83,12 +83,6 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
-        <!-- ─── REDIS (sesiones / caché) ─────────────────────── -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-
         <!-- ─── APACHE POI (importación/exportación Excel) ──── -->
         <dependency>
             <groupId>org.apache.poi</groupId>

@@ -24,6 +24,11 @@ public class ConfiguracionDominioService {
     private final ObjectMapper  mapper;
     private final String        defaultDominioApp;
 
+    // CORS se evalúa en cada request: se cachea para no consultar la BD cada vez
+    private static final long CORS_TTL_MS = 60_000;
+    private volatile String corsCache;
+    private volatile long   corsCacheExpira;
+
     public ConfiguracionDominioService(JdbcTemplate jdbc,
                                        ObjectMapper mapper,
                                        @Value("${sgi.app.url:http://localhost:4200}") String defaultDominioApp) {
@@ -53,6 +58,7 @@ public class ConfiguracionDominioService {
         cfg.put("corsOrigenes", normalizarCors(req.corsOrigenes(), req.dominioApp()));
 
         guardar(cfg, usuarioId);
+        corsCache = null; // aplicar los nuevos orígenes de inmediato
         log.info("[DOMINIO] Configuracion actualizada por {}", usuarioId);
         return toResponse(cfg);
     }
@@ -72,6 +78,17 @@ public class ConfiguracionDominioService {
     }
 
     public String getCorsOrigenes() {
+        String cache = corsCache;
+        if (cache != null && System.currentTimeMillis() < corsCacheExpira) {
+            return cache;
+        }
+        String valor = leerCorsOrigenes();
+        corsCache = valor;
+        corsCacheExpira = System.currentTimeMillis() + CORS_TTL_MS;
+        return valor;
+    }
+
+    private String leerCorsOrigenes() {
         try {
             Map<String, Object> cfg = leerConfig();
             if (cfg == null) return defaultDominioApp;

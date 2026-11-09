@@ -1,49 +1,15 @@
-# Angular specific
-/dist/
-/out-tsc/
-/tmp/
-/coverage/
-/e2e/test-output/
-/.angular/
-.angular/
-
-# Node modules and dependency files
-/node_modules/
-/package-lock.json
-/yarn.lock
-
-# Environment files
-/.env
-
-# Angular CLI and build artefacts
-/.angular-cli.json
-/.ng/
-
-# TypeScript cache
-*.tsbuildinfo
-
-# Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Maven / compilados
-target/
-*.class
-*.lst
-
-
 # ============================================================
 # SGI Backend - .gitignore
 # ============================================================
 
-# Maven
+# Maven / compilados
 target/
 !.mvn/wrapper/maven-wrapper.jar
 *.jar
 *.war
+*.class
 
-# Spring Boot - NUNCA subir credenciales
+# Credenciales - NUNCA subir
 .env
 .env.*
 !.env.example
@@ -60,13 +26,20 @@ application-prod.properties
 .DS_Store
 Thumbs.db
 
+# Logs
+*.log
+
 # Archivos locales de desarrollo y pruebas
-startup.log
 *.ps1
 login*.json
+nginx.conf.temp
+$null
 *.docx
 SGI-BACKEND-API-REFERENCIA.md
 
 # Documentación técnica local (no va a git)
 docs/
-startup-err.log
+
+# Herramientas locales
+.github/java-upgrade/
+.github/modernize/

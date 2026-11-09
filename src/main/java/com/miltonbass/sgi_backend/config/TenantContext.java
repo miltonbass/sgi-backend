@@ -8,7 +8,7 @@ package com.miltonbass.sgi_backend.config;
 public final class TenantContext {
 
     private static final ThreadLocal<String> CURRENT_TENANT =
-            new InheritableThreadLocal<>();
+            new ThreadLocal<>(); // no heredable: un hilo nuevo nunca debe recibir la sede de otro request
 
     public static final String SHARED_SCHEMA  = "shared";
     public static final String DEFAULT_SCHEMA = "shared";
