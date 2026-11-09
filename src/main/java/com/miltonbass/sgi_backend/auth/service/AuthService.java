@@ -68,7 +68,9 @@ public class AuthService {
          * @param dispositivo IP + user-agent para auditoría
          * @return TokenResponse con access y refresh token
          */
-        @Transactional
+        // noRollbackFor: el contador de intentos fallidos debe persistir aunque se lance
+        // AuthException; sin esto el rollback lo deshacía y la cuenta nunca se bloqueaba.
+        @Transactional(noRollbackFor = AuthException.class)
         public TokenResponse login(LoginRequest request, String dispositivo) {
                 // 1. Buscar usuario
                 UsuarioSistema usuario = usuarioRepo.findByEmailIgnoreCase(request.email())
