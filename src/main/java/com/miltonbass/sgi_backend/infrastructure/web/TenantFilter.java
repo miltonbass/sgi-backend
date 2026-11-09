@@ -13,10 +13,8 @@ import java.io.IOException;
 
 /**
  * Intercepta cada request y establece el TenantContext
- * usando el atributo "sgi_sede_schema" que pondrá el JwtAuthFilter
- * en la Historia 1.4.
- *
- * Por ahora lee el header X-Sede-Schema para pruebas.
+ * usando el atributo "sgi_sede_schema" que pone el JwtAuthFilter
+ * a partir del token validado. Sin token con sede → schema "shared".
  */
 @Component
 @Order(2)
@@ -31,13 +29,9 @@ public class TenantFilter implements Filter {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
 
-        // Prioridad 1: atributo puesto por JwtAuthFilter (Historia 1.4)
+        // Única fuente válida: el claim sedeSchema del JWT firmado (puesto por JwtAuthFilter).
+        // No se acepta ningún header del cliente: permitiría saltar a otra sede.
         String sedeSchema = (String) httpRequest.getAttribute(JwtAuthFilter.ATTR_SEDE_SCHEMA);
-        
-        // Prioridad 2 (solo dev): header manual para tests sin JWT
-        if (sedeSchema == null) {
-            sedeSchema = httpRequest.getHeader("X-Sede-Schema");
-        }
 
         // Validar y setear
         if (sedeSchema != null && sedeSchema.matches(SCHEMA_PATTERN)) {

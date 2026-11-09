@@ -4,13 +4,19 @@ import com.miltonbass.sgi_backend.auth.dto.AuthDtos.ErrorResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.stream.Collectors;
 
@@ -93,6 +99,66 @@ public class GlobalExceptionHandler {
         ErrorResponse body = ErrorResponse.of(status, codigo,
                 ex.getReason() != null ? ex.getReason() : ex.getMessage());
         return ResponseEntity.status(ex.getStatusCode()).body(body);
+    }
+
+    /**
+     * Body ausente o JSON mal formado → 400 (error del cliente, no del servidor).
+     */
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleNotReadable(HttpMessageNotReadableException ex) {
+        log.debug("HttpMessageNotReadableException: {}", ex.getMessage());
+        ErrorResponse body = ErrorResponse.of(400, "CUERPO_INVALIDO",
+                "El cuerpo de la solicitud está ausente o no es un JSON válido");
+        return ResponseEntity.badRequest().body(body);
+    }
+
+    /**
+     * Query param obligatorio ausente → 400.
+     */
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ErrorResponse> handleMissingParam(MissingServletRequestParameterException ex) {
+        ErrorResponse body = ErrorResponse.of(400, "PARAMETRO_REQUERIDO",
+                "Falta el parametro obligatorio '" + ex.getParameterName() + "'");
+        return ResponseEntity.badRequest().body(body);
+    }
+
+    /**
+     * Ruta inexistente → 404.
+     */
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNoResource(NoResourceFoundException ex) {
+        ErrorResponse body = ErrorResponse.of(404, "RECURSO_NO_ENCONTRADO", "Recurso no encontrado");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
+
+    /**
+     * Método HTTP no soportado en la ruta → 405.
+     */
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ErrorResponse> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex) {
+        ErrorResponse body = ErrorResponse.of(405, "METODO_NO_PERMITIDO",
+                "Metodo " + ex.getMethod() + " no permitido en esta ruta");
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(body);
+    }
+
+    /**
+     * Content-Type no soportado → 415.
+     */
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public ResponseEntity<ErrorResponse> handleMediaType(HttpMediaTypeNotSupportedException ex) {
+        ErrorResponse body = ErrorResponse.of(415, "TIPO_CONTENIDO_NO_SOPORTADO",
+                "Content-Type no soportado");
+        return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(body);
+    }
+
+    /**
+     * Archivo subido supera el límite configurado → 413.
+     */
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ErrorResponse> handleMaxUpload(MaxUploadSizeExceededException ex) {
+        ErrorResponse body = ErrorResponse.of(413, "ARCHIVO_DEMASIADO_GRANDE",
+                "El archivo supera el tamaño máximo permitido");
+        return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body(body);
     }
 
     /**

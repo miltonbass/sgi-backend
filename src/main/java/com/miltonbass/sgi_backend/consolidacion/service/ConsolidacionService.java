@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,17 +62,28 @@ public class ConsolidacionService {
             List<UUID> ids = jdbc.query(
                     "SELECT id FROM " + tenant + ".miembros WHERE usuario_id = ? AND deleted_at IS NULL",
                     (rs, i) -> rs.getObject("id", UUID.class), userId);
-            consolidadorId = ids.isEmpty() ? null : ids.get(0);
+            if (ids.isEmpty()) {
+                // Consolidador sin miembro vinculado: no debe ver tareas de otros
+                return new TareaConsolidacionPageResponse(List.of(), page, size, 0L, 0);
+            }
+            consolidadorId = ids.get(0);
         }
 
-        String whereEstado = (estado != null && !estado.isBlank())
-                ? "AND t.estado = '" + estado.toUpperCase() + "' " : "";
-        String whereCons = consolidadorId != null
-                ? "AND t.consolidador_id = '" + consolidadorId + "' " : "";
+        // Filtros parametrizados: nunca concatenar valores del cliente en el SQL
+        StringBuilder where = new StringBuilder();
+        List<Object> params = new ArrayList<>();
+        if (estado != null && !estado.isBlank()) {
+            where.append("AND t.estado = ? ");
+            params.add(estado.toUpperCase());
+        }
+        if (consolidadorId != null) {
+            where.append("AND t.consolidador_id = ? ");
+            params.add(consolidadorId);
+        }
+        String filtros = where.toString();
 
-        String countSql = "SELECT COUNT(*) FROM " + tenant + ".tareas_consolidacion t WHERE 1=1 "
-                + whereEstado + whereCons;
-        Long total = jdbc.queryForObject(countSql, Long.class);
+        String countSql = "SELECT COUNT(*) FROM " + tenant + ".tareas_consolidacion t WHERE 1=1 " + filtros;
+        Long total = jdbc.queryForObject(countSql, Long.class, params.toArray());
         if (total == null) total = 0L;
 
         String dataSql = "SELECT t.id, t.miembro_id, m.nombres AS miem_nombres, "
@@ -81,11 +93,13 @@ public class ConsolidacionService {
                 + "FROM " + tenant + ".tareas_consolidacion t "
                 + "JOIN " + tenant + ".miembros m ON t.miembro_id = m.id "
                 + "LEFT JOIN " + tenant + ".miembros c ON t.consolidador_id = c.id "
-                + "WHERE 1=1 " + whereEstado + whereCons
+                + "WHERE 1=1 " + filtros
                 + "ORDER BY t.created_at DESC LIMIT ? OFFSET ?";
 
+        params.add(size);
+        params.add((long) page * size);
         List<TareaConsolidacionResponse> content = jdbc.query(dataSql, this::mapTarea,
-                size, (long) page * size);
+                params.toArray());
         int totalPages = size > 0 ? (int) Math.ceil((double) total / size) : 0;
         return new TareaConsolidacionPageResponse(content, page, size, total, totalPages);
     }

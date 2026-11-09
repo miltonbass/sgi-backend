@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -85,10 +86,14 @@ public class AlertaService {
     // ── Listar alertas ────────────────────────────────────────────────────────
     public AlertaPageResponse listar(String estado, int page, int size) {
         String tenant = tenant();
-        String whereEstado = (estado != null && !estado.isBlank()) ? "AND a.estado = '" + estado.toUpperCase() + "' " : "";
+        // Filtro parametrizado: nunca concatenar valores del cliente en el SQL
+        boolean filtrarEstado = estado != null && !estado.isBlank();
+        String whereEstado = filtrarEstado ? "AND a.estado = ? " : "";
+        List<Object> params = new ArrayList<>();
+        if (filtrarEstado) params.add(estado.toUpperCase());
 
         String countSql = "SELECT COUNT(*) FROM " + tenant + ".alertas_ausencia a WHERE 1=1 " + whereEstado;
-        Long total = jdbc.queryForObject(countSql, Long.class);
+        Long total = jdbc.queryForObject(countSql, Long.class, params.toArray());
         if (total == null) total = 0L;
 
         String dataSql = "SELECT a.id, a.miembro_id, a.consolidador_id, a.semanas_ausente, "
@@ -101,7 +106,9 @@ public class AlertaService {
                 + "WHERE 1=1 " + whereEstado
                 + "ORDER BY a.created_at DESC LIMIT ? OFFSET ?";
 
-        List<AlertaResponse> content = jdbc.query(dataSql, this::mapRow, size, (long) page * size);
+        params.add(size);
+        params.add((long) page * size);
+        List<AlertaResponse> content = jdbc.query(dataSql, this::mapRow, params.toArray());
         int totalPages = size > 0 ? (int) Math.ceil((double) total / size) : 0;
         return new AlertaPageResponse(content, page, size, total, totalPages);
     }
