@@ -89,6 +89,8 @@ Health check: `GET /actuator/health`
 | `EndpointSecurityIntegrationTest` | Todos los endpoints: 401 sin token o con firma alterada, 403 con rol sin permisos, `@PreAuthorize` obligatorio |
 | `TenantIsolationIntegrationTest` | Una sede nunca ve datos de otra |
 | `AuthIntegrationTest` | Login, refresh, logout, bloqueo de cuenta |
+| `UsuarioIntegrationTest` | Un ADMIN_SEDE solo gestiona su sede y nunca a usuarios globales |
+| `MiembroIntegrationTest` | Alta, edición, máquina de estados, baja lógica, búsqueda y exportación |
 | `SqlInjectionRegressionTest` | Filtros parametrizados |
 | `ErrorHandlingIntegrationTest` | Errores 4xx uniformes, nunca 500 por culpa del cliente |
 | `JwtServiceTest`, `ProductionSecretsValidatorTest` | Unitarios |

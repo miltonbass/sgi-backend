@@ -101,6 +101,7 @@ public class UsuarioService {
             .orElseThrow(() -> AuthException.usuarioNoEncontrado());
 
         validarAsignacion(req.sedeId(), req.roles(), rolLlamante, sedeIdLlamante);
+        validarNoEsUsuarioGlobal(u, rolLlamante);
         asignarSede(usuarioId, req.sedeId(), req.roles());
         return toResponse(u);
     }
@@ -113,9 +114,14 @@ public class UsuarioService {
                                       int tamano,
                                       String rolLlamante,
                                       String sedeIdLlamante) {
-        // ADMIN_SEDE solo puede ver su propia sede
-        if ("ADMIN_SEDE".equals(rolLlamante) && sedeIdFiltro == null) {
-            sedeIdFiltro = UUID.fromString(sedeIdLlamante);
+        // Un admin no global solo puede ver su propia sede (aunque pida otra)
+        if (!esAdminGlobal(rolLlamante)) {
+            if (sedeIdLlamante == null) throw AuthException.sedeNoAsignada();
+            UUID propia = UUID.fromString(sedeIdLlamante);
+            if (sedeIdFiltro != null && !sedeIdFiltro.equals(propia)) {
+                throw AuthException.sedeNoAsignada();
+            }
+            sedeIdFiltro = propia;
         }
 
         List<UsuarioSistema> usuarios = (sedeIdFiltro != null)
@@ -152,11 +158,37 @@ public class UsuarioService {
 
     // ─── Helpers internos ────────────────────────────────────
 
+    private static boolean esAdminGlobal(String rolLlamante) {
+        return "ADMIN_GLOBAL".equals(rolLlamante) || "SUPER_ADMIN".equals(rolLlamante);
+    }
+
+    /**
+     * Un admin no global solo puede gestionar usuarios de su propia sede
+     * y nunca a un usuario con privilegios globales (evita escalada de privilegios:
+     * p. ej. resetear la contraseña de un ADMIN_GLOBAL y entrar con su cuenta).
+     */
+    private void validarGestionSobreUsuario(UsuarioSistema objetivo, String rolLlamante, String sedeIdLlamante) {
+        if (esAdminGlobal(rolLlamante)) return;
+        boolean mismaSede = sedeIdLlamante != null && usuarioSedeRepo.findByUsuarioId(objetivo.getId()).stream()
+                .anyMatch(us -> us.getSedeId().toString().equals(sedeIdLlamante));
+        if (!mismaSede) {
+            throw AuthException.sedeNoAsignada();
+        }
+        validarNoEsUsuarioGlobal(objetivo, rolLlamante);
+    }
+
+    private void validarNoEsUsuarioGlobal(UsuarioSistema objetivo, String rolLlamante) {
+        if (esAdminGlobal(rolLlamante)) return;
+        boolean esGlobal = objetivo.isSuperAdmin() || usuarioSedeRepo.findByUsuarioId(objetivo.getId()).stream()
+                .anyMatch(us -> us.getRoles().contains("ADMIN_GLOBAL") || us.getRoles().contains("SUPER_ADMIN"));
+        if (esGlobal) {
+            throw AuthException.rolNoPermitido();
+        }
+    }
+
     private void validarAsignacion(UUID sedeId, List<String> roles,
                                    String rolLlamante, String sedeIdLlamante) {
-        boolean esAdminGlobal = "ADMIN_GLOBAL".equals(rolLlamante)
-                             || "SUPER_ADMIN".equals(rolLlamante);
-        if (!esAdminGlobal) {
+        if (!esAdminGlobal(rolLlamante)) {
             // ADMIN_SEDE solo puede operar sobre su propia sede
             if (!sedeId.toString().equals(sedeIdLlamante)) {
                 throw AuthException.sedeNoAsignada();
@@ -212,6 +244,8 @@ public class UsuarioService {
         UsuarioSistema u = usuarioRepo.findById(Objects.requireNonNull(id, "id no puede ser nulo"))
             .orElseThrow(() -> AuthException.usuarioNoEncontrado());
 
+        validarGestionSobreUsuario(u, rolLlamante, sedeIdLlamante);
+
         if (req.nombre()    != null) u.setNombre(req.nombre());
         if (req.apellido()  != null) u.setApellido(req.apellido());
         if (req.telefono()  != null) u.setTelefono(req.telefono());
@@ -225,6 +259,8 @@ public class UsuarioService {
     public void desasignarSede(UUID usuarioId, UUID sedeId,
                             String rolLlamante, String sedeIdLlamante) {
         validarAsignacion(sedeId, List.of(), rolLlamante, sedeIdLlamante);
+        usuarioRepo.findById(Objects.requireNonNull(usuarioId))
+            .ifPresent(u -> validarNoEsUsuarioGlobal(u, rolLlamante));
         usuarioSedeRepo.deleteByUsuarioIdAndSedeId(usuarioId, sedeId);
         log.info("Usuario {} desvinculado de sede {}", usuarioId, sedeId);
     }
@@ -256,14 +292,7 @@ public class UsuarioService {
         UsuarioSistema u = usuarioRepo.findById(Objects.requireNonNull(targetId))
                 .orElseThrow(AuthException::usuarioNoEncontrado);
 
-        boolean esAdminGlobal = "ADMIN_GLOBAL".equals(rolLlamante) || "SUPER_ADMIN".equals(rolLlamante);
-        if (!esAdminGlobal) {
-            boolean mismaSedeAdminSede = usuarioSedeRepo.findByUsuarioId(targetId).stream()
-                    .anyMatch(us -> us.getSedeId().toString().equals(sedeIdLlamante));
-            if (!mismaSedeAdminSede) {
-                throw AuthException.sedeNoAsignada();
-            }
-        }
+        validarGestionSobreUsuario(u, rolLlamante, sedeIdLlamante);
 
         u.setPasswordHash(passwordEncoder.encode(req.passwordNueva()));
         u.setDebeCambiarPassword(true);

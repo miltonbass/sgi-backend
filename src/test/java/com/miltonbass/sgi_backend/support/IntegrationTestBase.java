@@ -83,7 +83,8 @@ public abstract class IntegrationTestBase {
         }
     }
 
-    private UUID crearUsuario(String username, String email, UUID sede, String... roles) {
+    /** Crea un usuario activo con contraseña PASSWORD y los roles indicados en la sede. */
+    protected UUID crearUsuario(String username, String email, UUID sede, String... roles) {
         String hash = new BCryptPasswordEncoder().encode(PASSWORD);
         UUID id = jdbc.queryForObject("INSERT INTO shared.usuarios_sistema "
                 + "(username, email, password_hash, nombre, apellido, activo) "
@@ -97,6 +98,12 @@ public abstract class IntegrationTestBase {
     /** Access token firmado para la sede/roles indicados (sin pasar por login). */
     protected String token(UUID sede, String schema, String... roles) {
         return jwtService.generarAccessToken(EMAIL_ADMIN, adminUserId.toString(),
+                sede != null ? sede.toString() : null, schema, List.of(roles));
+    }
+
+    /** Access token para un usuario concreto. */
+    protected String tokenPara(String email, UUID userId, UUID sede, String schema, String... roles) {
+        return jwtService.generarAccessToken(email, userId.toString(),
                 sede != null ? sede.toString() : null, schema, List.of(roles));
     }
 

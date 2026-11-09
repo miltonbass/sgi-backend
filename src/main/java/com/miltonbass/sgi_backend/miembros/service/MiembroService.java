@@ -1,7 +1,6 @@
 // src/main/java/com/miltonbass/sgi_backend/miembros/service/MiembroService.java
 package com.miltonbass.sgi_backend.miembros.service;
 
-import com.miltonbass.sgi_backend.exception.AuthException;
 import com.miltonbass.sgi_backend.miembros.dto.MiembroDtos.*;
 import org.springframework.security.access.AccessDeniedException;
 import com.miltonbass.sgi_backend.miembros.entity.Miembro;
@@ -13,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -503,7 +504,7 @@ public class MiembroService {
 
     private Miembro buscarPorId(UUID id) {
         return miembroRepo.findByIdAndDeletedAtIsNull(id)
-                .orElseThrow(AuthException::usuarioNoEncontrado);
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Miembro no encontrado"));
     }
 
     private MiembroPageResponse toPageResponse(Page<Miembro> page) {

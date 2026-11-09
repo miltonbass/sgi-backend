@@ -112,12 +112,14 @@ public class UsuarioController {
 
     // ─── Helpers JWT ─────────────────────────────────────────
     private String extraerRolPrincipal(Authentication auth) {
-    return auth.getAuthorities().stream()
-        .map(a -> a.getAuthority())
-        .filter(r -> r.startsWith("ROLE_ADMIN") || r.startsWith("ROLE_SUPER"))
-        .map(r -> r.replace("ROLE_", ""))   // devolver sin prefijo para comparar en el servicio
-        .findFirst()
-        .orElse("OTRO");
+        // Rol de mayor privilegio, de forma determinista (sin prefijo ROLE_)
+        java.util.Set<String> roles = auth.getAuthorities().stream()
+            .map(a -> a.getAuthority().replace("ROLE_", ""))
+            .collect(java.util.stream.Collectors.toSet());
+        for (String rol : java.util.List.of("SUPER_ADMIN", "ADMIN_GLOBAL", "ADMIN_SEDE")) {
+            if (roles.contains(rol)) return rol;
+        }
+        return "OTRO";
     }
 
     private String extraerSedeId(Authentication auth) {
